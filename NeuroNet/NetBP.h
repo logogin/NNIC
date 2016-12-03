@@ -24,6 +24,7 @@
 class NetBP  
 {
 public:
+	void CopyWeights(LPVOID pDest,const UINT uiLayer);
 	FLOAT GetLearnRate(void);
 	void UpdateGradients(const FLOAT *fTarget);
 	void SetLearnType(const UINT uiLearnType);

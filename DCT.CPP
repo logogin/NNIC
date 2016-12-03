@@ -142,3 +142,10 @@ void DCT::GetBlock(FLOAT *fBlock)
 	for (UINT i=0; i<m_uiBlockSize; i++)
 		CopyMemory(&fBlock[i*m_uiBlockSize],m_vMatrices[RSLT][i],sizeof(FLOAT)*m_uiBlockSize);
 }
+
+void DCT::ZigZagSequence(SHORT *sSequence)
+{
+	for (UINT i=0; i<m_uiBlockSize; i++)
+		for (UINT j=0; j<m_uiBlockSize; j++)
+			sSequence[ZigZag[i][j]]=(SHORT)m_vMatrices[RSLT][i][j];
+}

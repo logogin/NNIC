@@ -29,6 +29,9 @@ typedef struct tagIMAGEKITINFO
 class ImageKit  
 {
 public:
+	BYTE GetBytesPerPixel(void);
+	ULONG GetColors(void);
+	BYTE GetBitsPerPixel(void);
 	DWORD GetImageSize(void);
 	void FromObject(const ImageKit &Image,const BYTE *pData);
 	DOUBLE GetPSNRFullChannel(const ImageKit &Image);
@@ -37,7 +40,11 @@ public:
 	ULONG GetImageHeight(void);
 	HBITMAP GetHandle(CDC *pDC);
 	BYTE *GetBits(void);
-	void GetSegment(const CRect rSeg,FLOAT *pSeg,const FLOAT fMinValue,const FLOAT fRange);
+	void GetSegment(const CRect rSeg,
+		FLOAT *pSeg,
+		const BYTE bColor,
+		const FLOAT fMinValue,
+		const FLOAT fRange);
 	void DeletePadding(void);
 	BOOL DecodeBMP(const CString &sFileName);
 	ImageKit();

@@ -14,12 +14,15 @@ class CReportDlg : public CDialog
 {
 // Construction
 public:
-	double m_r;
-	double m_g;
-	double m_b;
-	double m_a;
-	double m_f;
-	void Set(double r,double g,double b,double a,double f);
+	void SetPSNR(const DOUBLE fFull);
+	void SetCompressionMethod(const CString &sMethod);
+	void SetCompressionTime(const FLOAT fTime);
+	void SetPSNR(const DOUBLE fRed,const DOUBLE fGreen, const DOUBLE fBlue, const DOUBLE fAverange, const DOUBLE fFull);
+	void SetFileSize(const ULONG ulOriginalSize,const ULONG ulCompressedSize);
+	void SetOriginalColors(const BYTE bBitsPerPixel,const ULONG ulColors);
+	void SetImageSize(const ULONG ulWidth,const ULONG ulHeight);
+	void SetDirectory(const CString &sPath);
+	void SetFileName(const CString &sFileName);
 	CReportDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
@@ -38,6 +41,20 @@ public:
 
 // Implementation
 protected:
+	CString m_sFileName;
+	CString m_sDirectory;
+	CString m_sImageSize;
+	CString m_sOriginalColors;
+	CString m_sOriginalSize;
+	CString m_sCompressedSize;
+	CString m_sRatio;
+	CString m_sCompressionMethod;
+	CString m_sRed;
+	CString m_sGreen;
+	CString m_sBlue;
+	CString m_sAverange;
+	CString m_sFull;
+	CString m_sCompressionTime;
 
 	// Generated message map functions
 	//{{AFX_MSG(CReportDlg)

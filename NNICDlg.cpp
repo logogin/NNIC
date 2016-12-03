@@ -10,6 +10,7 @@
 #include "ReportDlg.h"
 #include "CPDlg.h"
 #include "BPDlg.h"
+#include "DCTDlg.h"
 #include "DCT.h"
 
 #ifdef _DEBUG
@@ -78,7 +79,8 @@ CNNICDlg::CNNICDlg(CWnd* pParent /*=NULL*/)
 	OPTIONSBP optionsBP(0,0,1.0f,TRUE,TRUE,300,0.01f,80,8,4,FALSE,16,0.9f,0.01f,
 		1000,0.05f,0.3f,0.1f,1000,0.01f);
 	OPTIONSCP optionsCP(1024,10,0.035f,0.3f,0.1f,10000,0.01f,3,0,50000,1);
-	OPTIONS options(optionsBP,optionsCP);
+	OPTIONSDCT optionsDCT(10,TRUE);
+	OPTIONS options(optionsBP,optionsCP,optionsDCT);
 	CopyMemory(&m_optionsDefault,&options,sizeof(OPTIONS));
 }
 
@@ -100,7 +102,6 @@ BEGIN_MESSAGE_MAP(CNNICDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_COMPRESS, OnButtonCompress)
 	ON_BN_CLICKED(IDC_BUTTON_STOP, OnButtonStop)
 	ON_BN_CLICKED(IDC_BUTTON_OPTIONS, OnButtonOptions)
-	ON_BN_CLICKED(IDC_BUTTON1, OnButton1)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -139,7 +140,7 @@ BOOL CNNICDlg::OnInitDialog()
 	menuMain.LoadMenu(IDR_MAIN_MENU);
 	SetMenu(&menuMain);
 
-	CheckRadioButton(IDC_RADIO_BACK,IDC_RADIO_DCTBACK,IDC_RADIO_DCT);
+	CheckRadioButton(IDC_RADIO_BACK,IDC_RADIO_DCTBACK,IDC_RADIO_BACK);
 	((CProgressCtrl *)GetDlgItem(IDC_PROGRESS_COMPR))->SetStep(1);
 	EnableCompress(FALSE);
 	EnableStop(FALSE);
@@ -235,7 +236,12 @@ void CNNICDlg::OnButtonCompress()
 	case IDC_RADIO_DCT:
 		EnableOptions(FALSE);
 		m_bFinished=FALSE;
-		m_threadCompress=AfxBeginThread(StartDCT,this);
+		m_threadCompress=AfxBeginThread(StartDCT,this/*,THREAD_PRIORITY_NORMAL,10*1024*1024,0,NULL*/);
+		break;
+	case IDC_RADIO_DCTBACK:
+		EnableOptions(FALSE);
+		m_bFinished=FALSE;
+		m_threadCompress=AfxBeginThread(StartDCTBack,this);
 	}
 }
 
@@ -267,12 +273,20 @@ UINT StartCP(LPVOID pParam)
 
 	ImageKit *pImage=pDlg->GetOriginalImage();
 	const BYTE *pBits=pImage->GetBits();
+	ofstream out("image1.dat",ios::out | ios::binary);
+	out<<pImage->GetImageSize();
+	out.write(pBits,pImage->GetImageSize());
+
+	out.close();
 	ASSERT(pBits!=NULL);
 
-	OPTIONSCP *pOptions=pDlg->GetOptionsCP();
-	ASSERT(pOptions!=NULL);
+	OPTIONSCP *optionsCP=pDlg->GetOptionsCP();
+	ASSERT(optionsCP!=NULL);
 
-	UINT uiLayers[3]={3,pOptions->st_wClusters,3};
+	/*******!!!!!!!!!!!!!*********/
+	//optionsCP->st_ulCycles=0;
+
+	UINT uiLayers[3]={3,optionsCP->st_wClusters,3};
 	NetCP Net(uiLayers);
 	//Net.SetNeighborhoodSize(pOptions->st_wInitNeighSize);
 	Net.InitWeights(-1.0,2.0);
@@ -291,7 +305,8 @@ UINT StartCP(LPVOID pParam)
 
 	FLOAT fWinDist;
 	UINT uiCycles=0;
-	WORD *uiClusters=new WORD[uiSize];
+	BYTE *uiClusters=new BYTE[uiSize];
+	//WORD *uiClusters=new WORD[uiSize];
 	ASSERT(uiClusters!=NULL);
 
 	CString sString;
@@ -306,55 +321,59 @@ UINT StartCP(LPVOID pParam)
 	ULONG ulNeighCount=0;
 	INT iLearnSign=1;
 	INT iNeighSign=1;
-	FLOAT fLearnRate=pOptions->st_fInitLearnRate;
-	WORD wNeighSize=pOptions->st_wInitNeighSize;
-	if (pOptions->st_fInitLearnRate>=pOptions->st_fFinalLearnRate)
+	FLOAT fLearnRate=optionsCP->st_fInitLearnRate;
+	WORD wNeighSize=optionsCP->st_wInitNeighSize;
+	if (optionsCP->st_fInitLearnRate>=optionsCP->st_fFinalLearnRate)
 		iLearnSign=-1;
-	if (pOptions->st_wInitNeighSize>=pOptions->st_wFinalNeighSize)
+	if (optionsCP->st_wInitNeighSize>=optionsCP->st_wFinalNeighSize)
 		iNeighSign=-1;
+	//QueryPerformanceCounter(&liCount1);
 	do
 	{
+		FLOAT fTime=0.0;
 		fWinDist=0.0f;
 		pDlg->SetProgress(0);
-		QueryPerformanceCounter(&liCount1);
 		for (i=0; i<uiSize; i++)
 		{
+			
 			ulLearnCount++;
 			ulNeighCount++;
-			if (ulLearnCount==pOptions->st_ulLearnRateEpochs)
+			if (ulLearnCount==optionsCP->st_ulLearnRateEpochs)
 			{
 				ulLearnCount=0;
-				fLearnRate+=iLearnSign*pOptions->st_fLearnChangeRate;
-				if (iLearnSign==-1&&fLearnRate<pOptions->st_fFinalLearnRate)
-					fLearnRate=pOptions->st_fFinalLearnRate;
-				if (iLearnSign==1&&fLearnRate>pOptions->st_fFinalLearnRate)
-					fLearnRate=pOptions->st_fFinalLearnRate;
+				fLearnRate+=iLearnSign*optionsCP->st_fLearnChangeRate;
+				if (iLearnSign==-1&&fLearnRate<optionsCP->st_fFinalLearnRate)
+					fLearnRate=optionsCP->st_fFinalLearnRate;
+				if (iLearnSign==1&&fLearnRate>optionsCP->st_fFinalLearnRate)
+					fLearnRate=optionsCP->st_fFinalLearnRate;
 			}
 
-			if (ulNeighCount==pOptions->st_ulNeighSizeEpochs)
+			if (ulNeighCount==optionsCP->st_ulNeighSizeEpochs)
 			{
 				ulNeighCount=0;
 				switch (iNeighSign)
 				{
 				case -1:
-					if (wNeighSize>pOptions->st_wFinalNeighSize)
-						wNeighSize-=pOptions->st_wNeighChangeRate;
+					if (wNeighSize>optionsCP->st_wFinalNeighSize)
+						wNeighSize-=optionsCP->st_wNeighChangeRate;
 					else
-						wNeighSize=pOptions->st_wFinalNeighSize;
+						wNeighSize=optionsCP->st_wFinalNeighSize;
 					break;
 				case 1:
-					if (wNeighSize<pOptions->st_wFinalNeighSize)
-						wNeighSize+=pOptions->st_wNeighChangeRate;
+					if (wNeighSize<optionsCP->st_wFinalNeighSize)
+						wNeighSize+=optionsCP->st_wNeighChangeRate;
 					else
-						wNeighSize=pOptions->st_wFinalNeighSize;
+						wNeighSize=optionsCP->st_wFinalNeighSize;
 					break;
 				}
 				
 			}
-
+		
 			Net.SetNeighborhoodSize(wNeighSize);
 			Net.SetAxons(INPUT_LAYER,vPatterns[i]);
+			QueryPerformanceCounter(&liCount1);
 			Net.PropagateKohonen();
+			QueryPerformanceCounter(&liCount2);
 			uiClusters[i]=Net.GetWinnerNeuron();
 			if (!map.Lookup(uiClusters[i],pValue))
 				map.SetAt(uiClusters[i],&uiClusters[i]);
@@ -362,53 +381,29 @@ UINT StartCP(LPVOID pParam)
 			Net.LearnKohonen(fLearnRate);
 			if (!((i+1)%uiInc))
 				pDlg->StepProgress();
+			
+			fTime+=(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart;
 		}
-		QueryPerformanceCounter(&liCount2);
+		
 		fWinDist/=uiSize;
 		uiCycles++;
 		pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,uiCycles);
 		sString.Format(_T("%f"),fWinDist);
 		pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
-		sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+		sString.Format(_T("%f"),fTime);
+		//QueryPerformanceCounter(&liCount2);
+		//sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 		pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
-		pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,pOptions->st_wClusters-map.GetCount());
+		pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,optionsCP->st_wClusters-map.GetCount());
 		map.RemoveAll();
 	}
-	while(fWinDist>pOptions->st_fMinDist&&uiCycles<=pOptions->st_ulCycles);
+	while(fWinDist>optionsCP->st_fMinDist&&uiCycles<optionsCP->st_ulCycles);
 
 	for (i=0; i<uiSize; i++)
 		delete []vPatterns[i];
 	delete []vPatterns;
 
 	uiCycles=0;
-//	FLOAT fPixel[3];
-//	do
-//	{
-//		fWinDist=0.0f;
-//		pDlg->SetProgress(0);
-//		QueryPerformanceCounter(&liCount1);
-//		for (i=0; i<uiSize; i++)
-//		{
-//			//Net.SetAxons(INPUT_LAYER,vPatterns[i]);
-//			//Net.PropagateKohonen();//
-//			for (UINT j=0; j<3; j++)*/
-//				fPixel[j]=pBits[3*i+j]/*-127.0f*/;
-//			Net.SetWinnerNeuron(uiClusters[i]);
-//			fWinDist+=Net.GetTargetDistance(fPixel);			
-//			Net.LearnGrossberg(pOptions->st_fLRGrossberg,fPixel);
-//			if (!((i+1)%uiInc))
-//				pDlg->StepProgress();
-//		}
-//		QueryPerformanceCounter(&liCount2);
-//		fWinDist/=uiSize;
-//		uiCycles++;
-//		pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,uiCycles);
-//		sString.Format(_T("%f"),fWinDist);
-//		pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
-//		sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
-//		pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
-//	}
-//	while(fWinDist>pOptions->st_fDistGrossberg&&uiCycles<=pOptions->st_uiCycles);
 
 	for (i=0; i<uiSize; i++)
 	{
@@ -416,27 +411,30 @@ UINT StartCP(LPVOID pParam)
 		Net.LearnGrossberg(&pBits[i*3]);
 	}
 	Net.FinilizeGrossberg();
+	QueryPerformanceCounter(&liCount2);
 
 	BYTE *pResult=new BYTE[uiSize*3];
 	ASSERT(pResult!=NULL);
+	ofstream f("debug.txt",ios::out);
 	for (i=0; i<uiSize; i++)
+	{
+		f<<i<<" "<<(WORD)uiClusters[i]<<endl;
 		for (UINT j=0; j<3; j++)
 /******************/
 			pResult[i*3+j]=(BYTE)floor(/*127.0+*/Net.GetWeight(GROSSBERG_LAYER,j,uiClusters[i])+0.5);
+	}
+	f.close();
+//	ifstream f("result.dat",ios::in | ios::binary);
+//	DWORD size;
+//	f>>size;
+//	f.read(pResult,size);
+//	f.close();
 
 	ImageKit *pComprImage=pDlg->GetComprImage();
 	pComprImage->FromObject(*pImage,pResult);
 	pDlg->DisplayComprBitmap();
 	//	*pImage,pResult);
-	DOUBLE r=pImage->GetPSNR(0,*pComprImage);
-	DOUBLE b=pImage->GetPSNR(1,*pComprImage);
-	DOUBLE g=pImage->GetPSNR(2,*pComprImage);
-	DOUBLE av=(r+g+b)/3;
-	DOUBLE all=pImage->GetPSNRFullChannel(*pComprImage);
-	CReportDlg ReportDlg;
-
-	
-	
+    	
 	delete []pResult;
 
 	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
@@ -456,7 +454,7 @@ UINT StartCP(LPVOID pParam)
 		pImage->GetImageHeight(),uiSize);
 	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
 
-	ULONG uiSrcLen=pOptions->st_wClusters*3;
+	ULONG uiSrcLen=optionsCP->st_wClusters*3;
 	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
 
 	BYTE *pSrc=new BYTE[uiSrcLen];
@@ -465,7 +463,7 @@ UINT StartCP(LPVOID pParam)
 	ASSERT(pDest!=NULL);
 	ZeroMemory(pDest,uiDestLen);
 
-	for (i=0; i<pOptions->st_wClusters; i++)
+	for (i=0; i<optionsCP->st_wClusters; i++)
 		for (UINT j=0; j<3; j++)
 			pSrc[i*3+j]=(BYTE)(127.0+Net.GetWeight(GROSSBERG_LAYER,j,i)+0.5);
 
@@ -477,7 +475,8 @@ UINT StartCP(LPVOID pParam)
 
 	delete []pSrc;
 	delete []pDest;
-	uiSrcLen=uiSize*sizeof(WORD);
+	uiSrcLen=uiSize*sizeof(BYTE);
+	//uiSrcLen=uiSize*sizeof(WORD);
 	uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
 
 	pDest=new BYTE[uiDestLen];
@@ -490,9 +489,20 @@ UINT StartCP(LPVOID pParam)
 	file.Write(&uiDestLen,sizeof(ULONG));
 	file.Write(pDest,uiDestLen);
 
+	CReportDlg ReportDlg;
+	ReportDlg.SetFileName(file.GetFileName());
+	ReportDlg.SetDirectory(file.GetFilePath());
+	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
 	file.Close();
+	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
+	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetCompressionMethod(_T("Counter Propagation"));
+	DOUBLE fRed=pImage->GetPSNR(0,*pComprImage);
+	DOUBLE fGreen=pImage->GetPSNR(1,*pComprImage);
+	DOUBLE fBlue=pImage->GetPSNR(2,*pComprImage);
+	ReportDlg.SetPSNR(fRed,fGreen,fBlue,(fRed+fGreen+fBlue)/3,pImage->GetPSNRFullChannel(*pComprImage));
+	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 
-	ReportDlg.Set(r,g,b,av,all);
 	ReportDlg.DoModal();
 
 	delete []pDest;
@@ -518,25 +528,30 @@ UINT StartBP(LPVOID pParam)
 	UINT uiInput=optionsBP->st_wInputBlock*optionsBP->st_wInputBlock;
 	UINT uiHidden=optionsBP->st_wHiddenBlock*optionsBP->st_wHiddenBlock;
 	UINT uiLayers[4];
-	UINT uiOutputLayer;
+	//BYTE bInputLayer=0;
+	BYTE bHiddenLayer;
+	BYTE bOutputLayer;
 	if (optionsBP->st_bSecondHidden)
 	{
 		uiLayers[0]=uiInput;
 		uiLayers[1]=optionsBP->st_wNeurons;
 		uiLayers[2]=uiHidden;
 		uiLayers[3]=uiInput;
-		uiOutputLayer=3;
+		bHiddenLayer=2;
+		bOutputLayer=3;
 	}
 	else
 	{
 		uiLayers[0]=uiInput;
 		uiLayers[1]=uiHidden;
 		uiLayers[2]=uiInput;
-		uiOutputLayer=2;
+		bHiddenLayer=1;
+		bOutputLayer=2;
 	}
 	
-	NetBP Net(uiOutputLayer+1,uiLayers);
+	NetBP Net(bOutputLayer+1,uiLayers);
 	Net.SetSignalBoundaries(-0.5,0.5);
+
 	switch (optionsBP->st_wSigmoidType)
 	{
 	case 0:
@@ -546,10 +561,12 @@ UINT StartBP(LPVOID pParam)
 		Net.SetSigmoidType(SIGMOID_TYPE_HYPERTAN);
 		break;
 	}
+
 	Net.SetSigmoidAlpha(optionsBP->st_fSigmoidAlpha);
 	Net.SetScaleParam(0.5);
 	Net.UseBiases(optionsBP->st_bUseBiases);
 	UINT uiMethod;
+	//optionsBP->st_wLearnMode=1;
 	switch (optionsBP->st_wLearnMode)
 	{
 	case 0:
@@ -562,9 +579,12 @@ UINT StartBP(LPVOID pParam)
 	if (optionsBP->st_bUseMomentum)
 		uiMethod|=LEARN_TYPE_MOMENTUM;
 	
+	Net.SetLearnType(uiMethod);
 	Net.InitWeights();
 
 	ImageKit *pImage=pDlg->GetOriginalImage();
+	/********!!!!!!!!!!!*********/
+//	optionsBP->st_wPatterns=1024;
 
 	FLOAT Segments[32][32][64];
 	for (UINT i=0 ;i<32; i++)
@@ -573,164 +593,241 @@ UINT StartBP(LPVOID pParam)
 			CPoint point(j*8,i*8);
 			CSize size(8,8);
 			CRect rect(point,size);
-			pImage->GetSegment(rect,Segments[i][j],-0.5f,1.0f);
+			pImage->GetSegment(rect,Segments[i][j],0,-0.5f,1.0f);
 		}
 
 	LARGE_INTEGER liFreq;
 	LARGE_INTEGER liCount1;
 	LARGE_INTEGER liCount2;
-	QueryPerformanceFrequency(&liFreq);
-	ULONG ulCycles=0;
-	FLOAT fNetError;
-	CString sString;
-	BOOL bFlag;
-	UINT uiPatterns;
-	PVOID pValue;
-	WORD uiIndex;
-//	UINT uiIndex1;
-//	UINT uiIndex2;
-	CMapWordToPtr map;
-//	POSITION pos;
-	srand((unsigned int)(time(NULL)));
-	map.RemoveAll();
-	for (i=0; i<100; i++)
-	{
-		do
-			uiIndex=rand()%1024;
-		while (map.Lookup(uiIndex,pValue));
-		map.SetAt(uiIndex,&uiIndex);
-	}
-////	ofstream file("debug.txt",ios::out);
-	Net.SetLearnRate(0.1);
-	QueryPerformanceCounter(&liCount1);
-	do
-	{
-		//QueryPerformanceCounter(&liCount1);
-		bFlag=TRUE;
-		uiPatterns=0;
-		for (i=0; i<32; i++)
-			for (UINT j=0; j<32; j++)
-			{
-				Net.SetAxons(0,Segments[i][j]);
-				Net.ForwardPass(0);
-				if ((fNetError=Net.TargetFunction(2,Segments[i][j]))>0.32)
-				{
-					Net.BackwardPass(Segments[i][j]);
-					bFlag=FALSE;
-					uiPatterns++;
-				}
-			}
-//		pos=map.GetStartPosition();
-//		for (i=0; i<90; i++)
-//		{
-//			map.GetNextAssoc(pos,uiIndex,pValue);
-//			uiIndex1=uiIndex/32;
-//			uiIndex2=uiIndex%32;
-//			Net.SetAxons(0,Segments[uiIndex1][uiIndex2]);
-//			Net.ForwardPass(0);
-//			if ((fNetError=Net.TargetFunction(2,Segments[uiIndex1][uiIndex2]))>0.1)
-//			{
-//				Net.BackwardPass(Segments[uiIndex1][uiIndex2]);
-//				bFlag=FALSE;
-//				uiPatterns++;
-//			}
-//			
-//		}
-//		file<<fNetError<<endl;
-		QueryPerformanceCounter(&liCount2);
-		ulCycles++;
-		pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,ulCycles);
-		sString.Format(_T("%f %f"),fNetError,Net.GetLearnRate());
-		pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
-		sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
-		pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
-		pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,uiPatterns);
-	}
-	while (!bFlag&&uiPatterns>0);
-//	FLOAT *fPatterns[1024];
-//	FLOAT fError;
-//	//Net.SetLearnRate(0.9f);
-//	QueryPerformanceCounter(&liCount1);
-//	do
-//	{
-//		//QueryPerformanceCounter(&liCount1);
-//		fNetError=0.0;
-//		uiPatterns=0;
-//		bFlag=TRUE;
-////		for (i=0; i<32; i++)
-////			for (UINT j=0; j<32; j++)
-////			{
-////				Net.SetAxons(0,Segments[i][j]);
-////				Net.ForwardPass(0);
-////				if ((fError=Net.TargetFunction(2,Segments[i][j]))>0.01)
-////				{
-////					Net.UpdateGradients(Segments[i][j]);
-////					fNetError+=fError;
-////					fPatterns[uiPatterns++]=&Segments[i][j][0];
-////					bFlag=FALSE;
-////				}
-////
-////			}
-//		pos=map.GetStartPosition();
-//		for (i=0; i<100; i++)
-//		{
-//			map.GetNextAssoc(pos,uiIndex,pValue);
-//			uiIndex1=uiIndex/32;
-//			uiIndex2=uiIndex%32;
-//			Net.SetAxons(0,Segments[uiIndex1][uiIndex2]);
-//			Net.ForwardPass(0);
-//			if ((fError=Net.TargetFunction(2,Segments[uiIndex1][uiIndex2]))>0.01)
-//			{
-//				Net.UpdateGradients(Segments[uiIndex1][uiIndex2]);
-//				fNetError+=fError;
-//				fPatterns[uiPatterns++]=&Segments[uiIndex1][uiIndex2][0];
-//				bFlag=FALSE;
-//			}
-//		}
-//		
-//		if (!bFlag)
-//		{
-//			fNetError=Net.BackwardPass(uiPatterns,(const FLOAT **)&fPatterns[0],fNetError);
-//		}
-//		QueryPerformanceCounter(&liCount2);
-//		ulCycles++;
-//		pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,ulCycles);
-//		sString.Format(_T("%f %f"),fNetError,Net.GetLearnRate());
-//		pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
-//		sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
-//		pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
-//		pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,uiPatterns);
-//	}
-//	while (!bFlag&&uiPatterns>0);
-//	file.close();
 
-	FLOAT fOutput[64];
-	ULONG ulSize=pImage->GetImageSize();
-	BYTE *pResult=new BYTE[ulSize];
+	UINT uiPatterns;
+	FLOAT fNetError;
+	ULONG ulCycles;
+	BOOL bFlag;
+	CString sString;
+
+	QueryPerformanceFrequency(&liFreq);
+	if (uiMethod & LEARN_TYPE_SEQUENTIAL)
+	{
+		ULONG ulLearnCount=0;
+		ULONG ulMomentCount=0;
+		INT iLearnSign=1;
+		INT iMomentSign=1;
+		if (optionsBP->st_fInitLearnRate>=optionsBP->st_fFinalLearnRate)
+			iLearnSign=-1;
+		if (optionsBP->st_fInitMoment>=optionsBP->st_fFinalMoment)
+			iMomentSign=-1;
+		FLOAT fLearnRate=optionsBP->st_fInitLearnRate;
+		FLOAT fMomentumParam=optionsBP->st_fInitMoment;
+		Net.SetLearnRate(optionsBP->st_fInitLearnRate);
+		Net.SetMomentumParam(optionsBP->st_fInitMoment);
+		ulCycles=0;
+		QueryPerformanceCounter(&liCount1);
+		do
+		{
+			bFlag=TRUE;
+			uiPatterns=0;
+			for (i=0; i<32; i++)
+				for (UINT j=0; j<32; j++)
+				{
+					Net.SetAxons(0,Segments[i][j]);
+					Net.ForwardPass(0);
+					if ((fNetError=Net.TargetFunction(bOutputLayer,Segments[i][j]))>
+							optionsBP->st_fMinError)
+					{
+						Net.BackwardPass(Segments[i][j]);
+						bFlag=FALSE;
+					}
+					else
+						uiPatterns++;
+					ulLearnCount++;
+					if (ulLearnCount==optionsBP->st_dwLearnSteps
+							&&optionsBP->st_fFinalLearnRate!=optionsBP->st_fInitLearnRate)
+					{
+						ulLearnCount=0;
+						fLearnRate+=iLearnSign*optionsBP->st_fLearnChangeRate;
+						if (iLearnSign==-1&&fLearnRate<optionsBP->st_fFinalLearnRate)
+							fLearnRate=optionsBP->st_fFinalLearnRate;
+						if (iLearnSign==1&&fLearnRate>optionsBP->st_fFinalLearnRate)
+							fLearnRate=optionsBP->st_fFinalLearnRate;
+						Net.SetLearnRate(fLearnRate);
+					}
+					if (uiMethod & LEARN_TYPE_MOMENTUM)
+					{
+						ulMomentCount++;
+						if (ulMomentCount==optionsBP->st_dwMomentSteps
+							&&optionsBP->st_fFinalMoment!=optionsBP->st_fInitMoment)
+						{
+							ulMomentCount=0;
+							fMomentumParam+=iMomentSign*optionsBP->st_fMomentChangeRate;
+							if (iMomentSign==-1&&fMomentumParam<optionsBP->st_fFinalMoment)
+								fMomentumParam=optionsBP->st_fFinalMoment;
+							if (iMomentSign==1&&fMomentumParam>optionsBP->st_fFinalMoment)
+								fMomentumParam=optionsBP->st_fFinalMoment;
+							Net.SetMomentumParam(fMomentumParam);
+						}
+					}
+				}
+			QueryPerformanceCounter(&liCount2);
+			ulCycles++;
+			pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,ulCycles);
+			sString.Format(_T("%f %f"),fNetError,Net.GetLearnRate());
+			pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
+			sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+			pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
+			pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,uiPatterns);
+		}
+		while (uiPatterns<optionsBP->st_wPatterns&&ulCycles<optionsBP->st_dwLearnCycles&&!bFlag);
+	}
+	if (uiMethod & LEARN_TYPE_BATCH)
+	{
+		FLOAT fError;
+		FLOAT *fPatterns[1024];
+		ulCycles=0;
+		QueryPerformanceCounter(&liCount1);
+		do
+		{
+			fNetError=0.0;
+			uiPatterns=0;
+			bFlag=TRUE;
+			for (i=0; i<32; i++)
+				for (UINT j=0; j<32; j++)
+				{
+					Net.SetAxons(0,Segments[i][j]);
+					Net.ForwardPass(0);
+					if ((fError=Net.TargetFunction(bOutputLayer,Segments[i][j]))>
+							optionsBP->st_fMinError)
+					{
+						Net.UpdateGradients(Segments[i][j]);
+						fNetError+=fError;
+						fPatterns[uiPatterns++]=&Segments[i][j][0];
+						bFlag=FALSE;
+					}
+				}
+
+			if (!bFlag)
+				fNetError=Net.BackwardPass(uiPatterns,(const FLOAT **)&fPatterns[0],fNetError);
+			QueryPerformanceCounter(&liCount2);
+			ulCycles++;
+			pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,ulCycles);
+			sString.Format(_T("%f %f"),fNetError,Net.GetLearnRate());
+			pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
+			sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+			pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
+			pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,1024-uiPatterns);
+		}
+		while ((1024-uiPatterns)<optionsBP->st_wPatterns&&ulCycles<optionsBP->st_dwLearnCycles&&!bFlag);
+	}
+
+	BYTE bHiddenPatterns[32][32][16];
+	FLOAT fHiddenOutput[16];
+
 	for (i=0; i<32; i++)
 		for (ULONG j=0; j<32; j++)
 		{
 			Net.SetAxons(0,Segments[i][j]);
 			Net.ForwardPass(0);
-			Net.GetAxons(2,fOutput);
-			for (ULONG k=0; k<8; k++)
+			Net.GetAxons(bHiddenLayer,fHiddenOutput);
+			for (ULONG k=0; k<16; k++)
+				bHiddenPatterns[i][j][k]=(BYTE)floor((fHiddenOutput[k]+0.5f)/1.0f*255.0f+0.5f);
+		}
+
+	FLOAT fOutput[64];
+	FLOAT fHiddenInput[16];
+	ULONG ulSize=pImage->GetImageSize();
+	BYTE *pResult=new BYTE[ulSize];
+	for (i=0; i<32; i++)
+		for (ULONG j=0; j<32; j++)
+		{
+			for (ULONG k=0; k<16; k++)
+				fHiddenInput[k]=-0.5f+bHiddenPatterns[i][j][k]/255.0f;
+			Net.SetAxons(bHiddenLayer,fHiddenInput);
+			Net.ForwardPass(bHiddenLayer);
+			Net.GetAxons(bOutputLayer,fOutput);
+			for (k=0; k<8; k++)
 				for (ULONG m=0; m<8; m++)
 					pResult[(i*8+k)*256+(j*8+m)]=
 						(BYTE)floor((fOutput/*Segments[i][j]*/[8*k+m]+0.5f)/1.0f*255.0+0.5f);
 		}
 
+//	FLOAT fOutput[64];
+//	ULONG ulSize=pImage->GetImageSize();
+//	BYTE *pResult=new BYTE[ulSize];
+//	for (i=0; i<32; i++)
+//		for (ULONG j=0; j<32; j++)
+//		{
+//			Net.SetAxons(0,Segments[i][j]);
+//			Net.ForwardPass(0);
+//			Net.GetAxons(bOutputLayer,fOutput);
+//			for (ULONG k=0; k<8; k++)
+//				for (ULONG m=0; m<8; m++)
+//					pResult[(i*8+k)*256+(j*8+m)]=
+//						(BYTE)floor((fOutput/*Segments[i][j]*/[8*k+m]+0.5f)/1.0f*255.0+0.5f);
+//		}
+
 	ImageKit *pComprImage=pDlg->GetComprImage();
 	pComprImage->FromObject(*pImage,pResult);
 	pDlg->DisplayComprBitmap();
-	//	*pImage,pResult);
-	//DOUBLE r=pImage->GetPSNR(0,*pComprImage);
-	//DOUBLE b=pImage->GetPSNR(1,*pComprImage);
-	//DOUBLE g=pImage->GetPSNR(2,*pComprImage);
-	//DOUBLE av=(r+g+b)/3;
-	DOUBLE all=pImage->GetPSNRFullChannel(*pComprImage);
-	CReportDlg ReportDlg;
 
-	ReportDlg.Set(0,0,0,0,all);
+	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
+	{
+		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
+        return TRUE;
+
+    } 
+	else 
+		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
+			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
+
+	CFile file;
+	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
+
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_BP,pImage->GetImageWidth(),
+		pImage->GetImageHeight(),ulSize);
+	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
+
+	ULONG uiSrcLen=8*8*4*4*sizeof(FLOAT);
+	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+
+	BYTE *pSrc=new BYTE[uiSrcLen];
+	ASSERT(pSrc!=NULL);
+	BYTE *pDest=new BYTE[uiDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,uiDestLen);
+
+	Net.CopyWeights(pSrc,bHiddenLayer);
+
+	ASSERT(compress(pDest,&uiDestLen,pSrc,uiSrcLen)==Z_OK);
+
+	file.Write(&uiSrcLen,sizeof(ULONG));
+	file.Write(&uiDestLen,sizeof(ULONG));
+	file.Write(pDest,uiDestLen);
+
+	delete []pSrc;
+	delete []pDest;
+	uiSrcLen=32*32*16*sizeof(BYTE);
+	uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+
+	pDest=new BYTE[uiDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,uiDestLen);
+
+	ASSERT(compress(pDest,&uiDestLen,(BYTE *)bHiddenPatterns,uiSrcLen)==Z_OK);
+
+	file.Write(&uiSrcLen,sizeof(ULONG));
+	file.Write(&uiDestLen,sizeof(ULONG));
+	file.Write(pDest,uiDestLen);
+	
+	CReportDlg ReportDlg;
+	ReportDlg.SetFileName(file.GetFileName());
+	ReportDlg.SetDirectory(file.GetFilePath());
+	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	file.Close();
+	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
+	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetCompressionMethod(_T("Back Propagation"));
+	ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
+	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 	ReportDlg.DoModal();
 
 	pDlg->EnableOptions(TRUE);
@@ -747,73 +844,408 @@ UINT StartDCT(LPVOID pParam)
         !pDlg->IsKindOf(RUNTIME_CLASS(CNNICDlg)))
     return TRUE;
 
+	OPTIONSDCT *optionsDCT=pDlg->GetOptionsDCT();
+	ASSERT(optionsDCT!=NULL);
+
 	pDlg->EnableCompress(FALSE);
 	pDlg->EnableStop(TRUE);
 
-	DCT dct(8);
-	dct.SetQuality(10);
+	DCT Dct(DCT_SIZE);
+	Dct.SetQuality(optionsDCT->st_bQuality);
+	ImageKit *pImage=pDlg->GetOriginalImage();
+
+	FLOAT fSegment[DCT_SIZE][DCT_SIZE];
+	SHORT sZigZag[DCT_SIZE*DCT_SIZE];
+	FLOAT fShift;
+	if (optionsDCT->st_bShift)
+		fShift=-128.0f;
+	else
+		fShift=0.0;
+
+	const BYTE bBytesPerPixel=pImage->GetBytesPerPixel();
+	const ULONG ulHeight=pImage->GetImageHeight();
+	const ULONG ulWidth=pImage->GetImageWidth();
+	const ULONG ulPixels=ulHeight*ulWidth;
+
+	FLOAT fPixel;
+	INT i,j,k,m,l;
+
+	BYTE **pBitmap=NULL;
+	ASSERT((pBitmap=AllocateByteMatrix(ulHeight,ulWidth*bBytesPerPixel))!=NULL);
+
+	USHORT *pResult=new USHORT[ulPixels*bBytesPerPixel];
+
+	LARGE_INTEGER liFreq;
+	LARGE_INTEGER liCount1;
+	LARGE_INTEGER liCount2;
+	QueryPerformanceFrequency(&liFreq);
+	QueryPerformanceCounter(&liCount1);
+
+	ULONG ulCounter=0;
+	for (i=0; i<32; i++)
+		for (j=0; j<32; j++)
+			for (k=0; k<bBytesPerPixel; k++)
+			{
+				CPoint point(j*DCT_SIZE,i*DCT_SIZE);
+				CSize size(DCT_SIZE,DCT_SIZE);
+				CRect rect(point,size);
+				pImage->GetSegment(rect,&(fSegment[0][0]),k,fShift,256.0f);
+				Dct.DCTransform(&(fSegment[0][0]));
+				Dct.QuantizateBlock();
+				Dct.ZigZagSequence(sZigZag);
+				Dct.DequantizateBlock();
+				Dct.IDCTransform();
+				Dct.GetBlock(&(fSegment[0][0]));
+				for (l=0; l<DCT_SIZE; l++)
+					for (m=0; m<DCT_SIZE; m++)
+					{
+						fPixel=(FLOAT)floor(fSegment[l][m]-fShift+0.5f);
+						if (fPixel<0.0)
+							fPixel=0.0;
+						if (fPixel>255.0)
+							fPixel=255.0;
+						pBitmap[i*DCT_SIZE+l][(j*DCT_SIZE+m)*bBytesPerPixel+k]=(BYTE)fPixel;
+						pResult[ulCounter++]=sZigZag[l*DCT_SIZE+m];
+						//pResult[k*32*32*DCT_SIZE*DCT_SIZE+(i*DCT_SIZE+l)*32*DCT_SIZE+(j*DCT_SIZE+m)]=sZigZag[l*DCT_SIZE+m];
+					}
+
+			}
+	QueryPerformanceCounter(&liCount2);
+
+	ImageKit *pComprImage=pDlg->GetComprImage();
+	pComprImage->FromObject(*pImage,pBitmap[0]);
+	pDlg->DisplayComprBitmap();
+
+	DestroyMatrix((LPVOID *)pBitmap);
+
+	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
+	{
+		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
+        return TRUE;
+
+    } 
+	else 
+		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
+			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
+
+	CFile file;
+	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
+
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_DCT,pImage->GetImageWidth(),
+		pImage->GetImageHeight(),ulPixels*bBytesPerPixel);
+	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
+
+	ULONG uiSrcLen=32*32*DCT_SIZE*DCT_SIZE*sizeof(SHORT)*bBytesPerPixel;
+	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+
+	BYTE *pDest=new BYTE[uiDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,uiDestLen);
+
+	ASSERT(compress(pDest,&uiDestLen,(BYTE *)pResult,uiSrcLen)==Z_OK);
+
+	delete []pResult;
+
+	file.Write(&uiSrcLen,sizeof(ULONG));
+	file.Write(&uiDestLen,sizeof(ULONG));
+	file.Write(pDest,uiDestLen);
+		
+	CReportDlg ReportDlg;
+	ReportDlg.SetFileName(file.GetFileName());
+	ReportDlg.SetDirectory(file.GetFilePath());
+	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	file.Close();
+	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
+	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetCompressionMethod(_T("DC Transform"));
+	if (bBytesPerPixel>1)
+	{
+		DOUBLE fRed=pImage->GetPSNR(0,*pComprImage);
+		DOUBLE fGreen=pImage->GetPSNR(1,*pComprImage);
+		DOUBLE fBlue=pImage->GetPSNR(2,*pComprImage);
+		ReportDlg.SetPSNR(fRed,fGreen,fBlue,(fRed+fGreen+fBlue)/3,
+			pImage->GetPSNRFullChannel(*pComprImage));
+	}
+	else
+		ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
+	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+	ReportDlg.DoModal();
+
+	delete []pDest;
+	
+	pDlg->EnableOptions(TRUE);
+	pDlg->EnableCompress(TRUE);
+	pDlg->SetFinished(TRUE);
+	return FALSE;
+}
+
+UINT StartDCTBack(LPVOID pParam)
+{
+	CNNICDlg* pDlg = (CNNICDlg *)pParam;
+
+    if (pDlg == NULL ||
+        !pDlg->IsKindOf(RUNTIME_CLASS(CNNICDlg)))
+    return TRUE;
+
+	pDlg->EnableCompress(FALSE);
+	pDlg->EnableStop(TRUE);
+
+	DCT dct(DCT_SIZE);
 	ImageKit *pImage=pDlg->GetOriginalImage();
 
 	FLOAT Segments[32][32][64];
-//		={140,144,147,140,140,155,179,175,
-//		144,152,140,147,140,148,167,179,
-//		152,155,136,167,163,162,152,172,
-//		168,145,156,160,152,155,136,160,
-//		162,148,156,148,140,136,147,162,
-//		147,167,140,150,155,140,136,162,
-//		136,156,123,167,162,144,140,147,
-//		148,155,136,155,152,147,147,136};
-//	FLOAT Res[64]={168,-18,15,-9,23,-9,-14,19,
-//					21,-34,26,-9,-11,11,14,7,
-//					-10,-24,-2,6,-18,3,-20,-1,
-//					-8,-5,14,-15,-8,-3,-4,8,
-//					-3,10,8,1,-11,18,18,15,
-//					4,-2,-18,8,8,-4,1,-7,
-//					9,1,-3,4,-1,-7,-1,-2,
-//					0,-8,-2,2,1,4,-6,0};
-//	CFile f;
-//	f.Open("segments.dat",CFile::modeCreate | CFile::modeWrite);
-//	for (UINT i=0 ;i<32; i++)
-//		for (UINT j=0; j<32; j++)
-//		{
-//			CPoint point(j*8,i*8);
-//			CSize size(8,8);
-//			CRect rect(point,size);
-//			pImage->GetSegment(rect,Segments[i][j],-1.0,2.0);
-//			f.Write(Segments[i][j],sizeof(FLOAT)*64);
-//		}
-//
-//	f.Close();
-//	for (i=0; i<32; i++)
-//		for (UINT j=0; j<32; j++)
-//		{
-//			dct.DCTransform(Segments[i][j]);
-//			dct.GetBlock(Segments[i][j]);
-//			dct.QuantizateBlock();
-//			dct.GetBlock(Segments[i][j]);
-//			dct.DequantizateBlock();
-//			dct.IDCTransform();
-//			dct.GetBlock(Segments[i][j]);
-//		}
-//
+
+	for (UINT i=0; i<32; i++)
+		for (UINT j=0; j<32; j++)
+		{
+			CPoint point(j*8,i*8);
+			CSize size(8,8);
+			CRect rect(point,size);
+			pImage->GetSegment(rect,Segments[i][j],0,-127.0/*0.0*/,256.0);
+		}
+
+	/******* DCT ******/
+	for (i=0; i<32; i++)
+		for (UINT j=0; j<32; j++)
+		{
+			dct.DCTransform(Segments[i][j]);
+			dct.GetBlock(Segments[i][j]);
+			for (UINT k=0; k<64; k++)
+				Segments[i][j][k]=-0.5f+(1016.0f+Segments[i][j][k])/2040.0f;
+		}
+
+	/***** Back ********/
+	OPTIONSBP *optionsBP=pDlg->GetOptionsBP();
+	UINT uiInput=optionsBP->st_wInputBlock*optionsBP->st_wInputBlock;
+	UINT uiHidden=optionsBP->st_wHiddenBlock*optionsBP->st_wHiddenBlock;
+	UINT uiLayers[4];
+	BYTE bInputLayer=0;
+	BYTE bHiddenLayer;
+	BYTE bOutputLayer;
+	if (optionsBP->st_bSecondHidden)
+	{
+		uiLayers[0]=uiInput;
+		uiLayers[1]=optionsBP->st_wNeurons;
+		uiLayers[2]=uiHidden;
+		uiLayers[3]=uiInput;
+		bHiddenLayer=2;
+		bOutputLayer=3;
+	}
+	else
+	{
+		uiLayers[0]=uiInput;
+		uiLayers[1]=uiHidden;
+		uiLayers[2]=uiInput;
+		bHiddenLayer=1;
+		bOutputLayer=2;
+	}
+	
+	NetBP Net(bOutputLayer+1,uiLayers);
+	Net.SetSignalBoundaries(-0.5,0.5);
+
+	switch (optionsBP->st_wSigmoidType)
+	{
+	case 0:
+		Net.SetSigmoidType(SIGMOID_TYPE_ORIGINAL);
+		break;
+	case 1:
+		Net.SetSigmoidType(SIGMOID_TYPE_HYPERTAN);
+		break;
+	}
+
+	Net.SetSigmoidAlpha(optionsBP->st_fSigmoidAlpha);
+	Net.SetScaleParam(0.5);
+	Net.UseBiases(optionsBP->st_bUseBiases);
+	UINT uiMethod;
+	switch (optionsBP->st_wLearnMode)
+	{
+	case 0:
+		uiMethod=LEARN_TYPE_SEQUENTIAL;
+		break;
+	case 1:
+		uiMethod=LEARN_TYPE_BATCH;
+		break;
+	}
+	if (optionsBP->st_bUseMomentum)
+		uiMethod|=LEARN_TYPE_MOMENTUM;
+	
+	Net.SetLearnType(uiMethod);
+	Net.InitWeights();
+
+	LARGE_INTEGER liFreq;
+	LARGE_INTEGER liCount1;
+	LARGE_INTEGER liCount2;
+
+	UINT uiPatterns;
+	FLOAT fNetError;
+	ULONG ulCycles;
+	BOOL bFlag;
+	CString sString;
+
+	QueryPerformanceFrequency(&liFreq);
+	if (uiMethod & LEARN_TYPE_SEQUENTIAL)
+	{
+		ULONG ulLearnCount=0;
+		ULONG ulMomentCount=0;
+		INT iLearnSign=1;
+		INT iMomentSign=1;
+		if (optionsBP->st_fInitLearnRate>=optionsBP->st_fFinalLearnRate)
+			iLearnSign=-1;
+		if (optionsBP->st_fInitMoment>=optionsBP->st_fFinalMoment)
+			iMomentSign=-1;
+		FLOAT fLearnRate=optionsBP->st_fInitLearnRate;
+		FLOAT fMomentumParam=optionsBP->st_fInitMoment;
+		Net.SetLearnRate(optionsBP->st_fInitLearnRate);
+		Net.SetMomentumParam(optionsBP->st_fInitMoment);
+		ulCycles=0;
+		QueryPerformanceCounter(&liCount1);
+		do
+		{
+			bFlag=TRUE;
+			uiPatterns=0;
+			for (i=0; i<32; i++)
+				for (UINT j=0; j<32; j++)
+				{
+					Net.SetAxons(0,Segments[i][j]);
+					Net.ForwardPass(0);
+					if ((fNetError=Net.TargetFunction(bOutputLayer,Segments[i][j]))>
+							optionsBP->st_fMinError)
+					{
+						Net.BackwardPass(Segments[i][j]);
+						bFlag=FALSE;
+					}
+					else
+						uiPatterns++;
+					ulLearnCount++;
+					if (ulLearnCount==optionsBP->st_dwLearnSteps
+							&&optionsBP->st_fFinalLearnRate!=optionsBP->st_fInitLearnRate)
+					{
+						ulLearnCount=0;
+						fLearnRate+=iLearnSign*optionsBP->st_fLearnChangeRate;
+						if (iLearnSign==-1&&fLearnRate<optionsBP->st_fFinalLearnRate)
+							fLearnRate=optionsBP->st_fFinalLearnRate;
+						if (iLearnSign==1&&fLearnRate>optionsBP->st_fFinalLearnRate)
+							fLearnRate=optionsBP->st_fFinalLearnRate;
+						Net.SetLearnRate(fLearnRate);
+					}
+					if (uiMethod & LEARN_TYPE_MOMENTUM)
+					{
+						ulMomentCount++;
+						if (ulMomentCount==optionsBP->st_dwMomentSteps
+							&&optionsBP->st_fFinalMoment!=optionsBP->st_fInitMoment)
+						{
+							ulMomentCount=0;
+							fMomentumParam+=iMomentSign*optionsBP->st_fMomentChangeRate;
+							if (iMomentSign==-1&&fMomentumParam<optionsBP->st_fFinalMoment)
+								fMomentumParam=optionsBP->st_fFinalMoment;
+							if (iMomentSign==1&&fMomentumParam>optionsBP->st_fFinalMoment)
+								fMomentumParam=optionsBP->st_fFinalMoment;
+							Net.SetMomentumParam(fMomentumParam);
+						}
+					}
+				}
+			QueryPerformanceCounter(&liCount2);
+			ulCycles++;
+			pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,ulCycles);
+			sString.Format(_T("%f %f"),fNetError,Net.GetLearnRate());
+			pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
+			sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+			pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
+			pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,uiPatterns);
+		}
+		while (uiPatterns<optionsBP->st_wPatterns&&ulCycles<optionsBP->st_dwLearnCycles&&!bFlag);
+	}
+	if (uiMethod & LEARN_TYPE_BATCH)
+	{
+		FLOAT fError;
+		FLOAT *fPatterns[1024];
+		ulCycles=0;
+		Net.SetLearnRate(0.9f);
+		QueryPerformanceCounter(&liCount1);
+		do
+		{
+			fNetError=0.0;
+			uiPatterns=0;
+			bFlag=TRUE;
+			for (i=0; i<32; i++)
+				for (UINT j=0; j<32; j++)
+				{
+					Net.SetAxons(0,Segments[i][j]);
+					Net.ForwardPass(0);
+					if ((fError=Net.TargetFunction(bOutputLayer,Segments[i][j]))>
+							optionsBP->st_fMinError)
+					{
+						Net.UpdateGradients(Segments[i][j]);
+						fNetError+=fError;
+						fPatterns[uiPatterns++]=&Segments[i][j][0];
+						bFlag=FALSE;
+					}
+				}
+
+			if (!bFlag)
+				fNetError=Net.BackwardPass(uiPatterns,(const FLOAT **)&fPatterns[0],fNetError);
+			QueryPerformanceCounter(&liCount2);
+			ulCycles++;
+			pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,ulCycles);
+			sString.Format(_T("%f %f"),fNetError,Net.GetLearnRate());
+			pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
+			sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+			pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
+			pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,1024-uiPatterns);
+		}
+		while ((1024-uiPatterns)<optionsBP->st_wPatterns&&ulCycles<optionsBP->st_dwLearnCycles&&!bFlag);
+	}
+
+	/******* Back ********/
+	BYTE bHiddenPatterns[32][32][16];
+	FLOAT fHiddenOutput[16];
+
+	for (i=0; i<32; i++)
+		for (ULONG j=0; j<32; j++)
+		{
+			Net.SetAxons(bInputLayer,Segments[i][j]);
+			Net.ForwardPass(bInputLayer);
+			Net.GetAxons(bHiddenLayer,fHiddenOutput);
+			for (ULONG k=0; k<16; k++)
+				bHiddenPatterns[i][j][k]=(BYTE)floor((fHiddenOutput[k]+0.5f)/1.0f*255.0f+0.5f);
+		}
+
+//	FLOAT fOutput[64];
+	FLOAT fHiddenInput[16];
 //	ULONG ulSize=pImage->GetImageSize();
 //	BYTE *pResult=new BYTE[ulSize];
-//	FLOAT fPixel;
-//	for (i=0; i<32; i++)
-//		for (ULONG j=0; j<32; j++)
-//		{
-//			for (ULONG k=0; k<8; k++)
-//				for (ULONG m=0; m<8; m++)
-//				{
-//					fPixel=(FLOAT)floor(Segments[i][j][8*k+m]+128+0.5f);
-//					if (fPixel<0.0)
-//						fPixel=0.0;
-//					if (fPixel>255.0)
-//						fPixel=255.0;
-//					pResult[(i*8+k)*256+(j*8+m)]=(BYTE)fPixel;
-//						
-//				}
-//		}
+	for (i=0; i<32; i++)
+		for (ULONG j=0; j<32; j++)
+		{
+			for (ULONG k=0; k<16; k++)
+				fHiddenInput[k]=-0.5f+bHiddenPatterns[i][j][k]/255.0f;
+			Net.SetAxons(bHiddenLayer,fHiddenInput);
+			Net.ForwardPass(bHiddenLayer);
+			Net.GetAxons(bOutputLayer,Segments[i][j]);
+			for (k=0; k<64; k++)
+				Segments[i][j][k]=-1016.0f+(Segments[i][j][k]+0.5f)/1.0f*2040.0f;
+			dct.IDCTransform(Segments[i][j]);
+			dct.GetBlock(Segments[i][j]);
+		}
+
+
+	ULONG ulSize=pImage->GetImageSize();
+	BYTE *pResult=new BYTE[ulSize];
+	FLOAT fPixel;
+	for (i=0; i<32; i++)
+		for (ULONG j=0; j<32; j++)
+		{
+			for (ULONG k=0; k<8; k++)
+				for (ULONG m=0; m<8; m++)
+				{
+					fPixel=(FLOAT)floor(Segments[i][j][8*k+m]+127.0+0.5f);
+					if (fPixel<0.0)
+						fPixel=0.0;
+					if (fPixel>255.0)
+						fPixel=255.0;
+					pResult[(i*8+k)*256+(j*8+m)]=(BYTE)fPixel;
+				}
+		}
 
 
 //	ULONG ulSize=pImage->GetImageSize();
@@ -833,15 +1265,70 @@ UINT StartDCT(LPVOID pParam)
 //					pResult[(i*8+k)*256+(j*8+m)]=(BYTE)fPixel;
 //				}
 //		}
-//	file.Close();
-	ImageKit *pComprImage=pDlg->GetComprImage();
-//	pComprImage->FromObject(*pImage,pResult);
-	pComprImage->DecodeBMP(_T("peppers1.bmp"));
-	pDlg->DisplayComprBitmap();
-	DOUBLE all=pImage->GetPSNRFullChannel(*pComprImage);
-	CReportDlg ReportDlg;
 
-	ReportDlg.Set(0,0,0,0,all);
+	ImageKit *pComprImage=pDlg->GetComprImage();
+	pComprImage->FromObject(*pImage,pResult);
+	pDlg->DisplayComprBitmap();
+
+	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
+	{
+		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
+        return TRUE;
+
+    } 
+	else 
+		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
+			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
+
+	CFile file;
+	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
+
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_BP,pImage->GetImageWidth(),
+		pImage->GetImageHeight(),ulSize);
+	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
+
+	ULONG uiSrcLen=8*8*4*4*sizeof(FLOAT);
+	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+
+	BYTE *pSrc=new BYTE[uiSrcLen];
+	ASSERT(pSrc!=NULL);
+	BYTE *pDest=new BYTE[uiDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,uiDestLen);
+
+	Net.CopyWeights(pSrc,bHiddenLayer);
+
+	ASSERT(compress(pDest,&uiDestLen,pSrc,uiSrcLen)==Z_OK);
+
+	file.Write(&uiSrcLen,sizeof(ULONG));
+	file.Write(&uiDestLen,sizeof(ULONG));
+	file.Write(pDest,uiDestLen);
+
+	delete []pSrc;
+	delete []pDest;
+	uiSrcLen=32*32*16*sizeof(BYTE);
+	uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+
+	pDest=new BYTE[uiDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,uiDestLen);
+
+	ASSERT(compress(pDest,&uiDestLen,(BYTE *)bHiddenPatterns,uiSrcLen)==Z_OK);
+
+	file.Write(&uiSrcLen,sizeof(ULONG));
+	file.Write(&uiDestLen,sizeof(ULONG));
+	file.Write(pDest,uiDestLen);
+	
+	CReportDlg ReportDlg;
+	ReportDlg.SetFileName(file.GetFileName());
+	ReportDlg.SetDirectory(file.GetFilePath());
+	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	file.Close();
+	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
+	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetCompressionMethod(_T("Back Propagation"));
+	ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
+	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 	ReportDlg.DoModal();
 
 	pDlg->EnableOptions(TRUE);
@@ -900,17 +1387,24 @@ void CNNICDlg::OnButtonOptions()
 {
 	// TODO: Add your control notification handler code here
 	CPropertySheet propOptions;
+	propOptions.m_psh.dwFlags &= ~(PSH_HASHELP);
 	CBPDlg pageBP(m_optionsDefault.st_optionsBP);
+	pageBP.m_psp.dwFlags &= ~(PSP_HASHELP);
 	CCPDlg pageCP(m_optionsDefault.st_optionsCP);
+	pageCP.m_psp.dwFlags &= ~(PSP_HASHELP);
+	CDCTDlg pageDCT(m_optionsDefault.st_optionsDCT);
+	pageDCT.m_psp.dwFlags &= ~(PSP_HASHELP);
 	propOptions.SetTitle(_T("Compression Options"));
 	propOptions.AddPage(&pageBP);
 	propOptions.AddPage(&pageCP);
+	propOptions.AddPage(&pageDCT);
 
-	//UINT uiMethod=GetCheckedRadioButton(IDC_RADIO_BACK,IDC_RADIO_DCTBACK)-IDC_RADIO_BACK;
-	//propOptions.SetActivePage(/*&pageCP*/uiMethod);
+	UINT uiMethod=GetCheckedRadioButton(IDC_RADIO_BACK,IDC_RADIO_DCTBACK)-IDC_RADIO_BACK;
+	propOptions.SetActivePage(/*&pageCP*/uiMethod);
 	propOptions.DoModal();
 	pageBP.GetOptionsBP(&m_optionsDefault.st_optionsBP);
 	pageCP.GetOptionsCP(&m_optionsDefault.st_optionsCP);
+	pageDCT.GetOptionsDCT(&m_optionsDefault.st_optionsDCT);
 }
 
 OPTIONSBP * CNNICDlg::GetOptionsBP()
@@ -918,8 +1412,15 @@ OPTIONSBP * CNNICDlg::GetOptionsBP()
 	return &m_optionsDefault.st_optionsBP;
 }
 
-void CNNICDlg::OnButton1() 
+ULONG CNNICDlg::GetOriginalFileSize()
 {
-	// TODO: Add your control notification handler code here
-	OnFileOpen();
+	CFile file;
+	CFileStatus rStatus;
+	file.GetStatus(m_sOriginalFileName,rStatus);
+	return rStatus.m_size;
+}
+
+OPTIONSDCT * CNNICDlg::GetOptionsDCT()
+{
+	return &m_optionsDefault.st_optionsDCT;
 }

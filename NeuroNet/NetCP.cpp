@@ -87,7 +87,7 @@ void NetCP::InitWeights(const FLOAT fMinValue, const FLOAT fRange)
 	ASSERT(vWeights!=NULL);
 	UINT n=1;
 
-	srand((unsigned int)time(NULL));
+//	srand((unsigned int)time(NULL));
 
 /*	for (UINT i=0; i<m_uiLayerRank[KOHONEN_LAYER]; i++)
 	{
@@ -155,11 +155,20 @@ void NetCP::PropagateKohonen()
 {
 	BOOL bFirst=TRUE;
 	FLOAT fMax;
+
+//	FLOAT fTime=0.0;
+//	LARGE_INTEGER liFreq;
+//	LARGE_INTEGER liCount1;
+//	LARGE_INTEGER liCount2;
+//	QueryPerformanceFrequency(&liFreq);
+
 	for (UINT i=0; i<m_uiLayerRank[KOHONEN_LAYER]; i++)
 	{
+//		QueryPerformanceCounter(&liCount1);
 		FLOAT fSum=0.0f;
 		for (UINT j=0; j<m_uiNeuronRank[KOHONEN_NEURON]; j++)
 			fSum+=m_vWeights[KOHONEN_NEURON][i][j]*m_vAxons[INPUT_LAYER][j];
+		
 		if (bFirst)
 		{
 			fMax=fSum;
@@ -172,6 +181,8 @@ void NetCP::PropagateKohonen()
 				fMax=fSum;
 				m_uiWinnerNeuron=i;
 			}
+//		QueryPerformanceCounter(&liCount2);
+//		fTime+=(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart;
 	}
 }
 

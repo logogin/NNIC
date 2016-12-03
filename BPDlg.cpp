@@ -69,6 +69,7 @@ void CBPDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_LEARNCHANGERATE, m_fLearnChangeRate);
 	DDX_Text(pDX, IDC_EDIT_LEARNSTEPS, m_dwLearnSteps);
 	DDX_Text(pDX, IDC_EDIT_MINERROR, m_fMinError);
+	DDV_MinMaxFloat(pDX, m_fMinError, 0.f, 1.f);
 	DDX_Text(pDX, IDC_EDIT_MOMENTCHANGERATE, m_fMomentChangeRate);
 	DDV_MinMaxFloat(pDX, m_fMomentChangeRate, 0.f, 1.f);
 	DDX_Text(pDX, IDC_EDIT_MOMENTSTEPS, m_dwMomentSteps);
@@ -116,7 +117,7 @@ BOOL CBPDlg::OnInitDialog()
 	CheckRadioButton(IDC_RADIO_SIGMOID,IDC_RADIO_HYPERTAN,
 		IDC_RADIO_SIGMOID+m_optionsBP.st_wSigmoidType);
 
-	m_fAlpha=m_optionsBP.st_fSigmoidAlpha=1.f;
+	m_fAlpha=m_optionsBP.st_fSigmoidAlpha;
 
 	m_bBiases=m_optionsBP.st_bUseBiases;
 	m_bMomentum=m_optionsBP.st_bUseMomentum;
@@ -156,7 +157,6 @@ BOOL CBPDlg::OnInitDialog()
 	else
 		OnRadioBatch();
 
-	EnableMomentum(m_optionsBP.st_bUseMomentum);
 	EnableSecondHidden(m_optionsBP.st_bSecondHidden);
 	UpdateData(FALSE);
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -175,15 +175,15 @@ void CBPDlg::OnRadioBatch()
 void CBPDlg::OnRadioSequential() 
 {
 	// TODO: Add your control notification handler code here
-	UpdateData(TRUE);
 	m_optionsBP.st_wLearnMode=0;
 	GetDlgItem(IDC_CHECK_MOMENTUM)->EnableWindow(TRUE);
 	EnableLearnRate(TRUE);
-	EnableMomentum(TRUE & m_bMomentum);
+	EnableMomentum(m_bMomentum);
 }
 
 void CBPDlg::EnableLearnRate(const BOOL bFlag)
 {
+	UpdateData(TRUE);
 	GetDlgItem(IDC_EDIT_INITLEARNRATE)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_FINALLEARNRATE)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_LEARNSTEPS)->EnableWindow(bFlag);
@@ -228,6 +228,7 @@ void CBPDlg::OnCheckSecond()
 void CBPDlg::OnCheckMomentum() 
 {
 	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
 	m_optionsBP.st_bUseMomentum=m_bMomentum;
 	EnableMomentum(m_optionsBP.st_bUseMomentum);
 }

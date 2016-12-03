@@ -23,7 +23,7 @@
 #include <fstream.h>
 #include "Globals.h"
 #include "./ImageKit/ImageKit.h"
-#include "./ZLib/ZLib.h"
+#include "./ZLib121/ZLib.h"
 
 #pragma warning(disable : 4018)
 //{{AFX_INSERT_LOCATION}}

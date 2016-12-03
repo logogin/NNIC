@@ -46,26 +46,73 @@ BOOL CReportDlg::OnInitDialog()
 	CDialog::OnInitDialog();
 	// TODO: Add extra initialization here
 
-	CString s;
-	s.Format("%f dB",m_r);
-	SetDlgItemText(IDC_EDIT_RED,s);
-	s.Format("%f dB",m_g);
-	SetDlgItemText(IDC_EDIT_GREEN,s);
-	s.Format("%f dB",m_b);
-	SetDlgItemText(IDC_EDIT_BLUE,s);
-	s.Format("%f dB",m_a);
-	SetDlgItemText(IDC_EDIT_AVERANGE,s);
-	s.Format("%f dB",m_f);
-	SetDlgItemText(IDC_EDIT_FULL,s);
+	SetDlgItemText(IDC_EDIT_FILENAME,m_sFileName);
+	SetDlgItemText(IDC_EDIT_DIRECTORY,m_sDirectory);
+	SetDlgItemText(IDC_EDIT_IMAGESIZE,m_sImageSize);
+	SetDlgItemText(IDC_EDIT_COLORS,m_sOriginalColors);
+	SetDlgItemText(IDC_EDIT_METHOD,m_sCompressionMethod);
+	SetDlgItemText(IDC_EDIT_ORSIZE,m_sOriginalSize);
+	SetDlgItemText(IDC_EDIT_COMPRSIZE,m_sCompressedSize);
+	SetDlgItemText(IDC_EDIT_RATIO,m_sRatio);
+	SetDlgItemText(IDC_EDIT_RED,m_sRed);
+	SetDlgItemText(IDC_EDIT_GREEN,m_sGreen);
+	SetDlgItemText(IDC_EDIT_BLUE,m_sBlue);
+	SetDlgItemText(IDC_EDIT_AVERANGE,m_sAverange);
+	SetDlgItemText(IDC_EDIT_FULL,m_sFull);
+	SetDlgItemText(IDC_EDIT_TIME,m_sCompressionTime);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CReportDlg::Set(double r, double g, double b, double a, double f)
+void CReportDlg::SetFileName(const CString &sFileName)
 {
-	m_r=r;
-	m_g=g;
-	m_b=b;
-	m_a=a;
-	m_f=f;
+	m_sFileName=sFileName;
+}
+
+void CReportDlg::SetDirectory(const CString &sPath)
+{
+	m_sDirectory=sPath.Left(sPath.GetLength()-m_sFileName.GetLength());
+}
+
+void CReportDlg::SetFileSize(const ULONG ulOriginalSize,const ULONG ulCompressedSize)
+{
+	m_sRatio.Format(_T("%.2f"),(FLOAT)ulCompressedSize/ulOriginalSize*100.0);
+	m_sRatio+=_T("%");
+	m_sOriginalSize.Format(_T("%.2f KB (%d bytes)"),ulOriginalSize/1024.0,ulOriginalSize);
+	m_sCompressedSize.Format(_T("%.2f KB (%d bytes)"),ulCompressedSize/1024.0,ulCompressedSize);
+}
+
+void CReportDlg::SetImageSize(const ULONG ulWidth, const ULONG ulHeight)
+{
+	m_sImageSize.Format(_T("%dx%d pixels"),ulWidth,ulHeight);
+}
+
+void CReportDlg::SetOriginalColors(const BYTE bBitsPerPixel,const ULONG ulColors)
+{
+	m_sOriginalColors.Format(_T("%d (%d BitsPerPixel)"),ulColors,bBitsPerPixel);
+}
+
+void CReportDlg::SetPSNR(const DOUBLE fRed, const DOUBLE fGreen, const DOUBLE fBlue, const DOUBLE fAverange, const DOUBLE fFull)
+{
+	m_sRed.Format(_T("%.2f dB"),fRed);
+	m_sGreen.Format(_T("%.2f dB"),fGreen);
+	m_sBlue.Format(_T("%.2f dB"),fBlue);
+	m_sAverange.Format(_T("%.2f dB"),fAverange);
+	m_sFull.Format(_T("%.2f dB"),fFull);
+}
+
+void CReportDlg::SetCompressionTime(const FLOAT fTime)
+{
+	m_sCompressionTime.Format(_T("%.2f sec."),fTime);
+}
+
+void CReportDlg::SetCompressionMethod(const CString &sMethod)
+{
+	m_sCompressionMethod=sMethod;
+}
+
+void CReportDlg::SetPSNR(const DOUBLE fFull)
+{
+	m_sRed=m_sGreen=m_sBlue=m_sAverange=_T("N/A");
+	m_sFull.Format(_T("%.2f dB"),fFull);
 }

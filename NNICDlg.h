@@ -16,6 +16,7 @@
 UINT StartBP(LPVOID pParam);
 UINT StartCP(LPVOID pParam);
 UINT StartDCT(LPVOID pParam);
+UINT StartDCTBack(LPVOID pParam);
 
 class ImageKit;
 
@@ -24,6 +25,8 @@ class CNNICDlg : public CDialog
 	DECLARE_DYNAMIC(CNNICDlg);
 // Construction
 public:
+	OPTIONSDCT * GetOptionsDCT(void);
+	ULONG GetOriginalFileSize(void);
 	OPTIONSBP * GetOptionsBP(void);
 	void SetFinished(const BOOL bFlag);
 	void DisplayComprBitmap(void);
@@ -71,7 +74,6 @@ protected:
 	afx_msg void OnButtonCompress();
 	afx_msg void OnButtonStop();
 	afx_msg void OnButtonOptions();
-	afx_msg void OnButton1();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -16,7 +16,8 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 
 NetBP::NetBP(const UINT uiNetRank,const UINT uiLayerRank[]):m_uiNetRank(uiNetRank),
-	m_bUseBias(FALSE),m_uiLayerRank(NULL),m_uiNeuronRank(NULL),m_vAxons(NULL),m_bFirstEpoch(TRUE)
+	m_bUseBias(FALSE),m_uiLayerRank(NULL),m_uiNeuronRank(NULL),m_vAxons(NULL),
+	m_bFirstEpoch(TRUE)
 {
 	m_uiLayerRank=new UINT[m_uiNetRank];
 	ASSERT(m_uiLayerRank!=NULL);
@@ -229,7 +230,7 @@ FLOAT NetBP::BackwardPass(const UINT uiPatterns,const FLOAT **fPatterns,const FL
 //		for (i=0; i<m_uiNetRank-1; i++)
 //			for (UINT j=0; j<m_uiLayerRank[i+1]; j++)
 //				fGradNorm+=m_vBiases[GRAD2][i][j]*m_vBiases[GRAD2][i][j];
-//	
+//
 //	m_fLearnRate=fPrevNetError/fGradNorm;
 //
 //	FLOAT fNetError;
@@ -260,19 +261,64 @@ FLOAT NetBP::BackwardPass(const UINT uiPatterns,const FLOAT **fPatterns,const FL
 	FLOAT fGrad=0.0;
 	FLOAT fWeight=0.0;
 	FLOAT fValue;
+	BOOL bFlag;
+	FLOAT fNetError;
+	UINT i;
+	UINT j;
+	UINT k;
+
+//	if (m_bFirstEpoch)
+//	{
+//		m_bFirstEpoch=FALSE;
+//		m_fLearnRate=0.1f;
+//		UpdateWeights(WEIGH,DELTA);
+//		CopyWeights(GRAD1,GRAD2);
+//		ZeroWeights(GRAD2);
+//		return 0.0f;
+//	}
 
 	if (m_bFirstEpoch)
 	{
 		m_bFirstEpoch=FALSE;
-		UpdateWeights();
+		for (i=0; i<m_uiNetRank-1; i++)
+			for (j=0; j<m_uiLayerRank[i+1]; j++)
+				for (k=0; k<m_uiNeuronRank[i]; k++)
+					fGradNorm+=m_vWeights[GRAD2][i][j][k]*m_vWeights[GRAD2][i][j][k];
+
+		if (m_bUseBias)
+			for (i=0; i<m_uiNetRank-1; i++)
+				for (j=0; j<m_uiLayerRank[i+1]; j++)
+					fGradNorm+=m_vBiases[GRAD2][i][j]*m_vBiases[GRAD2][i][j];
+
+		m_fLearnRate=fPrevNetError/fGradNorm;
+
+		CopyWeights(DELTA,WEIGH);
+
+		bFlag=FALSE;
+		do
+		{
+			UpdateWeights(WEIGH,DELTA);
+			fNetError=0.0;
+			for (i=0 ;i<uiPatterns; i++)
+			{
+				SetAxons(0,fPatterns[i]);
+				ForwardPass(0);
+				fNetError+=TargetFunction(m_uiNetRank-1,fPatterns[i]);
+			}
+			if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
+				m_fLearnRate/=2;
+			else
+				bFlag=TRUE;
+		}
+		while (!bFlag);
 		CopyWeights(GRAD1,GRAD2);
 		ZeroWeights(GRAD2);
-		return -1;
+		return fNetError;
 	}
 
-	for (UINT i=0; i<m_uiNetRank-1; i++)
-		for (UINT j=0; j<m_uiLayerRank[i+1]; j++)
-			for (UINT k=0; k<m_uiNeuronRank[i]; k++)
+	for (i=0; i<m_uiNetRank-1; i++)
+		for (j=0; j<m_uiLayerRank[i+1]; j++)
+			for (k=0; k<m_uiNeuronRank[i]; k++)
 			{
 				fGradNorm+=m_vWeights[GRAD2][i][j][k]*m_vWeights[GRAD2][i][j][k];
 				fValue=m_vWeights[GRAD2][i][j][k]-m_vWeights[GRAD1][i][j][k];
@@ -282,7 +328,7 @@ FLOAT NetBP::BackwardPass(const UINT uiPatterns,const FLOAT **fPatterns,const FL
 
 	if (m_bUseBias)
 		for (i=0; i<m_uiNetRank-1; i++)
-			for (UINT j=0; j<m_uiLayerRank[i+1]; j++)
+			for (j=0; j<m_uiLayerRank[i+1]; j++)
 			{
 				fGradNorm+=m_vBiases[GRAD2][i][j]*m_vBiases[GRAD2][i][j];
 				fGradNorm+=m_vBiases[GRAD2][i][j]*m_vBiases[GRAD2][i][j];
@@ -292,21 +338,18 @@ FLOAT NetBP::BackwardPass(const UINT uiPatterns,const FLOAT **fPatterns,const FL
 			}
 
 	m_fLearnRate=(FLOAT)(0.5f*sqrt(fWeight/fGrad)*m_fLearnRate);
-/*	while(m_fLearnRate<0.01)
-		m_fLearnRate*=2;*/
-
-	BOOL bFlag=FALSE;
-	FLOAT fNetError;
+	
+	bFlag=FALSE;
 	CopyWeights(DELTA,WEIGH);
 	do
 	{
 		fNetError=0.0;
 		UpdateWeights(WEIGH,DELTA);
-		for (UINT i=0; i<uiPatterns; i++)
+		for (i=0; i<uiPatterns; i++)
 		{
 			SetAxons(0,fPatterns[i]);
 			ForwardPass(0);
-			fNetError+=TargetFunction(2,fPatterns[i]);
+			fNetError+=TargetFunction(m_uiNetRank-1,fPatterns[i]);
 		}
 		if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
 			m_fLearnRate/=2;
@@ -353,7 +396,7 @@ void NetBP::UpdateGradients(const FLOAT *fTarget)
 			for (UINT j=0; j<m_uiLayerRank[i+1]; j++)
 				for (UINT k=0; k<m_uiNeuronRank[i]; k++)
 					m_vWeights[GRAD2][i][j][k]=m_vErrorSignal[i][j]*m_vAxons[i][k];
-				
+		
 		if (m_bUseBias)
 			for (i=0; i<m_uiNetRank-1; i++)
 				for (UINT j=0; j<m_uiLayerRank[i+1]; j++)
@@ -523,4 +566,11 @@ void NetBP::SetLearnType(const UINT uiLearnType)
 FLOAT NetBP::GetLearnRate()
 {
 	return m_fLearnRate;
+}
+
+void NetBP::CopyWeights(LPVOID pDest,const UINT uiLayer)
+{
+	ASSERT(uiLayer<m_uiNetRank);
+	CopyMemory(pDest,m_vWeights[WEIGH][uiLayer],
+		m_uiNeuronRank[uiLayer]*m_uiLayerRank[uiLayer]*sizeof(FLOAT));
 }

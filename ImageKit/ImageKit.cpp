@@ -110,7 +110,10 @@ void ImageKit::DeletePadding()
 	delete []pClearImage;
 }
 
-void ImageKit::GetSegment(const CRect rSeg, FLOAT *pSeg, const FLOAT fMinValue,const FLOAT fRange)
+void ImageKit::GetSegment(const CRect rSeg, FLOAT *pSeg,
+						  const BYTE bColor,
+						  const FLOAT fMinValue,
+						  const FLOAT fRange)
 {
 	ULONG uiWidth=rSeg.Width();
 	ASSERT(rSeg.left<m_ImageInfo.dwWidth);
@@ -120,7 +123,8 @@ void ImageKit::GetSegment(const CRect rSeg, FLOAT *pSeg, const FLOAT fMinValue,c
 		for (ULONG j=0; j<rSeg.Width(); j++)
 			if ((i+rSeg.top)<m_ImageInfo.dwHeight&&(j+rSeg.left)<m_ImageInfo.dwWidth)
 				pSeg[i*uiWidth+j]=fMinValue+
-					m_pImage[(i+rSeg.top)*m_ImageInfo.dwWidth+(j+rSeg.left)]/255.0f*fRange;
+					m_pImage[((i+rSeg.top)*m_ImageInfo.dwWidth+
+						(j+rSeg.left))*m_ImageInfo.bBytesPerPixel+bColor]/255.0f*fRange;
 			else
 				pSeg[i*uiWidth+j]=0.0f;
 }
@@ -223,4 +227,19 @@ void ImageKit::FromObject(const ImageKit &Image, const BYTE *pData)
 DWORD ImageKit::GetImageSize()
 {
 	return m_ImageInfo.dwImageSize;
+}
+
+BYTE ImageKit::GetBitsPerPixel()
+{
+	return m_ImageInfo.bBitsPerPixel;
+}
+
+ULONG ImageKit::GetColors()
+{
+	return (1<<m_ImageInfo.bBitsPerPixel);
+}
+
+BYTE ImageKit::GetBytesPerPixel()
+{
+	return m_ImageInfo.bBytesPerPixel;
 }

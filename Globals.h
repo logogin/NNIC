@@ -112,13 +112,32 @@ typedef struct tagOPTIONSCP
 	WORD st_wNeighChangeRate;
 } OPTIONSCP;
 
+typedef struct tagOPTIONSDCT
+{
+	tagOPTIONSDCT(const BYTE bQuality,const BOOL bShift)
+	{
+		st_bQuality=bQuality;
+		st_bShift=bShift;
+	}
+
+	tagOPTIONSDCT(void)
+	{
+	
+	}
+
+	BYTE st_bQuality;
+	BOOL st_bShift;
+} OPTIONSDCT;
 
 typedef struct tagOPTIONS
 {
-	tagOPTIONS(const OPTIONSBP &optionsBP,const OPTIONSCP optionsCP)
+	tagOPTIONS(const OPTIONSBP &optionsBP,
+		const OPTIONSCP &optionsCP,
+		const OPTIONSDCT &optionsDCT)
 	{
 		CopyMemory(&st_optionsBP,&optionsBP,sizeof(OPTIONSBP));
 		CopyMemory(&st_optionsCP,&optionsCP,sizeof(OPTIONSCP));
+		CopyMemory(&st_optionsDCT,&optionsDCT,sizeof(OPTIONSDCT));
 	}
 
 	tagOPTIONS(void)
@@ -127,6 +146,7 @@ typedef struct tagOPTIONS
 	}
 	OPTIONSBP st_optionsBP;
 	OPTIONSCP st_optionsCP;
+	OPTIONSDCT st_optionsDCT;
 } OPTIONS;
 
 typedef struct tagREPORT
@@ -150,6 +170,8 @@ typedef struct tagREPORT
 
 #define COMPRFILE_NNIC 0x4E4E4943
 #define COMPRTYPE_CP 0x1
+#define COMPRTYPE_BP 0x2
+#define COMPRTYPE_DCT 0x2
 
 typedef struct tagCOMPRFILEINFO
 {
@@ -167,5 +189,8 @@ typedef struct tagCOMPRFILEINFO
 	DWORD st_dwImageHeight;
 	DWORD st_dwImageSize;
 } COMPRFILEINFO;
+
+BYTE **AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth);
+void DestroyMatrix(LPVOID *pMatrix);
 
 #endif // !defined(AFX_GLOBALS_H__76BA1620_20A5_4B58_9D57_375E431EC133__INCLUDED_)

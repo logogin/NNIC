@@ -13,8 +13,8 @@
 enum Layers {INPUT_LAYER,KOHONEN_LAYER,GROSSBERG_LAYER};
 enum Neurons {KOHONEN_NEURON,GROSSBERG_NEURON};
 
-const INT bQuadrants[8][3]={{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},
-								{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}};
+//const INT bQuadrants[8][3]={{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},
+//								{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}};
 class NetCP  
 {
 public:
