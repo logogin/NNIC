@@ -8,6 +8,7 @@
 #include ".\NeuroNet\NetBP.h"
 #include ".\NeuroNet\NetCP.h"
 #include "ReportDlg.h"
+#include "ResampleDlg.h"
 #include "CPDlg.h"
 #include "BPDlg.h"
 #include "DCTDlg.h"
@@ -88,8 +89,8 @@ void CNNICDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CNNICDlg)
-	DDX_Control(pDX, IDC_STATIC_COMPRESSED, m_staticCompr);
-	DDX_Control(pDX, IDC_STATIC_ORIGINAL, m_staticOriginal);
+	DDX_Control(pDX, IDC_STATIC_RIGHT, m_staticRight);
+	DDX_Control(pDX, IDC_STATIC_LEFT, m_staticLeft);
 	//}}AFX_DATA_MAP
 }
 
@@ -207,11 +208,13 @@ void CNNICDlg::OnFileOpen()
 	dlgFile.m_ofn.lpstrFilter=_T("BMP - Windows Bitmap\x0*.bmp");
 	if (dlgFile.DoModal()==IDOK)
 	{
-		m_sOriginalFileName=dlgFile.GetPathName();
-		m_OriginalImage.DecodeBMP(m_sOriginalFileName);
-		//m_OriginalImage.DeletePadding();
-		//m_staticOriginal.SetBitmap(m_OriginalImage.GetHandle(m_staticOriginal.GetDC()));
-		m_staticOriginal.SetBitmap(m_OriginalImage.Resample(m_staticOriginal.GetDC(),512,512));
+		m_strLoadedFileName=dlgFile.GetPathName();
+		m_leftBitmap.LoadBMP(m_strLoadedFileName);
+//		CResampleDlg dlg(&m_leftBitmap);
+//		dlg.DoModal();
+		m_leftBitmap.Scale(m_staticLeft.GetDC(),100,100);
+		//m_staticLeft.SetBitmap(m_leftBitmap.Scale(256,200)/*dlg.GetHandle()*/);
+		//m_staticLeft.SetBitmap(m_leftBitmap.Scale(m_staticLeft.GetDC(),100,100));
 		EnableCompress(TRUE);
 	}
 
@@ -330,7 +333,7 @@ UINT StartBP(LPVOID pParam)
 	Net.SetLearnType(uiMethod);
 	Net.InitWeights();
 
-	ImageKit *pImage=pDlg->GetOriginalImage();
+	CBitmapKit *pBitmap=pDlg->GetLeftBitmap();
 	/********!!!!!!!!!!!*********/
 //	optionsBP->st_wPatterns=1024;
 
@@ -341,7 +344,7 @@ UINT StartBP(LPVOID pParam)
 			CPoint point(j*8,i*8);
 			CSize size(8,8);
 			CRect rect(point,size);
-			pImage->GetSegment(rect,Segments[i][j],0,-0.5f,1.0f);
+			pBitmap->GetSegment(rect,Segments[i][j],0,-0.5f,1.0f);
 		}
 
 	LARGE_INTEGER liFreq;
@@ -482,7 +485,8 @@ UINT StartBP(LPVOID pParam)
 
 	FLOAT fOutput[64];
 	FLOAT fHiddenInput[16];
-	ULONG ulSize=pImage->GetImageSize();
+	ULONG ulSize=pBitmap->GetSizeBytes();
+	DWORD dwWidthBytes=pBitmap->GetWidthBytes();
 	BYTE *pResult=new BYTE[ulSize];
 	for (i=0; i<32; i++)
 		for (ULONG j=0; j<32; j++)
@@ -494,7 +498,7 @@ UINT StartBP(LPVOID pParam)
 			Net.GetAxons(bOutputLayer,fOutput);
 			for (k=0; k<8; k++)
 				for (ULONG m=0; m<8; m++)
-					pResult[(i*8+k)*256+(j*8+m)]=
+					pResult[(i*8+k)*dwWidthBytes+(j*8+m)]=
 						(BYTE)floor((fOutput/*Segments[i][j]*/[8*k+m]+0.5f)/1.0f*255.0+0.5f);
 		}
 
@@ -513,9 +517,11 @@ UINT StartBP(LPVOID pParam)
 //						(BYTE)floor((fOutput/*Segments[i][j]*/[8*k+m]+0.5f)/1.0f*255.0+0.5f);
 //		}
 
-	ImageKit *pComprImage=pDlg->GetComprImage();
-	pComprImage->FromObject(*pImage,pResult);
-	pDlg->DisplayComprBitmap();
+	CBitmapKit *pComprBitmap=pDlg->GetRightBitmap();
+	BITMAP bm;
+	pBitmap->GetBitmap(&bm);
+	pComprBitmap->CreateBitmap(bm,pResult);
+	pDlg->DisplayRightBitmap();
 
 	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
 	{
@@ -530,8 +536,8 @@ UINT StartBP(LPVOID pParam)
 	CFile file;
 	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
 
-	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_BP,pImage->GetImageWidth(),
-		pImage->GetImageHeight(),ulSize);
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_BP,pComprBitmap->GetWidth(),
+		pComprBitmap->GetHeight(),pComprBitmap->GetSizeClear());
 	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
 
 	ULONG uiSrcLen=8*8*4*4*sizeof(FLOAT);
@@ -569,12 +575,12 @@ UINT StartBP(LPVOID pParam)
 	CReportDlg ReportDlg;
 	ReportDlg.SetFileName(file.GetFileName());
 	ReportDlg.SetDirectory(file.GetFilePath());
-	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	ReportDlg.SetFileSize(pDlg->GetLoadedFileSize(),file.GetLength());
 	file.Close();
-	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
-	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetImageSize(pBitmap->GetWidth(),pBitmap->GetHeight());
+	ReportDlg.SetOriginalColors(pBitmap->GetBitsPixel(),pBitmap->GetColors());
 	ReportDlg.SetCompressionMethod(_T("Back Propagation"));
-	ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
+	ReportDlg.SetPSNR(pBitmap->GetPSNRFullChannel(pComprBitmap));
 	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 	ReportDlg.DoModal();
 
@@ -595,18 +601,22 @@ UINT StartCP(LPVOID pParam)
 	pDlg->EnableCompress(FALSE);
 	pDlg->EnableStop(TRUE);
 
-	ImageKit *pImage=pDlg->GetOriginalImage();
-	DWORD dwSize=pImage->GetImageHeight()*pImage->GetImageWidth();
-	DWORD dwImageSize=pImage->GetImageSize();
-	const BYTE *pBits=pImage->GetBits();
-	ASSERT(pBits!=NULL);
+	CBitmapKit *pBitmap=pDlg->GetLeftBitmap();
+	DWORD dwSize=pBitmap->GetSizePixel();
+	DWORD dwWidth=pBitmap->GetWidth();
+	DWORD dwHeight=pBitmap->GetHeight();
+	DWORD dwWidthBytes=pBitmap->GetWidthBytes();
+	DWORD dwBitmapSize=pBitmap->GetSizeClear();
+	
+	const LPBYTE *lpBits=pBitmap->GetBits();
+	ASSERT(lpBits!=NULL);
 
 	OPTIONSCP *optionsCP=pDlg->GetOptionsCP();
 	ASSERT(optionsCP!=NULL);
 
 	const BYTE bVectorSize=3;
 	const FLOAT fColorShift=128.0f;
-	DWORD i,j;
+	DWORD i,j,k;
 
 	WORD *wLayers=NULL;
 	switch (optionsCP->st_bNetType)
@@ -650,7 +660,7 @@ UINT StartCP(LPVOID pParam)
 	Net.SetNeighbouringRadius(wNeighRadius);
 	Net.CalculateLearnRate(pLearnRate);
 
-	BYTE *pBitmap=NULL;
+	LPBYTE *pResultBitmap=NULL;
 	WORD *wClusters=new WORD[dwSize];
 	ASSERT(wClusters!=NULL);
 
@@ -661,7 +671,7 @@ UINT StartCP(LPVOID pParam)
 	DWORD dwCycles;
 	CMap<WORD,WORD,BYTE,BYTE> map;
 	BYTE bValue;
-	DWORD dwFrom=(DWORD)(optionsCP->st_wClusters+optionsCP->st_wClusters*0.2);
+	DWORD dwFrom=(DWORD)(optionsCP->st_wClusters*1.2);
 	map.InitHashTable(FindPrimeNumber(dwFrom));
 
 	CString strText;
@@ -684,7 +694,7 @@ UINT StartCP(LPVOID pParam)
 			for (i=0; i<dwSize; i++)
 			{
 				for (j=0; j<bVectorSize; j++)
-					pVectors[i][j]=pBits[i*bVectorSize+j]-fColorShift;
+					pVectors[i][j]=lpBits[i/dwWidth][i%dwWidth*bVectorSize+j]-fColorShift;
 				Net.NormalizeVector(pVectors[i],bVectorSize);
 			}
 
@@ -776,30 +786,31 @@ UINT StartCP(LPVOID pParam)
 			for (i=0; i<dwSize; i++)
 			{
 				Net.SetWinnerNeuron(wClusters[i]);	
-				Net.LearnGrossberg(&pBits[i*bVectorSize]);
+				Net.LearnGrossberg(&(lpBits[i/dwWidth][i%dwWidth*bVectorSize]));
 			}
 			Net.FinalizeGrossberg();	
 
-			pBitmap=new BYTE[dwImageSize];
-			ASSERT(pBitmap!=NULL);
+			pResultBitmap=AllocateByteMatrix(dwHeight,dwWidthBytes);
+			ASSERT(pResultBitmap!=NULL);
 
 			//ofstream f("debug.txt",ios::out);
-			for (i=0; i<dwSize; i++)
-			{
-//				f<<i<<" "<<wClusters[i]<<endl;
-				for (j=0; j<bVectorSize; j++)
-					pBitmap[i*bVectorSize+j]=
-						(BYTE)(Net.GetWeight(GROSSBERG_LAYER,LOWORD(j),wClusters[i])+0.5f);
-			}
-
+			DWORD dwIndex;
+			for (i=0; i<dwHeight; i++)
+				for (j=0; j<dwWidth; j++)
+				{
+					dwIndex=i*dwWidth+j;
+					for (k=0; k<bVectorSize; k++)
+						pResultBitmap[i][j*bVectorSize+k]=
+							(BYTE)(Net.GetWeight(GROSSBERG_LAYER,(WORD)k,
+								wClusters[dwIndex])+0.5f);
+				}			
 			pSrc=new BYTE[dwSrcLen];
 			ASSERT(pSrc!=NULL);
 			
 			for (i=0; i<optionsCP->st_wClusters; i++)
 				for (j=0; j<bVectorSize; j++)
 					pSrc[i*bVectorSize+j]=(BYTE)(Net.GetWeight(GROSSBERG_LAYER,
-						LOWORD(j),LOWORD(i))+0.5f);
-//			f.close();
+						(WORD)j,(WORD)i)+0.5f);
 		}
 
 		break;
@@ -815,14 +826,14 @@ UINT StartCP(LPVOID pParam)
 
 		bFlag=FALSE;
 		DWORD dwCount;
-		WORD wPixel;
+//		WORD wPixel;
 		const DWORD dwPixelsPerCycle=(DWORD)((FLOAT)dwSize/optionsCP->st_dwCycles+0.5f);
-		DWORD dwStep=bVectorSize*wPrime[3];
+		DWORD dwStep=wPrime[3];
 		for (i=0; i<3&&!bFlag; i++)
 			if (dwSize%wPrime[i])
 			{
 				bFlag=TRUE;
-				dwStep=bVectorSize*wPrime[i];
+				dwStep=wPrime[i];
 			}
 
 		i=0;
@@ -834,12 +845,12 @@ UINT StartCP(LPVOID pParam)
 		do
 		{
 			i+=dwStep;
-			if (i>=dwImageSize)
-				i-=dwImageSize;
-			wPixel=LOWORD(i/3);
-			Net.SetAxons(INPUT_LAYER,&pBits[i]);
+			if (i>=dwSize)
+				i-=dwSize;
+//			dwPixel=i/3;
+			Net.SetAxons(INPUT_LAYER,&(lpBits[i/dwWidth][i%dwWidth*bVectorSize]));
 			Net.PropagateKohonenMin();
-			wClusters[wPixel]=Net.GetWinnerNeuron();
+			wClusters[i]=Net.GetWinnerNeuron();
 //			if (!map.Lookup(wClusters[wPixel],bValue))
 //				map.SetAt(wClusters[wPixel],FALSE);
 			Net.LearnKohonen(pLearnRate);
@@ -864,22 +875,24 @@ UINT StartCP(LPVOID pParam)
 				strText.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 				pDlg->SetDlgItemText(IDC_STATIC_TIME,strText);
 				pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,optionsCP->st_wClusters-map.GetCount());
-				map.RemoveAll();
+//				map.RemoveAll();
 			}
 		}
 		while (dwCycles<optionsCP->st_dwCycles);
 
-		pBitmap=new BYTE[dwImageSize];
-		ASSERT(pBitmap!=NULL);
+		pResultBitmap=AllocateByteMatrix(dwHeight,dwWidthBytes);
+		ASSERT(pResultBitmap!=NULL);
 
-		for (i=0; i<dwSize; i++)
-		{
-			Net.SetAxons(INPUT_LAYER,&pBits[i*3]);
-			Net.PropagateKohonenMin();
-			wClusters[i]=Net.GetWinnerNeuron();
-			for (j=0; j<bVectorSize; j++)
-				pBitmap[i*bVectorSize+j]=
-					(BYTE)(Net.GetWeight(KOHONEN_LAYER,wClusters[i],LOWORD(j))+0.5f);
+		for (i=0; i<dwHeight; i++)
+			for (j=0; j<dwWidth; j++)
+			{
+				Net.SetAxons(INPUT_LAYER,&(lpBits[i][j*bVectorSize]));
+				Net.PropagateKohonenMin();
+				wClusters[i*dwWidth+j]=Net.GetWinnerNeuron();
+				for (k=0; k<bVectorSize; k++)
+					pResultBitmap[i][j*bVectorSize+k]=
+						(BYTE)(Net.GetWeight(KOHONEN_LAYER,
+							wClusters[i*dwWidth+j],(WORD)k)+0.5f);
 		}
 		pSrc=new BYTE[dwSrcLen];
 		ASSERT(pSrc!=NULL);
@@ -887,17 +900,19 @@ UINT StartCP(LPVOID pParam)
 		for (i=0; i<optionsCP->st_wClusters; i++)
 			for (j=0; j<bVectorSize; j++)
 				pSrc[i*bVectorSize+j]=(BYTE)(Net.GetWeight(KOHONEN_LAYER,
-					LOWORD(i),LOWORD(j))+0.5f);
+					(WORD)i,(WORD)j)+0.5f);
 		break;
 	}
 	
 	delete []pLearnRate;
 
-	ImageKit *pComprImage=pDlg->GetComprImage();
-	pComprImage->FromObject(*pImage,pBitmap);
-	pDlg->DisplayComprBitmap();
+	CBitmapKit *pComprBitmap=pDlg->GetRightBitmap();
+	BITMAP bm;
+	pBitmap->GetBitmap(&bm);
+	pComprBitmap->CreateBitmap(bm,pResultBitmap[0]);
+	pDlg->DisplayRightBitmap();
 
-	delete []pBitmap;
+	DestroyMatrix((LPVOID *)pResultBitmap);
 
 	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
 	{
@@ -912,15 +927,14 @@ UINT StartCP(LPVOID pParam)
 	CFile file;
 	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
 
-	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_CP,pImage->GetImageWidth(),
-		pImage->GetImageHeight(),dwImageSize);
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_CP,
+		dwWidth,dwHeight,pComprBitmap->GetSizeClear());
 	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
 
 	BYTE *pDest=new BYTE[dwDestLen];
 	ASSERT(pDest!=NULL);
 	ZeroMemory(pDest,dwDestLen);
 
-	
 
 	ASSERT(compress(pDest,&dwDestLen,pSrc,dwSrcLen)==Z_OK);
 
@@ -962,16 +976,16 @@ UINT StartCP(LPVOID pParam)
 	CReportDlg ReportDlg;
 	ReportDlg.SetFileName(file.GetFileName());
 	ReportDlg.SetDirectory(file.GetFilePath());
-	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	ReportDlg.SetFileSize(pDlg->GetLoadedFileSize(),file.GetLength());
 	file.Close();
-	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
-	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetImageSize(dwWidth,dwHeight);
+	ReportDlg.SetOriginalColors(pBitmap->GetBitsPixel(),pBitmap->GetColors());
 	ReportDlg.SetCompressionMethod(_T("Counter Propagation"));
-	DOUBLE fRed=pImage->GetPSNR(0,*pComprImage);
-	DOUBLE fGreen=pImage->GetPSNR(1,*pComprImage);
-	DOUBLE fBlue=pImage->GetPSNR(2,*pComprImage);
+	DOUBLE fRed=pBitmap->GetPSNR(pComprBitmap,0);
+	DOUBLE fGreen=pBitmap->GetPSNR(pComprBitmap,1);
+	DOUBLE fBlue=pBitmap->GetPSNR(pComprBitmap,2);
 	ReportDlg.SetPSNR(fRed,fGreen,fBlue,(fRed+fGreen+fBlue)/bVectorSize,
-		pImage->GetPSNRFullChannel(*pComprImage));
+		pBitmap->GetPSNRFullChannel(pComprBitmap));
 	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 
 	ReportDlg.DoModal();
@@ -1000,7 +1014,7 @@ UINT StartDCT(LPVOID pParam)
 
 	DCT Dct(DCT_SIZE);
 	Dct.SetQuality(optionsDCT->st_bQuality);
-	ImageKit *pImage=pDlg->GetOriginalImage();
+	CBitmapKit *pBitmap=pDlg->GetLeftBitmap();
 
 	FLOAT fSegment[DCT_SIZE][DCT_SIZE];
 	SHORT sZigZag[DCT_SIZE*DCT_SIZE];
@@ -1010,18 +1024,22 @@ UINT StartDCT(LPVOID pParam)
 	else
 		fShift=0.0;
 
-	const BYTE bBytesPerPixel=pImage->GetBytesPerPixel();
-	const ULONG ulHeight=pImage->GetImageHeight();
-	const ULONG ulWidth=pImage->GetImageWidth();
-	const ULONG ulPixels=ulHeight*ulWidth;
+	const BYTE bBytesPixel=pBitmap->GetBytesPixel();
+	const DWORD dwWidth=pBitmap->GetWidth();
+	const DWORD dwHeight=pBitmap->GetHeight();
+	const DWORD dwWidthBytes=pBitmap->GetWidthBytes();
+	const DWORD dwImageSize=pBitmap->GetSizeClear();
+	//const ULONG ulHeight=pImage->GetImageHeight();
+	//const ULONG ulWidth=pImage->GetImageWidth();
+	//const ULONG ulPixels=ulHeight*ulWidth;
 
 	FLOAT fPixel;
 	INT i,j,k,m,l;
 
-	BYTE **pBitmap=NULL;
-	ASSERT((pBitmap=AllocateByteMatrix(ulHeight,ulWidth*bBytesPerPixel))!=NULL);
+	LPBYTE *lpBits=AllocateByteMatrix(dwHeight,dwWidthBytes);
+	ASSERT(lpBits!=NULL);
 
-	USHORT *pResult=new USHORT[ulPixels*bBytesPerPixel];
+	PWORD pResult=new WORD[dwImageSize];
 
 	LARGE_INTEGER liFreq;
 	LARGE_INTEGER liCount1;
@@ -1030,14 +1048,14 @@ UINT StartDCT(LPVOID pParam)
 	QueryPerformanceCounter(&liCount1);
 
 	ULONG ulCounter=0;
-	for (i=0; i<32; i++)
-		for (j=0; j<32; j++)
-			for (k=0; k<bBytesPerPixel; k++)
+	for (i=0; i<dwHeight; i+=8)
+		for (j=0; j<dwWidth; j+=8)
+			for (k=0; k<bBytesPixel; k++)
 			{
-				CPoint point(j*DCT_SIZE,i*DCT_SIZE);
+				CPoint point(j,i);
 				CSize size(DCT_SIZE,DCT_SIZE);
 				CRect rect(point,size);
-				pImage->GetSegment(rect,&(fSegment[0][0]),k,fShift,256.0f);
+				pBitmap->GetSegment(rect,&(fSegment[0][0]),k,fShift,256.0f);
 				Dct.DCTransform(&(fSegment[0][0]));
 				Dct.QuantizateBlock();
 				Dct.ZigZagSequence(sZigZag);
@@ -1047,12 +1065,12 @@ UINT StartDCT(LPVOID pParam)
 				for (l=0; l<DCT_SIZE; l++)
 					for (m=0; m<DCT_SIZE; m++)
 					{
-						fPixel=(FLOAT)floor(fSegment[l][m]-fShift+0.5f);/*****!!!!!!!!*****/
+						fPixel=fSegment[l][m]-fShift+0.5f;
 						if (fPixel<0.0)
 							fPixel=0.0;
 						if (fPixel>255.0)
 							fPixel=255.0;
-						pBitmap[i*DCT_SIZE+l][(j*DCT_SIZE+m)*bBytesPerPixel+k]=(BYTE)fPixel;
+						lpBits[i+l][(j+m)*bBytesPixel+k]=(BYTE)fPixel;
 						pResult[ulCounter++]=sZigZag[l*DCT_SIZE+m];
 						//pResult[k*32*32*DCT_SIZE*DCT_SIZE+(i*DCT_SIZE+l)*32*DCT_SIZE+(j*DCT_SIZE+m)]=sZigZag[l*DCT_SIZE+m];
 					}
@@ -1060,11 +1078,14 @@ UINT StartDCT(LPVOID pParam)
 			}
 	QueryPerformanceCounter(&liCount2);
 
-	ImageKit *pComprImage=pDlg->GetComprImage();
-	pComprImage->FromObject(*pImage,pBitmap[0]);
-	pDlg->DisplayComprBitmap();
+	CBitmapKit *pComprBitmap=pDlg->GetRightBitmap();
+	BITMAP bm;
+	pBitmap->GetBitmap(&bm);
+	pComprBitmap->CreateBitmap(bm,lpBits[0]);
 
-	DestroyMatrix((LPVOID *)pBitmap);
+	pDlg->DisplayRightBitmap();
+
+	DestroyMatrix((LPVOID *)lpBits);
 
 	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
 	{
@@ -1079,11 +1100,10 @@ UINT StartDCT(LPVOID pParam)
 	CFile file;
 	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
 
-	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_DCT,pImage->GetImageWidth(),
-		pImage->GetImageHeight(),ulPixels*bBytesPerPixel);
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_DCT,dwWidth,dwHeight,dwImageSize);
 	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
 
-	ULONG uiSrcLen=32*32*DCT_SIZE*DCT_SIZE*sizeof(SHORT)*bBytesPerPixel;
+	ULONG uiSrcLen=32*32*DCT_SIZE*DCT_SIZE*sizeof(SHORT)*bBytesPixel;
 	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
 
 	BYTE *pDest=new BYTE[uiDestLen];
@@ -1101,21 +1121,21 @@ UINT StartDCT(LPVOID pParam)
 	CReportDlg ReportDlg;
 	ReportDlg.SetFileName(file.GetFileName());
 	ReportDlg.SetDirectory(file.GetFilePath());
-	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	ReportDlg.SetFileSize(pDlg->GetLoadedFileSize(),file.GetLength());
 	file.Close();
-	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
-	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetImageSize(dwWidth,dwHeight);
+	ReportDlg.SetOriginalColors(pBitmap->GetBitsPixel(),pBitmap->GetColors());
 	ReportDlg.SetCompressionMethod(_T("DC Transform"));
-	if (bBytesPerPixel>1)
+	if (bBytesPixel>1)
 	{
-		DOUBLE fRed=pImage->GetPSNR(0,*pComprImage);
-		DOUBLE fGreen=pImage->GetPSNR(1,*pComprImage);
-		DOUBLE fBlue=pImage->GetPSNR(2,*pComprImage);
+		DOUBLE fRed=pBitmap->GetPSNR(pComprBitmap,0);
+		DOUBLE fGreen=pBitmap->GetPSNR(pComprBitmap,1);
+		DOUBLE fBlue=pBitmap->GetPSNR(pComprBitmap,2);
 		ReportDlg.SetPSNR(fRed,fGreen,fBlue,(fRed+fGreen+fBlue)/3,
-			pImage->GetPSNRFullChannel(*pComprImage));
+		pBitmap->GetPSNRFullChannel(pComprBitmap));
 	}
 	else
-		ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
+		ReportDlg.SetPSNR(pBitmap->GetPSNRFullChannel(pComprBitmap));
 	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
 	ReportDlg.DoModal();
 
@@ -1139,7 +1159,7 @@ UINT StartDCTBack(LPVOID pParam)
 	pDlg->EnableStop(TRUE);
 
 	DCT dct(DCT_SIZE);
-	ImageKit *pImage=pDlg->GetOriginalImage();
+	CBitmapKit *pBitmap=pDlg->GetLeftBitmap();
 
 	FLOAT Segments[32][32][64];
 
@@ -1149,7 +1169,7 @@ UINT StartDCTBack(LPVOID pParam)
 			CPoint point(j*8,i*8);
 			CSize size(8,8);
 			CRect rect(point,size);
-			pImage->GetSegment(rect,Segments[i][j],0,-127.0/*0.0*/,256.0);
+			pBitmap->GetSegment(rect,Segments[i][j],0,-127.0/*0.0*/,256.0);
 		}
 
 	/******* DCT ******/
@@ -1377,7 +1397,7 @@ UINT StartDCTBack(LPVOID pParam)
 		}
 
 
-	ULONG ulSize=pImage->GetImageSize();
+	ULONG ulSize=pBitmap->GetSizeClear();
 	BYTE *pResult=new BYTE[ulSize];
 	FLOAT fPixel;
 	for (i=0; i<32; i++)
@@ -1414,70 +1434,71 @@ UINT StartDCTBack(LPVOID pParam)
 //				}
 //		}
 
-	ImageKit *pComprImage=pDlg->GetComprImage();
-	pComprImage->FromObject(*pImage,pResult);
-	pDlg->DisplayComprBitmap();
-
-	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
-	{
-		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
-        return TRUE;
-
-    } 
-	else 
-		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
-			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
-
-	CFile file;
-	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
-
-	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_BP,pImage->GetImageWidth(),
-		pImage->GetImageHeight(),ulSize);
-	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
-
-	ULONG uiSrcLen=8*8*4*4*sizeof(FLOAT);
-	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
-
-	BYTE *pSrc=new BYTE[uiSrcLen];
-	ASSERT(pSrc!=NULL);
-	BYTE *pDest=new BYTE[uiDestLen];
-	ASSERT(pDest!=NULL);
-	ZeroMemory(pDest,uiDestLen);
-
-	Net.CopyWeights(pSrc,bHiddenLayer);
-
-	ASSERT(compress(pDest,&uiDestLen,pSrc,uiSrcLen)==Z_OK);
-
-	file.Write(&uiSrcLen,sizeof(ULONG));
-	file.Write(&uiDestLen,sizeof(ULONG));
-	file.Write(pDest,uiDestLen);
-
-	delete []pSrc;
-	delete []pDest;
-	uiSrcLen=32*32*16*sizeof(BYTE);
-	uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
-
-	pDest=new BYTE[uiDestLen];
-	ASSERT(pDest!=NULL);
-	ZeroMemory(pDest,uiDestLen);
-
-	ASSERT(compress(pDest,&uiDestLen,(BYTE *)bHiddenPatterns,uiSrcLen)==Z_OK);
-
-	file.Write(&uiSrcLen,sizeof(ULONG));
-	file.Write(&uiDestLen,sizeof(ULONG));
-	file.Write(pDest,uiDestLen);
-	
-	CReportDlg ReportDlg;
-	ReportDlg.SetFileName(file.GetFileName());
-	ReportDlg.SetDirectory(file.GetFilePath());
-	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
-	file.Close();
-	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
-	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
-	ReportDlg.SetCompressionMethod(_T("Back Propagation"));
-	ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
-	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
-	ReportDlg.DoModal();
+//	CBitmapKit *pComprBitmap=pDlg->GetRightBitmap();
+//	pComprBitmap->CreateIndirect(pBitmap);
+//	p
+//	pDlg->DisplayComprBitmap();
+//
+//	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
+//	{
+//		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
+//        return TRUE;
+//
+//    } 
+//	else 
+//		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
+//			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
+//
+//	CFile file;
+//	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
+//
+//	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_BP,pImage->GetImageWidth(),
+//		pImage->GetImageHeight(),ulSize);
+//	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
+//
+//	ULONG uiSrcLen=8*8*4*4*sizeof(FLOAT);
+//	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+//
+//	BYTE *pSrc=new BYTE[uiSrcLen];
+//	ASSERT(pSrc!=NULL);
+//	BYTE *pDest=new BYTE[uiDestLen];
+//	ASSERT(pDest!=NULL);
+//	ZeroMemory(pDest,uiDestLen);
+//
+//	Net.CopyWeights(pSrc,bHiddenLayer);
+//
+//	ASSERT(compress(pDest,&uiDestLen,pSrc,uiSrcLen)==Z_OK);
+//
+//	file.Write(&uiSrcLen,sizeof(ULONG));
+//	file.Write(&uiDestLen,sizeof(ULONG));
+//	file.Write(pDest,uiDestLen);
+//
+//	delete []pSrc;
+//	delete []pDest;
+//	uiSrcLen=32*32*16*sizeof(BYTE);
+//	uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
+//
+//	pDest=new BYTE[uiDestLen];
+//	ASSERT(pDest!=NULL);
+//	ZeroMemory(pDest,uiDestLen);
+//
+//	ASSERT(compress(pDest,&uiDestLen,(BYTE *)bHiddenPatterns,uiSrcLen)==Z_OK);
+//
+//	file.Write(&uiSrcLen,sizeof(ULONG));
+//	file.Write(&uiDestLen,sizeof(ULONG));
+//	file.Write(pDest,uiDestLen);
+//	
+//	CReportDlg ReportDlg;
+//	ReportDlg.SetFileName(file.GetFileName());
+//	ReportDlg.SetDirectory(file.GetFilePath());
+//	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+//	file.Close();
+//	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
+//	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+//	ReportDlg.SetCompressionMethod(_T("DCT with Back Propagation"));
+//	ReportDlg.SetPSNR(pImage->GetPSNRFullChannel(*pComprImage));
+//	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+//	ReportDlg.DoModal();
 
 	pDlg->EnableOptions(TRUE);
 	pDlg->EnableCompress(TRUE);
@@ -1485,9 +1506,9 @@ UINT StartDCTBack(LPVOID pParam)
 	return FALSE;
 }
 
-ImageKit * CNNICDlg::GetOriginalImage()
+CBitmapKit * CNNICDlg::GetLeftBitmap()
 {
-	return &m_OriginalImage;
+	return &m_leftBitmap;
 }
 
 OPTIONSCP * CNNICDlg::GetOptionsCP()
@@ -1505,14 +1526,21 @@ INT CNNICDlg::StepProgress()
 	return ((CProgressCtrl *)GetDlgItem(IDC_PROGRESS_COMPR))->StepIt();
 }
 
-ImageKit * CNNICDlg::GetComprImage()
+CBitmapKit * CNNICDlg::GetRightBitmap()
 {
-	return &m_ComprImage;
+	return &m_rightBitmap;
 }
 
-void CNNICDlg::DisplayComprBitmap()
+void CNNICDlg::DisplayLeftBitmap()
 {
-	m_staticCompr.SetBitmap(m_ComprImage.GetHandle(m_staticCompr.GetDC()));
+	m_staticLeft.SetBitmap(m_leftBitmap);
+//	UpdateData(FALSE);
+}
+
+void CNNICDlg::DisplayRightBitmap()
+{
+	m_staticRight.SetBitmap(m_rightBitmap);
+//	UpdateData(FALSE);
 }
 
 void CNNICDlg::OnButtonStop() 
@@ -1560,15 +1588,20 @@ OPTIONSBP * CNNICDlg::GetOptionsBP()
 	return &m_optionsDefault.st_optionsBP;
 }
 
-ULONG CNNICDlg::GetOriginalFileSize()
+DWORD CNNICDlg::GetLoadedFileSize()
 {
 	CFile file;
-	CFileStatus rStatus;
-	file.GetStatus(m_sOriginalFileName,rStatus);
-	return rStatus.m_size;
+	CFileStatus fileStatus;
+	file.GetStatus(m_strLoadedFileName,fileStatus);
+	return fileStatus.m_size;
 }
 
 OPTIONSDCT * CNNICDlg::GetOptionsDCT()
 {
 	return &m_optionsDefault.st_optionsDCT;
+}
+
+void CNNICDlg::OnOK() 
+{
+	// TODO: Add your specialized code here and/or call the base class
 }

@@ -4,13 +4,10 @@
 #if !defined(AFX_NNICDLG_H__DD2B284F_84B4_4F8B_B6DB_342539641EB4__INCLUDED_)
 #define AFX_NNICDLG_H__DD2B284F_84B4_4F8B_B6DB_342539641EB4__INCLUDED_
 
-#include "IMAGEKIT\ImageKit.h"	// Added by ClassView
-#include "Globals.h"	// Added by ClassView
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#include ".\ImageKit\ImageKit.h"
 /////////////////////////////////////////////////////////////////////////////
 // CNNICDlg dialog
 UINT StartBP(LPVOID pParam);
@@ -18,7 +15,6 @@ UINT StartCP(LPVOID pParam);
 UINT StartDCT(LPVOID pParam);
 UINT StartDCTBack(LPVOID pParam);
 
-class ImageKit;
 
 class CNNICDlg : public CDialog
 {
@@ -26,15 +22,17 @@ class CNNICDlg : public CDialog
 // Construction
 public:
 	OPTIONSDCT * GetOptionsDCT(void);
-	ULONG GetOriginalFileSize(void);
+	DWORD GetLoadedFileSize(void);
 	OPTIONSBP * GetOptionsBP(void);
 	void SetFinished(const BOOLEAN bFlag);
-	void DisplayComprBitmap(void);
-	ImageKit * GetComprImage(void);
+	void DisplayRightBitmap(void);
+	void DisplayLeftBitmap(void);
+	CBitmapKit * GetLeftBitmap(void);
+	CBitmapKit * GetRightBitmap(void);
 	INT StepProgress(void);
 	void SetProgress(const UINT uiPos);
 	OPTIONSCP * GetOptionsCP(void);
-	ImageKit * GetOriginalImage(void);
+	
 	void EnableOptions(const BOOLEAN bFlag);
 	void EnableStop(const BOOLEAN bFlag);
 	void EnableCompress(const BOOLEAN bFlag);
@@ -43,12 +41,14 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CNNICDlg)
 	enum { IDD = IDD_NNIC_DIALOG };
-	CStatic	m_staticCompr;
-	CStatic	m_staticOriginal;
+	CStatic	m_staticRight;
+	CStatic	m_staticLeft;
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CNNICDlg)
+	public:
+	virtual void OnOK();
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 	//}}AFX_VIRTUAL
@@ -58,10 +58,9 @@ protected:
 	CWinThread * m_threadCompress;
 	BOOLEAN m_bFinished;
 	OPTIONS m_optionsDefault;
-	ImageKit m_OriginalImage;
-	ImageKit m_ComprImage;
-//	ImageKit m_Image;
-	CString m_sOriginalFileName;
+	CBitmapKit m_leftBitmap;
+	CBitmapKit m_rightBitmap;
+	CString m_strLoadedFileName;
 	HICON m_hIcon;
 
 	// Generated message map functions

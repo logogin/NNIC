@@ -20,10 +20,11 @@
 #include <afxcmn.h>			// MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
 #include <afxtempl.h>
+#include <afxmt.h>
 #include <math.h>
 #include <fstream.h>
 #include "Globals.h"
-#include "./ImageKit/ImageKit.h"
+#include "BitmapKit.h"
 #include "./ZLib121/ZLib.h"
 
 #pragma warning(disable : 4018)

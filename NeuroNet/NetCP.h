@@ -13,6 +13,7 @@
 enum Layers {INPUT_LAYER,KOHONEN_LAYER,GROSSBERG_LAYER};
 enum Neurons {KOHONEN_NEURON,GROSSBERG_NEURON};
 
+#define MAX_NET_SIZE 3
 #define NET_TYPE_KOHONEN_GROSSBERG 1
 #define NET_TYPE_KOHONEN 2
 
@@ -48,10 +49,10 @@ protected:
 	WORD m_wWinnerNeuron;
 	FLOAT m_fLearnRate;
 	WORD m_wNeighRadius;
-	WORD *m_vLayerRank;
-	WORD *m_vNeuronRank;
-	FLOAT **m_vAxons;
-	FLOAT ***m_vWeights;
+	WORD m_vLayerRank[MAX_NET_SIZE];
+	WORD m_vNeuronRank[MAX_NET_SIZE-1];
+	FLOAT *m_vAxons[MAX_NET_SIZE];
+	FLOAT **m_vWeights[MAX_NET_SIZE-1];
 	DWORD *m_vCounts;
 	BYTE m_bNetType;
 	BYTE m_bLearnType;

@@ -29,29 +29,33 @@ NetCP::NetCP(const WORD *pRanks,const BYTE bNetType):m_bNetType(bNetType)
 		break;
 	}
 
-	m_vLayerRank=new WORD[m_bNetRank];
-	ASSERT(m_vLayerRank!=NULL);
+//	m_vLayerRank=new WORD[m_bNetRank];
+//	ASSERT(m_vLayerRank!=NULL);
 	CopyMemory(m_vLayerRank,pRanks,sizeof(WORD)*m_bNetRank);
 
-	DWORD *dwLayerRank=new DWORD[m_bNetRank];
-	ASSERT(dwLayerRank!=NULL);
+//	DWORD *dwLayerRank=new DWORD[m_bNetRank];
+//	ASSERT(dwLayerRank!=NULL);
 	for (i=0; i<m_bNetRank; i++)
-		dwLayerRank[i]=m_vLayerRank[i];
+	{
+//		dwLayerRank[i]=m_vLayerRank[i];
+		m_vAxons[i]=new FLOAT[m_vLayerRank[i]];
+		ASSERT(m_vAxons[i]!=NULL);
+	}
 
-	ASSERT((m_vAxons=AllocateFloatMatrix(m_bNetRank,dwLayerRank))!=NULL);
-	delete []dwLayerRank;
-
-	m_vNeuronRank=new WORD[m_bNetRank-1];
-	ASSERT(m_vNeuronRank!=NULL);
-
-	m_vWeights=new FLOAT **[m_bNetRank-1];
-	ASSERT(m_vWeights!=NULL);
+//	ASSERT((m_vAxons=AllocateFloatMatrix(m_bNetRank,dwLayerRank))!=NULL);
+//	delete []dwLayerRank;
+//
+//	m_vNeuronRank=new WORD[m_bNetRank-1];
+//	ASSERT(m_vNeuronRank!=NULL);
+//
+//	m_vWeights=new FLOAT **[m_bNetRank-1];
+//	ASSERT(m_vWeights!=NULL);
 
 	for (i=0; i<m_bNetRank-1; i++)
 	{
 		m_vNeuronRank[i]=m_vLayerRank[i];
-
-		ASSERT((m_vWeights[i]=AllocateFloatMatrix(m_vLayerRank[i+1],m_vNeuronRank[i]))!=NULL);
+		m_vWeights[i]=AllocateFloatMatrix(m_vLayerRank[i+1],m_vNeuronRank[i]);
+		ASSERT(m_vWeights[i]!=NULL);
 	}
 	
 	m_vCounts=new DWORD[m_vLayerRank[KOHONEN_LAYER]];
@@ -62,18 +66,21 @@ NetCP::NetCP(const WORD *pRanks,const BYTE bNetType):m_bNetType(bNetType)
 NetCP::~NetCP()
 {
 	DWORD i;
-	if (m_vAxons!=NULL)
-		DestroyMatrix((LPVOID *)m_vAxons);
+	for (i=0; i<m_bNetRank; i++)
+		if (m_vAxons[i]!=NULL)
+			delete m_vAxons[i];
+//	if (m_vAxons!=NULL)
+//		DestroyMatrix((LPVOID *)m_vAxons);
 
 	for (i=0; i<m_bNetRank-1; i++)
 		if (m_vWeights[i]!=NULL)
 			DestroyMatrix((LPVOID *)m_vWeights[i]);
 
-	if (m_vWeights!=NULL)
-		delete []m_vWeights;
+//	if (m_vWeights!=NULL)
+//		delete []m_vWeights;
 
-	if (m_vLayerRank!=NULL)
-		delete []m_vLayerRank;
+//	if (m_vLayerRank!=NULL)
+//		delete []m_vLayerRank;
 
 	if (m_vCounts!=NULL)
 		delete []m_vCounts;

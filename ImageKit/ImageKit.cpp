@@ -37,50 +37,57 @@ ImageKit::~ImageKit()
 
 }
 
-BOOLEAN ImageKit::DecodeBMP(const CString &sFileName)
+BOOLEAN ImageKit::LoadBMP(const CString &sFileName)
 {
-	CFile BMPFile;
-	BMPFile.Open(sFileName,CFile::modeRead);
-
-	BITMAPFILEHEADER bmfHeader;
-
-	BMPFile.Read(&bmfHeader,sizeof(BITMAPFILEHEADER));
-
-	if (bmfHeader.bfType!=BFT_BITMAP)
-	{
-		BMPFile.Close();
+	HBITMAP hBitmap=(HBITMAP)LoadImage(NULL,sFileName,IMAGE_BITMAP,0,0,
+		LR_DEFAULTCOLOR | LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	if (hBitmap==NULL)
 		return FALSE;
-	}
+//	m_bmMap;
+//	if (GetObject(m_hBitmap,sizeof(BITMAP),&bm);
 
-	BITMAPINFOHEADER bmiHeader;
-	BMPFile.Read(&bmiHeader,sizeof(BITMAPINFOHEADER));
-
-	switch (bmiHeader.biBitCount)
-	{
-	case 8:
-		m_bmInfo=(BITMAPINFO *)(new BYTE[sizeof(BITMAPINFOHEADER) + 
-			((1<<bmiHeader.biBitCount) * sizeof(RGBQUAD))]);
-
-		ASSERT(m_bmInfo!=NULL);
-		CopyMemory(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER));
-
-		BMPFile.Read(m_bmInfo->bmiColors,((1<<bmiHeader.biBitCount) * sizeof(RGBQUAD)));
-		break;
-	case 24:
-		m_bmInfo=(BITMAPINFO *)(new BYTE[sizeof(BITMAPINFO)]);
-		ASSERT(m_bmInfo!=NULL);
-		CopyMemory(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER));
-		break;
-	}
-	
-
-	m_pImage=new BYTE[bmfHeader.bfSize - bmfHeader.bfOffBits];
-	ASSERT(m_pImage!=NULL);
-
-	BMPFile.Read(m_pImage,sizeof(BYTE)*(bmfHeader.bfSize - bmfHeader.bfOffBits));
-	
-	BMPFile.Close();
-	FillImageInfo();
+//	CFile BMPFile;
+//	BMPFile.Open(sFileName,CFile::modeRead);
+//
+//	BITMAPFILEHEADER bmfHeader;
+//
+//	BMPFile.Read(&bmfHeader,sizeof(BITMAPFILEHEADER));
+//
+//	if (bmfHeader.bfType!=BFT_BITMAP)
+//	{
+//		BMPFile.Close();
+//		return FALSE;
+//	}
+//
+//	BITMAPINFOHEADER bmiHeader;
+//	BMPFile.Read(&bmiHeader,sizeof(BITMAPINFOHEADER));
+//
+//	switch (bmiHeader.biBitCount)
+//	{
+//	case 8:
+//		m_bmInfo=(BITMAPINFO *)(new BYTE[sizeof(BITMAPINFOHEADER) + 
+//			((1<<bmiHeader.biBitCount) * sizeof(RGBQUAD))]);
+//
+//		ASSERT(m_bmInfo!=NULL);
+//		CopyMemory(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER));
+//
+//		BMPFile.Read(m_bmInfo->bmiColors,((1<<bmiHeader.biBitCount) * sizeof(RGBQUAD)));
+//		break;
+//	case 24:
+//		m_bmInfo=(BITMAPINFO *)(new BYTE[sizeof(BITMAPINFO)]);
+//		ASSERT(m_bmInfo!=NULL);
+//		CopyMemory(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER));
+//		break;
+//	}
+//	
+//
+//	m_pImage=new BYTE[bmfHeader.bfSize - bmfHeader.bfOffBits];
+//	ASSERT(m_pImage!=NULL);
+//
+//	BMPFile.Read(m_pImage,sizeof(BYTE)*(bmfHeader.bfSize - bmfHeader.bfOffBits));
+//	
+//	BMPFile.Close();
+//	FillImageInfo();
 	return TRUE;
 }
 
@@ -98,19 +105,21 @@ void ImageKit::FillImageInfo()
 
 void ImageKit::DeletePadding()
 {
-	if (m_ImageInfo.st_dwWidth==m_ImageInfo.st_dwPaddedWidth)
+	DWORD dwBytesPerRow=BITS2BYTES(m_ImageInfo.st_dwWidth*m_ImageInfo.st_bBitsPerPixel);
+	if (dwBytesPerRow==m_ImageInfo.st_dwPaddedWidth)
 		return;
 
-	BYTE *pClearImage=new BYTE[BITS2BYTES(m_ImageInfo.st_dwHeight*m_ImageInfo.st_dwWidth
-		*m_ImageInfo.st_bBitsPerPixel)];
+	BYTE *pClearImage=new BYTE[dwBytesPerRow*m_ImageInfo.st_dwHeight];
 	ASSERT(pClearImage!=NULL);
 	DWORD i;
 	for (i=0; i<m_ImageInfo.st_dwHeight; i++)
-		CopyMemory(pClearImage+m_ImageInfo.st_dwWidth*i,m_pImage+m_ImageInfo.st_dwPaddedWidth*i,
-			sizeof(BYTE)*m_ImageInfo.st_dwWidth);
+		CopyMemory(pClearImage+i*dwBytesPerRow,
+			m_pImage+i*m_ImageInfo.st_dwPaddedWidth,dwBytesPerRow);
 
 	delete []m_pImage;
-	CopyMemory(m_pImage,pClearImage,sizeof(BYTE)*m_ImageInfo.st_dwImageSize);
+	m_pImage=new BYTE[dwBytesPerRow*m_ImageInfo.st_dwHeight];
+	ASSERT(m_pImage!=NULL);
+	CopyMemory(m_pImage,pClearImage,m_ImageInfo.st_dwImageSize);
 	delete []pClearImage;
 }
 
@@ -141,10 +150,12 @@ BYTE *ImageKit::GetBits()
 
 HBITMAP ImageKit::GetHandle(CDC *pDC)
 {
-	ASSERT(pDC!=NULL);
+	//ASSERT(pDC!=NULL);
+//	return m_hBitmap;
 	HBITMAP hBitmap=CreateDIBitmap(pDC->GetSafeHdc(), 
 		&m_bmInfo->bmiHeader, CBM_INIT, m_pImage, m_bmInfo, DIB_RGB_COLORS);
 	return hBitmap;
+
 }
 
 ULONG ImageKit::GetImageHeight()
@@ -324,11 +335,11 @@ HBITMAP ImageKit::Resample(CDC *pDC,
 			}
 			for (k=0; k<m_ImageInfo.st_bBytesPerPixel; k++)
 			{
-				fWeight+=0.5;
-				if (fWeight<0.0)
-					fWeight=0.0;
-				if (fWeight>255.0)
-					fWeight=255.0;
+				pWeight[k]+=0.5;
+				if (pWeight[k]<0.0)
+					pWeight[k]=0.0;
+				if (pWeight[k]>255.0)
+					pWeight[k]=255.0;
 				pTmpImage[i][j*m_ImageInfo.st_bBytesPerPixel+k]=(BYTE)pWeight[k];
 			}
 		}
@@ -379,11 +390,11 @@ HBITMAP ImageKit::Resample(CDC *pDC,
 			}
 			for (k=0; k<m_ImageInfo.st_bBytesPerPixel; k++)
 			{
-				fWeight+=0.5;
-				if (fWeight<0.0)
-					fWeight=0.0;
-				if (fWeight>255.0)
-					fWeight=255.0;
+				pWeight[k]+=0.5;
+				if (pWeight[k]<0.0)
+					pWeight[k]=0.0;
+				if (pWeight[k]>255.0)
+					pWeight[k]=255.0;
 				pResultImage[j][i*m_ImageInfo.st_bBytesPerPixel+k]=(BYTE)pWeight[k];
 			}
 		}
@@ -428,7 +439,10 @@ DOUBLE ImageKit::Filter(const DOUBLE fSample)
 
 DOUBLE ImageKit::sinc(const double fValue)
 {
-	if (fValue==0.0)
+	DOUBLE fTmp=fValue*M_PI;
+	if (fTmp==0.0)
 		return 1.0;
-	return sin(M_PI*fValue)/(M_PI*fValue);
+	return sin(fTmp)/fTmp;
 }
+
+//return (d>=0 ? (int)(d+0.5) : (int)(d-0.5));

@@ -8,6 +8,13 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+//LONG round(const DOUBLE fValue)
+//{
+//	if (fValue<0.0)
+//		return (LONG)(fValue-0.5);
+//	return (LONG)(fValue+0.5);
+//}
+
 BYTE **AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth)
 {
 	DWORD i;

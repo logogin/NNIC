@@ -89,12 +89,12 @@ STYLE DS_MODALFRAME | DS_3DLOOK | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP |
     WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "NNIC - Neural Network Image Compressor"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC_ORIGINAL,"Static",SS_BITMAP | 
-                    SS_CENTERIMAGE | SS_SUNKEN | WS_BORDER,7,7,213,198
-    CONTROL         "",IDC_STATIC_COMPRESSED,"Static",SS_BITMAP | 
-                    SS_CENTERIMAGE | SS_SUNKEN | WS_BORDER,240,7,213,198
+    CONTROL         "",IDC_STATIC_LEFT,"Static",SS_BITMAP | SS_CENTERIMAGE | 
+                    SS_SUNKEN | WS_BORDER,7,7,221,197
+    CONTROL         "",IDC_STATIC_RIGHT,"Static",SS_BITMAP | SS_CENTERIMAGE | 
+                    SS_SUNKEN | WS_BORDER,240,7,213,198
     PUSHBUTTON      "Compress",IDC_BUTTON_COMPRESS,129,250,45,15
     GROUPBOX        "Use method",IDC_STATIC,7,223,115,75
     CONTROL         "Back Propagation",IDC_RADIO_BACK,"Button",
@@ -296,6 +296,15 @@ BEGIN
     LTEXT           "",IDC_STATIC_QUALITY,83,25,20,8
 END
 
+IDD_DIALOG_RESAMPLE DIALOG DISCARDABLE  0, 0, 180, 42
+STYLE WS_POPUP | WS_BORDER
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Progress1",IDC_PROGRESS_RESAMPLE,"msctls_progress32",
+                    PBS_SMOOTH | WS_BORDER,7,20,166,15
+    LTEXT           "Resampling...",IDC_STATIC,7,7,44,8
+END
+
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -318,8 +327,9 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040904B0"
+        BLOCK "040904b0"
         BEGIN
+            VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "NNIC MFC Application\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
@@ -327,8 +337,10 @@ BEGIN
             VALUE "LegalCopyright", "Copyright (C) 2003\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "NNIC.EXE\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "NNIC Application\0"
             VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -395,6 +407,14 @@ BEGIN
         RIGHTMARGIN, 228
         TOPMARGIN, 7
         BOTTOMMARGIN, 149
+    END
+
+    IDD_DIALOG_RESAMPLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 173
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 35
     END
 END
 #endif    // APSTUDIO_INVOKED

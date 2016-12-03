@@ -17,31 +17,6 @@
 #define M_PI 3.14159265358979323846
 #define FILTER_WIDTH (3.0)
 
-typedef struct tagCONTRIBUTOR
-{
-	tagCONTRIBUTOR(void)
-	{
-	
-	}
-
-	tagCONTRIBUTOR(const DWORD dwPixel, const DOUBLE fWeight)
-	{
-		st_dwPixel=dwPixel;
-		st_fWeight=fWeight;
-	}
-
-	tagCONTRIBUTOR operator=(const tagCONTRIBUTOR &contributor)
-	{
-		st_dwPixel=contributor.st_dwPixel;
-		st_fWeight=contributor.st_fWeight;
-
-		return *this;
-	}
-
-	DWORD st_dwPixel;
-	DOUBLE st_fWeight;
-} CONTRIBUTOR;
-
 typedef struct tagIMAGEKITINFO
 {
 	DWORD st_dwPaddedWidth;
@@ -51,6 +26,7 @@ typedef struct tagIMAGEKITINFO
 	BYTE st_bBytesPerPixel;
 	DWORD st_dwImageSize;
 } IMAGEKITINFO;
+
 
 class ImageKit  
 {
@@ -78,7 +54,7 @@ public:
 		const FLOAT fMinValue,
 		const FLOAT fRange);
 	void DeletePadding(void);
-	BOOLEAN DecodeBMP(const CString &sFileName);
+	BOOLEAN LoadBMP(const CString &sFileName);
 	ImageKit();
 	ImageKit(const ImageKit &Image,const BYTE *pData);
 	virtual ~ImageKit();
