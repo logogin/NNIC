@@ -1,8 +1,8 @@
-// NeuroNet.h : main header file for the NEURONET application
+// NNIC.h : main header file for the NNIC application
 //
 
-#if !defined(AFX_NEURONET_H__38D6C6E2_F73E_4521_AE9D_58E9632A123D__INCLUDED_)
-#define AFX_NEURONET_H__38D6C6E2_F73E_4521_AE9D_58E9632A123D__INCLUDED_
+#if !defined(AFX_NNIC_H__85B8E1FE_25E5_4386_A74D_B95C368ED0B2__INCLUDED_)
+#define AFX_NNIC_H__85B8E1FE_25E5_4386_A74D_B95C368ED0B2__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -12,28 +12,28 @@
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"		// main symbols
 
 /////////////////////////////////////////////////////////////////////////////
-// CNeuroNetApp:
-// See NeuroNet.cpp for the implementation of this class
+// CNNICApp:
+// See NNIC.cpp for the implementation of this class
 //
 
-class CNeuroNetApp : public CWinApp
+class CNNICApp : public CWinApp
 {
 public:
-	CNeuroNetApp();
+	CNNICApp();
 
 // Overrides
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNeuroNetApp)
+	//{{AFX_VIRTUAL(CNNICApp)
 	public:
 	virtual BOOL InitInstance();
 	//}}AFX_VIRTUAL
 
 // Implementation
-	//{{AFX_MSG(CNeuroNetApp)
-	afx_msg void OnAppAbout();
+
+	//{{AFX_MSG(CNNICApp)
 		// NOTE - the ClassWizard will add and remove member functions here.
 		//    DO NOT EDIT what you see in these blocks of generated code !
 	//}}AFX_MSG
@@ -46,4 +46,4 @@ public:
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_NEURONET_H__38D6C6E2_F73E_4521_AE9D_58E9632A123D__INCLUDED_)
+#endif // !defined(AFX_NNIC_H__85B8E1FE_25E5_4386_A74D_B95C368ED0B2__INCLUDED_)

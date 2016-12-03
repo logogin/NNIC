@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "NeuroNet.h"
 #include "NetCP.h"
 
 #ifdef _DEBUG
@@ -36,6 +35,9 @@ NetCP::NetCP(const UINT uiRanks[NETRANK])
 			ASSERT(m_vWeights[i][j]!=NULL);
 		}
 	}
+	m_uiCounts=new UINT[m_uiLayerRank[KOHONEN_LAYER]];
+	ASSERT(m_uiCounts!=NULL);
+	ZeroMemory(m_uiCounts,sizeof(UINT)*m_uiLayerRank[KOHONEN_LAYER]);
 }
 
 NetCP::~NetCP()
@@ -50,33 +52,34 @@ NetCP::~NetCP()
 			delete []m_vWeights[i][j];
 		delete []m_vWeights[i];
 	}
+	delete []m_uiCounts;
 }
 
-BOOL NetCP::MultMatrixVector(const FLOAT *vMatrix, 
-							 const CSize &MatrixSize, 
-							 const FLOAT *vVector, 
-							 const UINT uiVectorSize, 
-							 FLOAT *vResult,
-							 UINT *uiResultSize)
-{
-	if (MatrixSize.cx!=uiVectorSize)
-		return FALSE;
-
-	*uiResultSize=MatrixSize.cy;
-	ASSERT(uiResultSize!=NULL);
-
-	vResult=new FLOAT[*uiResultSize];
-	ASSERT(vResult!=NULL);
-
-	for (UINT i=0; i<MatrixSize.cy; i++)
-	{
-		FLOAT fSum=0.0f;
-		for (UINT j=0; j<MatrixSize.cx; j++)
-			fSum+=vMatrix[i*MatrixSize.cx+j]*vVector[j];
-		vResult[i]=fSum;
-	}
-	return TRUE;
-}
+//DEL BOOL NetCP::MultMatrixVector(const FLOAT *vMatrix, 
+//DEL 							 const CSize &MatrixSize, 
+//DEL 							 const FLOAT *vVector, 
+//DEL 							 const UINT uiVectorSize, 
+//DEL 							 FLOAT *vResult,
+//DEL 							 UINT *uiResultSize)
+//DEL {
+//DEL 	if (MatrixSize.cx!=uiVectorSize)
+//DEL 		return FALSE;
+//DEL 
+//DEL 	*uiResultSize=MatrixSize.cy;
+//DEL 	ASSERT(uiResultSize!=NULL);
+//DEL 
+//DEL 	vResult=new FLOAT[*uiResultSize];
+//DEL 	ASSERT(vResult!=NULL);
+//DEL 
+//DEL 	for (UINT i=0; i<MatrixSize.cy; i++)
+//DEL 	{
+//DEL 		FLOAT fSum=0.0f;
+//DEL 		for (UINT j=0; j<MatrixSize.cx; j++)
+//DEL 			fSum+=vMatrix[i*MatrixSize.cx+j]*vVector[j];
+//DEL 		vResult[i]=fSum;
+//DEL 	}
+//DEL 	return TRUE;
+//DEL }
 
 void NetCP::InitWeights(const FLOAT fMinValue, const FLOAT fRange)
 {
@@ -114,7 +117,8 @@ void NetCP::InitWeights(const FLOAT fMinValue, const FLOAT fRange)
 
 	for (i=0; i<m_uiLayerRank[GROSSBERG_LAYER]; i++)
 		for (UINT j=0; j<m_uiNeuronRank[GROSSBERG_NEURON]; j++)
-			m_vWeights[GROSSBERG_NEURON][i][j]=/*-127.0f+*/(FLOAT)rand()/RAND_MAX*255.0;
+			//m_vWeights[GROSSBERG_NEURON][i][j]=/*-127.0f+*/(FLOAT)rand()/RAND_MAX*255.0f;
+			m_vWeights[GROSSBERG_NEURON][i][j]=0.0f;
 }
 
 void NetCP::NormalizeVector(FLOAT *vVector,const UINT uiVectorSize)
@@ -123,16 +127,28 @@ void NetCP::NormalizeVector(FLOAT *vVector,const UINT uiVectorSize)
 	for (UINT i=0; i<uiVectorSize; i++)
 		fNorm+=vVector[i]*vVector[i];
 
-	fNorm=sqrt(fNorm);
+	fNorm=(FLOAT)sqrt(fNorm);
 	for (i=0; i<uiVectorSize; i++)
 		vVector[i]/=fNorm;
 }
 
-void NetCP::SetAxons(const UINT uiLayer, const FLOAT *vAxons)
+/*void NetCP::NormalizeVector(const FLOAT *vVector, const UINT uiVectorSize, FLOAT *vTarget)
+{
+	FLOAT fNorm=0.0f;
+	for (UINT i=0; i<uiVectorSize; i++)
+		fNorm+=vVector[i]*vVector[i];
+
+	fNorm=(FLOAT)sqrt(fNorm);
+	for (i=0; i<uiVectorSize; i++)
+		vTarget[i]=vVector[i]/fNorm;
+}*/
+
+void NetCP::SetAxons(const UINT uiLayer, const FLOAT *vAxons, const BOOL bNormalize)
 {
 	ASSERT(uiLayer<NETRANK);
 	CopyMemory(m_vAxons[INPUT_LAYER],vAxons,sizeof(FLOAT)*m_uiLayerRank[INPUT_LAYER]);
-	NormalizeVector(m_vAxons[INPUT_LAYER],m_uiLayerRank[INPUT_LAYER]);
+	if (bNormalize)
+		NormalizeVector(m_vAxons[INPUT_LAYER],m_uiLayerRank[INPUT_LAYER]);
 }
 
 void NetCP::PropagateKohonen()
@@ -173,7 +189,7 @@ void NetCP::LearnGrossberg(const FLOAT fLearnRate,const FLOAT *fTarget)
 	if (iFirstNeuron<0)
 		iFirstNeuron=0;
 	INT iLastNeuron=m_uiWinnerNeuron+m_uiNeighborhoodSize;
-	if (iLastNeuron==m_uiLayerRank[KOHONEN_LAYER])
+	if (iLastNeuron>=m_uiLayerRank[KOHONEN_LAYER])
 		iLastNeuron=m_uiLayerRank[KOHONEN_LAYER]-1;
 
 	for (UINT i=0; i<m_uiLayerRank[GROSSBERG_LAYER]; i++)
@@ -182,13 +198,27 @@ void NetCP::LearnGrossberg(const FLOAT fLearnRate,const FLOAT *fTarget)
 				m_vWeights[GROSSBERG_NEURON][i][j]);
 }
 
+void NetCP::LearnGrossberg(const BYTE *bTarget)
+{
+	m_uiCounts[m_uiWinnerNeuron]++;
+	for (UINT i=0; i<m_uiLayerRank[GROSSBERG_LAYER]; i++)
+		m_vWeights[GROSSBERG_NEURON][i][m_uiWinnerNeuron]+=bTarget[i];
+}
+
+void NetCP::FinilizeGrossberg()
+{
+	for (UINT i=0; i<m_uiLayerRank[KOHONEN_LAYER]; i++)
+		for (UINT j=0; j<m_uiLayerRank[GROSSBERG_LAYER]; j++)
+			m_vWeights[GROSSBERG_NEURON][j][i]/=m_uiCounts[i];
+}
+
 void NetCP::LearnKohonen(const FLOAT fLearnRate)
 {
 	INT iFirstNeuron=m_uiWinnerNeuron-m_uiNeighborhoodSize;
 	if (iFirstNeuron<0)
 		iFirstNeuron=0;
 	INT iLastNeuron=m_uiWinnerNeuron+m_uiNeighborhoodSize;
-	if (iLastNeuron==m_uiLayerRank[KOHONEN_LAYER])
+	if (iLastNeuron>=m_uiLayerRank[KOHONEN_LAYER])
 		iLastNeuron=m_uiLayerRank[KOHONEN_LAYER]-1;
 
 /*	for (UINT i=iFirstNeuron; i<iLastNeuron; i++)
@@ -238,7 +268,13 @@ FLOAT NetCP::GetWinnerDistance()
 		fSum+=fDistance*fDistance;
 	}
 
-	return sqrt(fSum);
+	return (FLOAT)sqrt(fSum);
+}
+
+void NetCP::SetWinnerNeuron(const UINT uiWinner)
+{
+	ASSERT(uiWinner<m_uiLayerRank[KOHONEN_LAYER]);
+	m_uiWinnerNeuron=uiWinner;
 }
 
 FLOAT NetCP::GetTargetDistance(const FLOAT *fTarget)
@@ -251,5 +287,5 @@ FLOAT NetCP::GetTargetDistance(const FLOAT *fTarget)
 		fSum+=fDistance*fDistance;
 	}
 
-	return sqrt(fSum);
+	return (FLOAT)sqrt(fSum);
 }

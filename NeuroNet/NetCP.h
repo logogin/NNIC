@@ -18,7 +18,11 @@ const INT bQuadrants[8][3]={{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},
 class NetCP  
 {
 public:
+	void FinilizeGrossberg(void);
+	void LearnGrossberg(const BYTE *bTarget);
 	FLOAT GetTargetDistance(const FLOAT *fTarget);
+	void SetWinnerNeuron(const UINT uiWinner);
+	void SetAxons(const UINT uiLayer, const FLOAT *vAxons,const BOOL bNormalize=FALSE);
 	FLOAT GetWinnerDistance(void);
 	void SetNeighborhoodSize(const UINT uiNeighborhoodSize);
 	void LearnKohonen(const FLOAT fLearnRate);
@@ -28,7 +32,6 @@ public:
 	void LearnGrossberg(const FLOAT fLearnRate,const FLOAT *fTarget);
 	void PropagateGrossberg(void);
 	void PropagateKohonen(void);
-	void SetAxons(const UINT uiLayer, const FLOAT *vAxons);
 	void NormalizeVector(FLOAT *vVector,const UINT uiVectorSize);
 	void InitWeights(const FLOAT fMinValue,const FLOAT fRange);
 	NetCP(const UINT uiRanks[NETRANK]);
@@ -37,17 +40,12 @@ public:
 protected:
 	UINT m_uiWinnerNeuron;
 	UINT m_uiNeighborhoodSize;
-	BOOL MultMatrixVector(const FLOAT *vMatrix,
-		const CSize &MatrixSize,
-		const FLOAT *vVector,
-		const UINT uiVectorSize,
-		FLOAT *vResult,
-		UINT *uiResultSize);
 
 	UINT m_uiLayerRank[NETRANK];
 	UINT m_uiNeuronRank[NETRANK-1];
 	FLOAT *m_vAxons[NETRANK];
 	FLOAT **m_vWeights[NETRANK-1];
+	UINT *m_uiCounts;
 };
 
 #endif // !defined(AFX_NETCP_H__F015352A_097D_45AD_BD96_EA31A10F0FEB__INCLUDED_)

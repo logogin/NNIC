@@ -16,7 +16,7 @@
 
 typedef struct tagIMAGEKITINFO
 {
-	DWORD dwAlignedWidth;
+	DWORD dwPaddedWidth;
 	DWORD dwWidth;
 	DWORD dwHeight;
 	BYTE bBitsPerPixel;
@@ -29,11 +29,19 @@ typedef struct tagIMAGEKITINFO
 class ImageKit  
 {
 public:
+	DWORD GetImageSize(void);
+	void FromObject(const ImageKit &Image,const BYTE *pData);
+	DOUBLE GetPSNRFullChannel(const ImageKit &Image);
+	DOUBLE GetPSNR(const UINT uiChannel,const ImageKit &Image);
+	ULONG GetImageWidth(void);
+	ULONG GetImageHeight(void);
+	HBITMAP GetHandle(CDC *pDC);
 	BYTE *GetBits(void);
 	void GetSegment(const CRect rSeg,FLOAT *pSeg,const FLOAT fMinValue,const FLOAT fRange);
-	void DeleteAlignment(void);
+	void DeletePadding(void);
 	BOOL DecodeBMP(const CString &sFileName);
 	ImageKit();
+	ImageKit(const ImageKit &Image,const BYTE *pData);
 	virtual ~ImageKit();
 
 protected:
