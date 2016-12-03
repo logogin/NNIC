@@ -25,8 +25,18 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CCPDlg)
 	enum { IDD = IDD_PROPPAGE_COUNTER };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
+	BOOL	m_bTrainNeighbours;
+	DWORD	m_dwCycles;
+	DWORD	m_wClusters;
+	DWORD	m_wNeighInit;
+	DWORD	m_wNeighFinal;
+	DWORD	m_wNeighChange;
+	float	m_fMinDist;
+	float	m_fLearnInit;
+	float	m_fLearnFinal;
+	float	m_fLearnChange;
+	DWORD	m_dwLearnSteps;
+	DWORD	m_dwNeighSteps;
 	//}}AFX_DATA
 
 
@@ -41,10 +51,16 @@ public:
 
 // Implementation
 protected:
+	void EnableNeighRadius(const BOOLEAN bFlag);
+	void EnableNeighRadiusChange(const BOOLEAN bFlag);
+	void EnableLearnRateChange(const BOOLEAN bFlag);
 	OPTIONSCP m_optionsCP;
 	// Generated message map functions
 	//{{AFX_MSG(CCPDlg)
 	virtual BOOL OnInitDialog();
+	afx_msg void OnRadioKohgros();
+	afx_msg void OnRadioKohonen();
+	afx_msg void OnCheckTrainneigh();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

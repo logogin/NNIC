@@ -28,16 +28,16 @@ public:
 	OPTIONSDCT * GetOptionsDCT(void);
 	ULONG GetOriginalFileSize(void);
 	OPTIONSBP * GetOptionsBP(void);
-	void SetFinished(const BOOL bFlag);
+	void SetFinished(const BOOLEAN bFlag);
 	void DisplayComprBitmap(void);
 	ImageKit * GetComprImage(void);
 	INT StepProgress(void);
 	void SetProgress(const UINT uiPos);
 	OPTIONSCP * GetOptionsCP(void);
 	ImageKit * GetOriginalImage(void);
-	void EnableOptions(const BOOL bFlag);
-	void EnableStop(const BOOL bFlag);
-	void EnableCompress(const BOOL bFlag);
+	void EnableOptions(const BOOLEAN bFlag);
+	void EnableStop(const BOOLEAN bFlag);
+	void EnableCompress(const BOOLEAN bFlag);
 	CNNICDlg(CWnd* pParent = NULL);	// standard constructor
 
 // Dialog Data
@@ -56,7 +56,7 @@ public:
 // Implementation
 protected:
 	CWinThread * m_threadCompress;
-	BOOL m_bFinished;
+	BOOLEAN m_bFinished;
 	OPTIONS m_optionsDefault;
 	ImageKit m_OriginalImage;
 	ImageKit m_ComprImage;

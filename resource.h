@@ -24,8 +24,15 @@
 #define IDC_EDIT_CYCLES                 1022
 #define IDC_EDIT_CLUSTERS               1026
 #define IDC_STATIC_AVDIST               1029
+#define IDC_EDIT_LEARNCHANGE            1029
 #define IDC_STATIC_TIME                 1030
 #define IDC_STATIC_CYCLES               1031
+#define IDC_EDIT_LEARNFINAL             1031
+#define IDC_EDIT_LEARNINIT              1032
+#define IDC_EDIT_NEIGHCHANGE            1033
+#define IDC_EDIT_NEIGHSTEPS             1034
+#define IDC_EDIT_NEIGHFINAL             1035
+#define IDC_EDIT_NEIGHINIT              1036
 #define IDC_EDIT_FILENAME               1037
 #define IDC_EDIT_DIRECTORY              1038
 #define IDC_EDIT_IMAGESIZE              1040
@@ -47,15 +54,10 @@
 #define IDC_EDIT_MINDIST                1069
 #define IDC_EDIT_INITMOMENT             1069
 #define IDC_EDIT_FINALLEARNRATE         1070
-#define IDC_EDIT_LEARNEPOCHS            1071
 #define IDC_EDIT_LEARNCHANGERATE        1072
-#define IDC_EDIT_INITNEIGHSIZE          1073
 #define IDC_RADIO_SEQUENTIAL            1073
-#define IDC_EDIT_FINALNEIGHSIZE         1074
 #define IDC_RADIO_BATCH                 1074
-#define IDC_EDIT_NEIGHEPOCHS            1075
 #define IDC_SLIDER_INPUT                1075
-#define IDC_EDIT_NEIGHCHANGERATE        1076
 #define IDC_SLIDER_HIDDEN               1076
 #define IDC_CHECK_SECOND                1077
 #define IDC_EDIT_NEURONS                1078
@@ -76,9 +78,11 @@
 #define IDC_STATIC_WITH                 1098
 #define IDC_STATIC_NEURONS              1099
 #define IDC_SLIDER_QUALITY              1102
-#define IDC_CHECK                       1103
 #define IDC_CHECK_SHIFT                 1103
 #define IDC_STATIC_QUALITY              1104
+#define IDC_RADIO_KOHGROS               1106
+#define IDC_RADIO_KOHONEN               1107
+#define IDC_CHECK_TRAINNEIGH            1110
 
 // Next default values for new objects
 // 
@@ -87,7 +91,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32772
-#define _APS_NEXT_CONTROL_VALUE         1106
-#define _APS_NEXT_SYMED_VALUE           101
+#define _APS_NEXT_CONTROL_VALUE         1117
+#define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

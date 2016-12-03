@@ -17,11 +17,11 @@ class CComprDlg : public CDialog
 // Construction
 public:
 	void DisplayComprBitmap(const BYTE *pData);
-	void SetFinished(const BOOL fFlag);
-	void EnableOptions(const BOOL bFlag);
+	void SetFinished(const BOOLEAN fFlag);
+	void EnableOptions(const BOOLEAN bFlag);
 	INT StepProgress(void);
 	void SetProgress(const UINT uiPos);
-	void EnableStart(const BOOL bFlag);
+	void EnableStart(const BOOLEAN bFlag);
 	OPTIONSCP * GetOptionsCP(void);
 	ImageKit * GetImageKit(void);
 	CComprDlg(const OPTIONS &options,ImageKit *pImageKit,CWnd* pParent = NULL);   // standard constructor
@@ -44,7 +44,7 @@ public:
 
 // Implementation
 protected:
-	BOOL m_bFinished;
+	BOOLEAN m_bFinished;
 	CWinThread * m_trdCompress;
 	ImageKit * m_pImageKit;
 	OPTIONS m_Options;

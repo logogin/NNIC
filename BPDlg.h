@@ -59,9 +59,9 @@ public:
 
 // Implementation
 protected:
-	void EnableSecondHidden(const BOOL bFlag);
-	void EnableLearnRate(const BOOL bFlag);
-	void EnableMomentum(const BOOL bFlag);
+	void EnableSecondHidden(const BOOLEAN bFlag);
+	void EnableLearnRate(const BOOLEAN bFlag);
+	void EnableMomentum(const BOOLEAN bFlag);
 	OPTIONSBP m_optionsBP; 
 	// Generated message map functions
 	//{{AFX_MSG(CBPDlg)

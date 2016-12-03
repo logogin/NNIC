@@ -142,7 +142,7 @@ UINT StartCP(LPVOID pParam)
 	UINT uiInc=uiSize/100;
 	FLOAT fStartLearn=0.9f;
 	FLOAT fPrevDist;
-	BOOL bFirst=TRUE;
+	BOOLEAN bFirst=TRUE;
 	do
 	{
 		
@@ -306,7 +306,7 @@ OPTIONSCP * CComprDlg::GetOptionsCP()
 	return &m_Options.st_optionsCP;
 }
 
-void CComprDlg::EnableStart(const BOOL bFlag)
+void CComprDlg::EnableStart(const BOOLEAN bFlag)
 {
 	m_btnStart.EnableWindow(bFlag);
 }
@@ -337,12 +337,12 @@ void CComprDlg::OnCancel()
 		CDialog::OnCancel();
 }
 
-void CComprDlg::EnableOptions(const BOOL bFlag)
+void CComprDlg::EnableOptions(const BOOLEAN bFlag)
 {
 	m_btnOptions.EnableWindow(bFlag);
 }
 
-void CComprDlg::SetFinished(const BOOL fFlag)
+void CComprDlg::SetFinished(const BOOLEAN fFlag)
 {
 	m_bFinished=fFlag;
 }
@@ -351,7 +351,7 @@ void CComprDlg::DisplayComprBitmap(const BYTE *pData)
 {
 	CNNICDlg *pDlg=(CNNICDlg *)GetParent();
 
-	BOOL b=IsWindow(pDlg->m_hWnd);
+	//BOOLEAN b=IsWindow(pDlg->m_hWnd);
 
 	ImageKit ComprImage(*m_pImageKit,pData);
 	CStatic *pStatic=(CStatic *)pDlg->GetDlgItem(IDC_STATIC_COMPRESSED);

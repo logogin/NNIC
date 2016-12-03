@@ -106,7 +106,7 @@ void NetBP::SetSignalBoundaries(const FLOAT fMinSignal, const FLOAT fMaxSignal)
 	m_fMaxSignal=fMaxSignal;
 }
 
-void NetBP::UseBiases(const BOOL bFlag)
+void NetBP::UseBiases(const BOOLEAN bFlag)
 {
 	m_bUseBias=bFlag;
 	if (bFlag)
@@ -237,7 +237,7 @@ FLOAT NetBP::BackwardPass(const UINT uiPatterns,const FLOAT **fPatterns,const FL
 //	
 //	CopyWeights(DELTA,WEIGH);
 //
-//	BOOL bFlag=FALSE;
+//	BOOLEAN bFlag=FALSE;
 //	do
 //	{
 //		UpdateWeights(WEIGH,DELTA);
@@ -261,7 +261,7 @@ FLOAT NetBP::BackwardPass(const UINT uiPatterns,const FLOAT **fPatterns,const FL
 	FLOAT fGrad=0.0;
 	FLOAT fWeight=0.0;
 	FLOAT fValue;
-	BOOL bFlag;
+	BOOLEAN bFlag;
 	FLOAT fNetError;
 	UINT i;
 	UINT j;

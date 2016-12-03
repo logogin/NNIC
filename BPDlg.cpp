@@ -112,10 +112,10 @@ BOOL CBPDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	CString sString;
 	CheckRadioButton(IDC_RADIO_SEQUENTIAL,IDC_RADIO_BATCH,
-		IDC_RADIO_SEQUENTIAL+m_optionsBP.st_wLearnMode);
+		IDC_RADIO_SEQUENTIAL+m_optionsBP.st_bLearnMode);
 
 	CheckRadioButton(IDC_RADIO_SIGMOID,IDC_RADIO_HYPERTAN,
-		IDC_RADIO_SIGMOID+m_optionsBP.st_wSigmoidType);
+		IDC_RADIO_SIGMOID+m_optionsBP.st_bSigmoidType);
 
 	m_fAlpha=m_optionsBP.st_fSigmoidAlpha;
 
@@ -152,7 +152,7 @@ BOOL CBPDlg::OnInitDialog()
 	m_dwPatterns=m_optionsBP.st_wPatterns;
 
 	UpdateData(FALSE);
-	if (m_optionsBP.st_wLearnMode==0)
+	if (m_optionsBP.st_bLearnMode==0)
 		OnRadioSequential();
 	else
 		OnRadioBatch();
@@ -166,7 +166,7 @@ BOOL CBPDlg::OnInitDialog()
 void CBPDlg::OnRadioBatch() 
 {
 	// TODO: Add your control notification handler code here
-	m_optionsBP.st_wLearnMode=1;
+	m_optionsBP.st_bLearnMode=1;
 	GetDlgItem(IDC_CHECK_MOMENTUM)->EnableWindow(FALSE);
 	EnableLearnRate(FALSE);
 	EnableMomentum(FALSE);
@@ -175,13 +175,13 @@ void CBPDlg::OnRadioBatch()
 void CBPDlg::OnRadioSequential() 
 {
 	// TODO: Add your control notification handler code here
-	m_optionsBP.st_wLearnMode=0;
+	m_optionsBP.st_bLearnMode=0;
 	GetDlgItem(IDC_CHECK_MOMENTUM)->EnableWindow(TRUE);
 	EnableLearnRate(TRUE);
 	EnableMomentum(m_bMomentum);
 }
 
-void CBPDlg::EnableLearnRate(const BOOL bFlag)
+void CBPDlg::EnableLearnRate(const BOOLEAN bFlag)
 {
 	UpdateData(TRUE);
 	GetDlgItem(IDC_EDIT_INITLEARNRATE)->EnableWindow(bFlag);
@@ -190,7 +190,7 @@ void CBPDlg::EnableLearnRate(const BOOL bFlag)
 	GetDlgItem(IDC_EDIT_LEARNCHANGERATE)->EnableWindow(bFlag);
 }
 
-void CBPDlg::EnableMomentum(const BOOL bFlag)
+void CBPDlg::EnableMomentum(const BOOLEAN bFlag)
 {
 	GetDlgItem(IDC_EDIT_INITMOMENT)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_FINALMOMENT)->EnableWindow(bFlag);
@@ -201,16 +201,16 @@ void CBPDlg::EnableMomentum(const BOOL bFlag)
 void CBPDlg::OnRadioSigmoid() 
 {
 	// TODO: Add your control notification handler code here
-	m_optionsBP.st_wSigmoidType=0;
+	m_optionsBP.st_bSigmoidType=0;
 }
 
 void CBPDlg::OnRadioHypertan() 
 {
 	// TODO: Add your control notification handler code here
-	m_optionsBP.st_wSigmoidType=1;
+	m_optionsBP.st_bSigmoidType=1;
 }
 
-void CBPDlg::EnableSecondHidden(const BOOL bFlag)
+void CBPDlg::EnableSecondHidden(const BOOLEAN bFlag)
 {
 	GetDlgItem(IDC_STATIC_WITH)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_NEURONS)->EnableWindow(bFlag);

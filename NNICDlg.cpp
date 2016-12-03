@@ -78,7 +78,7 @@ CNNICDlg::CNNICDlg(CWnd* pParent /*=NULL*/)
 
 	OPTIONSBP optionsBP(0,0,1.0f,TRUE,TRUE,300,0.01f,80,8,4,FALSE,16,0.9f,0.01f,
 		1000,0.05f,0.3f,0.1f,1000,0.01f);
-	OPTIONSCP optionsCP(1024,10,0.035f,0.3f,0.1f,10000,0.01f,3,0,50000,1);
+	OPTIONSCP optionsCP(NET_TYPE_KOHONEN_GROSSBERG,256,10,0.035f,TRUE,0.3f,0.1f,0.01f,10000,3,0,1,50000);
 	OPTIONSDCT optionsDCT(10,TRUE);
 	OPTIONS options(optionsBP,optionsCP,optionsDCT);
 	CopyMemory(&m_optionsDefault,&options,sizeof(OPTIONS));
@@ -210,7 +210,8 @@ void CNNICDlg::OnFileOpen()
 		m_sOriginalFileName=dlgFile.GetPathName();
 		m_OriginalImage.DecodeBMP(m_sOriginalFileName);
 		//m_OriginalImage.DeletePadding();
-		m_staticOriginal.SetBitmap(m_OriginalImage.GetHandle(m_staticOriginal.GetDC()));
+		//m_staticOriginal.SetBitmap(m_OriginalImage.GetHandle(m_staticOriginal.GetDC()));
+		m_staticOriginal.SetBitmap(m_OriginalImage.Resample(m_staticOriginal.GetDC(),512,512));
 		EnableCompress(TRUE);
 	}
 
@@ -245,272 +246,19 @@ void CNNICDlg::OnButtonCompress()
 	}
 }
 
-void CNNICDlg::EnableCompress(const BOOL bFlag)
+void CNNICDlg::EnableCompress(const BOOLEAN bFlag)
 {
 	(GetDlgItem(IDC_BUTTON_COMPRESS))->EnableWindow(bFlag);
 }
 
-void CNNICDlg::EnableStop(const BOOL bFlag)
+void CNNICDlg::EnableStop(const BOOLEAN bFlag)
 {
 	(GetDlgItem(IDC_BUTTON_STOP))->EnableWindow(bFlag);
 }
 
-void CNNICDlg::EnableOptions(const BOOL bFlag)
+void CNNICDlg::EnableOptions(const BOOLEAN bFlag)
 {
 	(GetDlgItem(IDC_BUTTON_OPTIONS))->EnableWindow(bFlag);
-}
-
-UINT StartCP(LPVOID pParam)
-{
-	CNNICDlg* pDlg = (CNNICDlg *)pParam;
-
-    if (pDlg == NULL ||
-        !pDlg->IsKindOf(RUNTIME_CLASS(CNNICDlg)))
-    return TRUE;
-
-	pDlg->EnableCompress(FALSE);
-	pDlg->EnableStop(TRUE);
-
-	ImageKit *pImage=pDlg->GetOriginalImage();
-	const BYTE *pBits=pImage->GetBits();
-	ofstream out("image1.dat",ios::out | ios::binary);
-	out<<pImage->GetImageSize();
-	out.write(pBits,pImage->GetImageSize());
-
-	out.close();
-	ASSERT(pBits!=NULL);
-
-	OPTIONSCP *optionsCP=pDlg->GetOptionsCP();
-	ASSERT(optionsCP!=NULL);
-
-	/*******!!!!!!!!!!!!!*********/
-	//optionsCP->st_ulCycles=0;
-
-	UINT uiLayers[3]={3,optionsCP->st_wClusters,3};
-	NetCP Net(uiLayers);
-	//Net.SetNeighborhoodSize(pOptions->st_wInitNeighSize);
-	Net.InitWeights(-1.0,2.0);
-
-	const UINT uiSize=pImage->GetImageHeight()*pImage->GetImageWidth();
-	FLOAT **vPatterns=new FLOAT *[uiSize];
-	ASSERT(*vPatterns!=NULL);
-	for (UINT i=0; i<uiSize; i++)
-	{
-		vPatterns[i]=new FLOAT[3];
-		ASSERT(vPatterns[i]!=NULL);
-		for (UINT j=0; j<3; j++)
-			vPatterns[i][j]=pBits[i*3+j]-127.0f;
-		Net.NormalizeVector(vPatterns[i],3);
-	}
-
-	FLOAT fWinDist;
-	UINT uiCycles=0;
-	BYTE *uiClusters=new BYTE[uiSize];
-	//WORD *uiClusters=new WORD[uiSize];
-	ASSERT(uiClusters!=NULL);
-
-	CString sString;
-	LARGE_INTEGER liFreq;
-	LARGE_INTEGER liCount1;
-	LARGE_INTEGER liCount2;
-	QueryPerformanceFrequency(&liFreq);
-	UINT uiInc=uiSize/100;
-	CMapWordToPtr map;
-	LPVOID pValue;
-	ULONG ulLearnCount=0;
-	ULONG ulNeighCount=0;
-	INT iLearnSign=1;
-	INT iNeighSign=1;
-	FLOAT fLearnRate=optionsCP->st_fInitLearnRate;
-	WORD wNeighSize=optionsCP->st_wInitNeighSize;
-	if (optionsCP->st_fInitLearnRate>=optionsCP->st_fFinalLearnRate)
-		iLearnSign=-1;
-	if (optionsCP->st_wInitNeighSize>=optionsCP->st_wFinalNeighSize)
-		iNeighSign=-1;
-	//QueryPerformanceCounter(&liCount1);
-	do
-	{
-		FLOAT fTime=0.0;
-		fWinDist=0.0f;
-		pDlg->SetProgress(0);
-		for (i=0; i<uiSize; i++)
-		{
-			
-			ulLearnCount++;
-			ulNeighCount++;
-			if (ulLearnCount==optionsCP->st_ulLearnRateEpochs)
-			{
-				ulLearnCount=0;
-				fLearnRate+=iLearnSign*optionsCP->st_fLearnChangeRate;
-				if (iLearnSign==-1&&fLearnRate<optionsCP->st_fFinalLearnRate)
-					fLearnRate=optionsCP->st_fFinalLearnRate;
-				if (iLearnSign==1&&fLearnRate>optionsCP->st_fFinalLearnRate)
-					fLearnRate=optionsCP->st_fFinalLearnRate;
-			}
-
-			if (ulNeighCount==optionsCP->st_ulNeighSizeEpochs)
-			{
-				ulNeighCount=0;
-				switch (iNeighSign)
-				{
-				case -1:
-					if (wNeighSize>optionsCP->st_wFinalNeighSize)
-						wNeighSize-=optionsCP->st_wNeighChangeRate;
-					else
-						wNeighSize=optionsCP->st_wFinalNeighSize;
-					break;
-				case 1:
-					if (wNeighSize<optionsCP->st_wFinalNeighSize)
-						wNeighSize+=optionsCP->st_wNeighChangeRate;
-					else
-						wNeighSize=optionsCP->st_wFinalNeighSize;
-					break;
-				}
-				
-			}
-		
-			Net.SetNeighborhoodSize(wNeighSize);
-			Net.SetAxons(INPUT_LAYER,vPatterns[i]);
-			QueryPerformanceCounter(&liCount1);
-			Net.PropagateKohonen();
-			QueryPerformanceCounter(&liCount2);
-			uiClusters[i]=Net.GetWinnerNeuron();
-			if (!map.Lookup(uiClusters[i],pValue))
-				map.SetAt(uiClusters[i],&uiClusters[i]);
-			fWinDist+=Net.GetWinnerDistance();
-			Net.LearnKohonen(fLearnRate);
-			if (!((i+1)%uiInc))
-				pDlg->StepProgress();
-			
-			fTime+=(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart;
-		}
-		
-		fWinDist/=uiSize;
-		uiCycles++;
-		pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,uiCycles);
-		sString.Format(_T("%f"),fWinDist);
-		pDlg->SetDlgItemText(IDC_STATIC_AVDIST,sString);
-		sString.Format(_T("%f"),fTime);
-		//QueryPerformanceCounter(&liCount2);
-		//sString.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
-		pDlg->SetDlgItemText(IDC_STATIC_TIME,sString);
-		pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,optionsCP->st_wClusters-map.GetCount());
-		map.RemoveAll();
-	}
-	while(fWinDist>optionsCP->st_fMinDist&&uiCycles<optionsCP->st_ulCycles);
-
-	for (i=0; i<uiSize; i++)
-		delete []vPatterns[i];
-	delete []vPatterns;
-
-	uiCycles=0;
-
-	for (i=0; i<uiSize; i++)
-	{
-		Net.SetWinnerNeuron(uiClusters[i]);	
-		Net.LearnGrossberg(&pBits[i*3]);
-	}
-	Net.FinilizeGrossberg();
-	QueryPerformanceCounter(&liCount2);
-
-	BYTE *pResult=new BYTE[uiSize*3];
-	ASSERT(pResult!=NULL);
-	ofstream f("debug.txt",ios::out);
-	for (i=0; i<uiSize; i++)
-	{
-		f<<i<<" "<<(WORD)uiClusters[i]<<endl;
-		for (UINT j=0; j<3; j++)
-/******************/
-			pResult[i*3+j]=(BYTE)floor(/*127.0+*/Net.GetWeight(GROSSBERG_LAYER,j,uiClusters[i])+0.5);
-	}
-	f.close();
-//	ifstream f("result.dat",ios::in | ios::binary);
-//	DWORD size;
-//	f>>size;
-//	f.read(pResult,size);
-//	f.close();
-
-	ImageKit *pComprImage=pDlg->GetComprImage();
-	pComprImage->FromObject(*pImage,pResult);
-	pDlg->DisplayComprBitmap();
-	//	*pImage,pResult);
-    	
-	delete []pResult;
-
-	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
-	{
-		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
-        return TRUE;
-
-    } 
-	else 
-		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
-			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
-
-	CFile file;
-	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
-
-	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_CP,pImage->GetImageWidth(),
-		pImage->GetImageHeight(),uiSize);
-	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
-
-	ULONG uiSrcLen=optionsCP->st_wClusters*3;
-	ULONG uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
-
-	BYTE *pSrc=new BYTE[uiSrcLen];
-	ASSERT(pSrc!=NULL);
-	BYTE *pDest=new BYTE[uiDestLen];
-	ASSERT(pDest!=NULL);
-	ZeroMemory(pDest,uiDestLen);
-
-	for (i=0; i<optionsCP->st_wClusters; i++)
-		for (UINT j=0; j<3; j++)
-			pSrc[i*3+j]=(BYTE)(127.0+Net.GetWeight(GROSSBERG_LAYER,j,i)+0.5);
-
-	ASSERT(compress(pDest,&uiDestLen,pSrc,uiSrcLen)==Z_OK);
-
-	file.Write(&uiSrcLen,sizeof(ULONG));
-	file.Write(&uiDestLen,sizeof(ULONG));
-	file.Write(pDest,uiDestLen);
-
-	delete []pSrc;
-	delete []pDest;
-	uiSrcLen=uiSize*sizeof(BYTE);
-	//uiSrcLen=uiSize*sizeof(WORD);
-	uiDestLen=(ULONG)(uiSrcLen*100.1/100+0.5)+12;
-
-	pDest=new BYTE[uiDestLen];
-	ASSERT(pDest!=NULL);
-	ZeroMemory(pDest,uiDestLen);
-
-	ASSERT(compress(pDest,&uiDestLen,(BYTE *)&uiClusters[0],uiSrcLen)==Z_OK);
-
-	file.Write(&uiSrcLen,sizeof(ULONG));
-	file.Write(&uiDestLen,sizeof(ULONG));
-	file.Write(pDest,uiDestLen);
-
-	CReportDlg ReportDlg;
-	ReportDlg.SetFileName(file.GetFileName());
-	ReportDlg.SetDirectory(file.GetFilePath());
-	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
-	file.Close();
-	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
-	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
-	ReportDlg.SetCompressionMethod(_T("Counter Propagation"));
-	DOUBLE fRed=pImage->GetPSNR(0,*pComprImage);
-	DOUBLE fGreen=pImage->GetPSNR(1,*pComprImage);
-	DOUBLE fBlue=pImage->GetPSNR(2,*pComprImage);
-	ReportDlg.SetPSNR(fRed,fGreen,fBlue,(fRed+fGreen+fBlue)/3,pImage->GetPSNRFullChannel(*pComprImage));
-	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
-
-	ReportDlg.DoModal();
-
-	delete []pDest;
-	delete []uiClusters;
-	pDlg->EnableOptions(TRUE);
-	pDlg->EnableCompress(TRUE);
-	pDlg->SetFinished(TRUE);
-	return FALSE;
 }
 
 UINT StartBP(LPVOID pParam)
@@ -552,7 +300,7 @@ UINT StartBP(LPVOID pParam)
 	NetBP Net(bOutputLayer+1,uiLayers);
 	Net.SetSignalBoundaries(-0.5,0.5);
 
-	switch (optionsBP->st_wSigmoidType)
+	switch (optionsBP->st_bSigmoidType)
 	{
 	case 0:
 		Net.SetSigmoidType(SIGMOID_TYPE_ORIGINAL);
@@ -567,7 +315,7 @@ UINT StartBP(LPVOID pParam)
 	Net.UseBiases(optionsBP->st_bUseBiases);
 	UINT uiMethod;
 	//optionsBP->st_wLearnMode=1;
-	switch (optionsBP->st_wLearnMode)
+	switch (optionsBP->st_bLearnMode)
 	{
 	case 0:
 		uiMethod=LEARN_TYPE_SEQUENTIAL;
@@ -603,7 +351,7 @@ UINT StartBP(LPVOID pParam)
 	UINT uiPatterns;
 	FLOAT fNetError;
 	ULONG ulCycles;
-	BOOL bFlag;
+	BOOLEAN bFlag;
 	CString sString;
 
 	QueryPerformanceFrequency(&liFreq);
@@ -836,6 +584,406 @@ UINT StartBP(LPVOID pParam)
 	return FALSE;
 }
 
+UINT StartCP(LPVOID pParam)
+{
+	CNNICDlg* pDlg = (CNNICDlg *)pParam;
+
+    if (pDlg == NULL ||
+        !pDlg->IsKindOf(RUNTIME_CLASS(CNNICDlg)))
+    return TRUE;
+
+	pDlg->EnableCompress(FALSE);
+	pDlg->EnableStop(TRUE);
+
+	ImageKit *pImage=pDlg->GetOriginalImage();
+	DWORD dwSize=pImage->GetImageHeight()*pImage->GetImageWidth();
+	DWORD dwImageSize=pImage->GetImageSize();
+	const BYTE *pBits=pImage->GetBits();
+	ASSERT(pBits!=NULL);
+
+	OPTIONSCP *optionsCP=pDlg->GetOptionsCP();
+	ASSERT(optionsCP!=NULL);
+
+	const BYTE bVectorSize=3;
+	const FLOAT fColorShift=128.0f;
+	DWORD i,j;
+
+	WORD *wLayers=NULL;
+	switch (optionsCP->st_bNetType)
+	{
+	case NET_TYPE_KOHONEN_GROSSBERG:
+		wLayers=new WORD[3];
+		ASSERT(wLayers!=NULL);
+		wLayers[INPUT_LAYER]=bVectorSize;
+		wLayers[KOHONEN_LAYER]=optionsCP->st_wClusters;
+		wLayers[GROSSBERG_LAYER]=bVectorSize;
+		break;
+
+	case NET_TYPE_KOHONEN:
+		wLayers=new WORD[2];
+		wLayers[INPUT_LAYER]=bVectorSize;
+		wLayers[KOHONEN_LAYER]=optionsCP->st_wClusters;
+		break;
+	}
+
+	NetCP Net(wLayers,optionsCP->st_bNetType);
+
+	delete []wLayers;
+
+	FLOAT *pLearnRate=NULL;
+	FLOAT fLearnRate=optionsCP->st_fInitLearnRate;
+	WORD wNeighRadius=optionsCP->st_wInitNeighRadius;
+	if (optionsCP->st_bTrainNeighbours)
+	{
+		pLearnRate=new FLOAT[__max(optionsCP->st_wInitNeighRadius,
+			optionsCP->st_wFinalNeighRadius)+1];
+		wNeighRadius=optionsCP->st_wInitNeighRadius;
+	}
+	else
+	{
+		pLearnRate=new FLOAT;
+		wNeighRadius=0;
+	}
+	ASSERT(pLearnRate!=NULL);
+
+	Net.SetLearnRate(fLearnRate);
+	Net.SetNeighbouringRadius(wNeighRadius);
+	Net.CalculateLearnRate(pLearnRate);
+
+	BYTE *pBitmap=NULL;
+	WORD *wClusters=new WORD[dwSize];
+	ASSERT(wClusters!=NULL);
+
+	DWORD dwSrcLen=optionsCP->st_wClusters*bVectorSize;
+	DWORD dwDestLen=(DWORD)(dwSrcLen*100.1/100+0.5)+12;
+	BYTE *pSrc=NULL;
+
+	DWORD dwCycles;
+	CMap<WORD,WORD,BYTE,BYTE> map;
+	BYTE bValue;
+	DWORD dwFrom=(DWORD)(optionsCP->st_wClusters+optionsCP->st_wClusters*0.2);
+	map.InitHashTable(FindPrimeNumber(dwFrom));
+
+	CString strText;
+	DWORD dwInc;
+	BOOLEAN bFlag;
+
+	LARGE_INTEGER liFreq;
+	LARGE_INTEGER liCount1;
+	LARGE_INTEGER liCount2;
+	QueryPerformanceFrequency(&liFreq);
+	switch (optionsCP->st_bNetType)
+	{
+	case NET_TYPE_KOHONEN_GROSSBERG:
+		{
+			Net.InitWeights(-1.0f,2.0f);
+
+			FLOAT **pVectors=NULL;
+			ASSERT((pVectors=AllocateFloatMatrix(dwSize,bVectorSize))!=NULL);
+
+			for (i=0; i<dwSize; i++)
+			{
+				for (j=0; j<bVectorSize; j++)
+					pVectors[i][j]=pBits[i*bVectorSize+j]-fColorShift;
+				Net.NormalizeVector(pVectors[i],bVectorSize);
+			}
+
+			INT iLearnSign=1;
+			INT iNeighSign=1;
+			if (optionsCP->st_fInitLearnRate>=optionsCP->st_fFinalLearnRate)
+				iLearnSign=-1;
+			if (optionsCP->st_wInitNeighRadius>=optionsCP->st_wFinalNeighRadius)
+				iNeighSign=-1;
+
+			DWORD dwLearnCount;
+			DWORD dwNeighCount;
+
+			FLOAT fWinDist;
+
+			dwInc=dwSize/100;
+			dwCycles=0;
+			dwLearnCount=0;
+			dwNeighCount=0;
+			//QueryPerformanceCounter(&liCount1);
+			do
+			{
+				
+				fWinDist=0.0f;
+				pDlg->SetProgress(0);
+				FLOAT fTime=0.0;
+				for (i=0; i<dwSize; i++)
+				{
+					
+					Net.SetAxons(INPUT_LAYER,pVectors[i]);
+				
+					QueryPerformanceCounter(&liCount1);
+					Net.PropagateKohonenMax();
+					QueryPerformanceCounter(&liCount2);
+					
+					wClusters[i]=Net.GetWinnerNeuron();
+					if (!map.Lookup(wClusters[i],bValue))
+						map.SetAt(wClusters[i],FALSE);
+					fWinDist+=Net.GetWinnerDistance();
+					Net.LearnKohonen(pLearnRate);
+					dwLearnCount++;
+					dwNeighCount++;
+					bFlag=FALSE;
+					if (dwLearnCount==optionsCP->st_dwLearnRateSteps)
+					{
+						dwLearnCount=0;
+						fLearnRate+=iLearnSign*optionsCP->st_fLearnChangeRate;
+						if (iLearnSign==-1&&fLearnRate<optionsCP->st_fFinalLearnRate)
+							fLearnRate=optionsCP->st_fFinalLearnRate;
+						if (iLearnSign==1&&fLearnRate>optionsCP->st_fFinalLearnRate)
+							fLearnRate=optionsCP->st_fFinalLearnRate;
+						Net.SetLearnRate(fLearnRate);
+						bFlag=TRUE;
+					}
+					if (wNeighRadius&&dwNeighCount==optionsCP->st_dwNeighRadiusSteps)
+					{
+				
+						dwNeighCount=0;
+						wNeighRadius+=iNeighSign*optionsCP->st_wNeighChangeRate;
+						if (iNeighSign==-1&&wNeighRadius<optionsCP->st_wFinalNeighRadius)
+							wNeighRadius=optionsCP->st_wFinalNeighRadius;
+						if (iNeighSign==1&&wNeighRadius>optionsCP->st_wFinalNeighRadius)
+							wNeighRadius=optionsCP->st_wFinalNeighRadius;
+						Net.SetNeighbouringRadius(wNeighRadius);
+						bFlag=TRUE;
+					}
+					if (bFlag)
+						Net.CalculateLearnRate(pLearnRate);	
+
+					if (!(i%(dwInc+1)))
+						pDlg->StepProgress();
+					fTime+=(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart;
+				}
+				fWinDist/=dwSize;
+				dwCycles++;
+				//QueryPerformanceCounter(&liCount2);
+				pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,dwCycles);
+				strText.Format(_T("%f"),fWinDist);
+				pDlg->SetDlgItemText(IDC_STATIC_AVDIST,strText);
+				strText.Format(_T("%f"),fTime);
+				//strText.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+				pDlg->SetDlgItemText(IDC_STATIC_TIME,strText);
+				pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,optionsCP->st_wClusters-map.GetCount());
+				map.RemoveAll();
+			}
+			while (fWinDist>optionsCP->st_fMinDist&&dwCycles<optionsCP->st_dwCycles);
+			DestroyMatrix((LPVOID *)pVectors);
+
+			for (i=0; i<dwSize; i++)
+			{
+				Net.SetWinnerNeuron(wClusters[i]);	
+				Net.LearnGrossberg(&pBits[i*bVectorSize]);
+			}
+			Net.FinalizeGrossberg();	
+
+			pBitmap=new BYTE[dwImageSize];
+			ASSERT(pBitmap!=NULL);
+
+			//ofstream f("debug.txt",ios::out);
+			for (i=0; i<dwSize; i++)
+			{
+//				f<<i<<" "<<wClusters[i]<<endl;
+				for (j=0; j<bVectorSize; j++)
+					pBitmap[i*bVectorSize+j]=
+						(BYTE)(Net.GetWeight(GROSSBERG_LAYER,LOWORD(j),wClusters[i])+0.5f);
+			}
+
+			pSrc=new BYTE[dwSrcLen];
+			ASSERT(pSrc!=NULL);
+			
+			for (i=0; i<optionsCP->st_wClusters; i++)
+				for (j=0; j<bVectorSize; j++)
+					pSrc[i*bVectorSize+j]=(BYTE)(Net.GetWeight(GROSSBERG_LAYER,
+						LOWORD(j),LOWORD(i))+0.5f);
+//			f.close();
+		}
+
+		break;
+
+	case NET_TYPE_KOHONEN:
+		Net.InitWeights();
+
+		const WORD wPrime[4]={487,491,499,503};
+		FLOAT fLearnPower=(FLOAT)(1.0f/(optionsCP->st_dwCycles-1)
+			*log(optionsCP->st_fFinalLearnRate/optionsCP->st_fInitLearnRate));
+		FLOAT fNeighPower=FLOAT(1.0f/(optionsCP->st_dwCycles-10)
+			*log(1.0f/optionsCP->st_wInitNeighRadius));
+
+		bFlag=FALSE;
+		DWORD dwCount;
+		WORD wPixel;
+		const DWORD dwPixelsPerCycle=(DWORD)((FLOAT)dwSize/optionsCP->st_dwCycles+0.5f);
+		DWORD dwStep=bVectorSize*wPrime[3];
+		for (i=0; i<3&&!bFlag; i++)
+			if (dwSize%wPrime[i])
+			{
+				bFlag=TRUE;
+				dwStep=bVectorSize*wPrime[i];
+			}
+
+		i=0;
+		dwInc=optionsCP->st_dwCycles/100;
+		pDlg->SetProgress(0);
+		dwCycles=0;
+		dwCount=0;
+		QueryPerformanceCounter(&liCount1);
+		do
+		{
+			i+=dwStep;
+			if (i>=dwImageSize)
+				i-=dwImageSize;
+			wPixel=LOWORD(i/3);
+			Net.SetAxons(INPUT_LAYER,&pBits[i]);
+			Net.PropagateKohonenMin();
+			wClusters[wPixel]=Net.GetWinnerNeuron();
+//			if (!map.Lookup(wClusters[wPixel],bValue))
+//				map.SetAt(wClusters[wPixel],FALSE);
+			Net.LearnKohonen(pLearnRate);
+
+			dwCount++;
+			if (dwCount==dwPixelsPerCycle)
+			{
+				dwCount=0;
+				dwCycles++;
+				fLearnRate=(FLOAT)(optionsCP->st_fInitLearnRate*exp(fLearnPower*dwCycles));
+				Net.SetLearnRate(fLearnRate);
+				if (optionsCP->st_bTrainNeighbours)
+				{
+					wNeighRadius=(WORD)(optionsCP->st_wInitNeighRadius*exp(fNeighPower*dwCycles));
+					Net.SetNeighbouringRadius(wNeighRadius);
+				}
+				Net.CalculateLearnRate(pLearnRate);
+				if (!(dwCycles%(dwInc+1)))
+					pDlg->StepProgress();
+				QueryPerformanceCounter(&liCount2);
+				pDlg->SetDlgItemInt(IDC_STATIC_CYCLES,dwCycles);
+				strText.Format(_T("%f"),(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+				pDlg->SetDlgItemText(IDC_STATIC_TIME,strText);
+				pDlg->SetDlgItemInt(IDC_STATIC_UNUSED,optionsCP->st_wClusters-map.GetCount());
+				map.RemoveAll();
+			}
+		}
+		while (dwCycles<optionsCP->st_dwCycles);
+
+		pBitmap=new BYTE[dwImageSize];
+		ASSERT(pBitmap!=NULL);
+
+		for (i=0; i<dwSize; i++)
+		{
+			Net.SetAxons(INPUT_LAYER,&pBits[i*3]);
+			Net.PropagateKohonenMin();
+			wClusters[i]=Net.GetWinnerNeuron();
+			for (j=0; j<bVectorSize; j++)
+				pBitmap[i*bVectorSize+j]=
+					(BYTE)(Net.GetWeight(KOHONEN_LAYER,wClusters[i],LOWORD(j))+0.5f);
+		}
+		pSrc=new BYTE[dwSrcLen];
+		ASSERT(pSrc!=NULL);
+		
+		for (i=0; i<optionsCP->st_wClusters; i++)
+			for (j=0; j<bVectorSize; j++)
+				pSrc[i*bVectorSize+j]=(BYTE)(Net.GetWeight(KOHONEN_LAYER,
+					LOWORD(i),LOWORD(j))+0.5f);
+		break;
+	}
+	
+	delete []pLearnRate;
+
+	ImageKit *pComprImage=pDlg->GetComprImage();
+	pComprImage->FromObject(*pImage,pBitmap);
+	pDlg->DisplayComprBitmap();
+
+	delete []pBitmap;
+
+	if (zlibVersion()[0] != ZLIB_VERSION[0]) 
+	{
+		AfxMessageBox(_T("Incompatible ZLib version"),MB_OK);
+        return TRUE;
+
+    } 
+	else 
+		if (strcmp(zlibVersion(), ZLIB_VERSION) != 0) 
+			AfxMessageBox(_T("WARNING: different ZLib version"),MB_OK);
+
+	CFile file;
+	file.Open(_T("image.tmp"),CFile::modeCreate | CFile::modeWrite);/*cur directory!!!*/
+
+	COMPRFILEINFO cfInfo(COMPRFILE_NNIC,COMPRTYPE_CP,pImage->GetImageWidth(),
+		pImage->GetImageHeight(),dwImageSize);
+	file.Write(&cfInfo,sizeof(COMPRFILEINFO));
+
+	BYTE *pDest=new BYTE[dwDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,dwDestLen);
+
+	
+
+	ASSERT(compress(pDest,&dwDestLen,pSrc,dwSrcLen)==Z_OK);
+
+	COMPRDATAINFO cdInfo(dwSrcLen,dwDestLen);
+	file.Write(&cdInfo,sizeof(COMPRDATAINFO));
+	
+	file.Write(pDest,dwDestLen);
+
+	delete []pSrc;
+	delete []pDest;
+
+	BYTE *bClusters=(BYTE *)wClusters;
+	if (optionsCP->st_wClusters<=256)
+	{
+		dwSrcLen=dwSize*sizeof(BYTE);
+
+		/*Packing*/
+		for (i=1; i<dwSize; i++)
+			bClusters[i]=LOBYTE(wClusters[i]);
+	}
+	else
+		dwSrcLen=dwSize*sizeof(WORD);
+		
+	dwDestLen=(DWORD)(dwSrcLen*100.1/100+0.5)+12;
+
+	pDest=new BYTE[dwDestLen];
+	ASSERT(pDest!=NULL);
+	ZeroMemory(pDest,dwDestLen);
+
+	ASSERT(compress(pDest,&dwDestLen,bClusters,dwSrcLen)==Z_OK);
+
+	delete []wClusters;
+
+	cdInfo.Set(dwSrcLen,dwDestLen);
+	file.Write(&cdInfo,sizeof(COMPRDATAINFO));
+
+	file.Write(pDest,dwDestLen);
+
+	CReportDlg ReportDlg;
+	ReportDlg.SetFileName(file.GetFileName());
+	ReportDlg.SetDirectory(file.GetFilePath());
+	ReportDlg.SetFileSize(pDlg->GetOriginalFileSize(),file.GetLength());
+	file.Close();
+	ReportDlg.SetImageSize(pImage->GetImageWidth(),pImage->GetImageHeight());
+	ReportDlg.SetOriginalColors(pImage->GetBitsPerPixel(),pImage->GetColors());
+	ReportDlg.SetCompressionMethod(_T("Counter Propagation"));
+	DOUBLE fRed=pImage->GetPSNR(0,*pComprImage);
+	DOUBLE fGreen=pImage->GetPSNR(1,*pComprImage);
+	DOUBLE fBlue=pImage->GetPSNR(2,*pComprImage);
+	ReportDlg.SetPSNR(fRed,fGreen,fBlue,(fRed+fGreen+fBlue)/bVectorSize,
+		pImage->GetPSNRFullChannel(*pComprImage));
+	ReportDlg.SetCompressionTime((FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart);
+
+	ReportDlg.DoModal();
+
+	delete []pDest;
+
+	pDlg->EnableOptions(TRUE);
+	pDlg->EnableCompress(TRUE);
+	pDlg->SetFinished(TRUE);
+	return FALSE;
+}
+
 UINT StartDCT(LPVOID pParam)
 {
 	CNNICDlg* pDlg = (CNNICDlg *)pParam;
@@ -899,7 +1047,7 @@ UINT StartDCT(LPVOID pParam)
 				for (l=0; l<DCT_SIZE; l++)
 					for (m=0; m<DCT_SIZE; m++)
 					{
-						fPixel=(FLOAT)floor(fSegment[l][m]-fShift+0.5f);
+						fPixel=(FLOAT)floor(fSegment[l][m]-fShift+0.5f);/*****!!!!!!!!*****/
 						if (fPixel<0.0)
 							fPixel=0.0;
 						if (fPixel>255.0)
@@ -1043,7 +1191,7 @@ UINT StartDCTBack(LPVOID pParam)
 	NetBP Net(bOutputLayer+1,uiLayers);
 	Net.SetSignalBoundaries(-0.5,0.5);
 
-	switch (optionsBP->st_wSigmoidType)
+	switch (optionsBP->st_bSigmoidType)
 	{
 	case 0:
 		Net.SetSigmoidType(SIGMOID_TYPE_ORIGINAL);
@@ -1057,7 +1205,7 @@ UINT StartDCTBack(LPVOID pParam)
 	Net.SetScaleParam(0.5);
 	Net.UseBiases(optionsBP->st_bUseBiases);
 	UINT uiMethod;
-	switch (optionsBP->st_wLearnMode)
+	switch (optionsBP->st_bLearnMode)
 	{
 	case 0:
 		uiMethod=LEARN_TYPE_SEQUENTIAL;
@@ -1079,7 +1227,7 @@ UINT StartDCTBack(LPVOID pParam)
 	UINT uiPatterns;
 	FLOAT fNetError;
 	ULONG ulCycles;
-	BOOL bFlag;
+	BOOLEAN bFlag;
 	CString sString;
 
 	QueryPerformanceFrequency(&liFreq);
@@ -1378,7 +1526,7 @@ void CNNICDlg::OnButtonStop()
 	}
 }
 
-void CNNICDlg::SetFinished(const BOOL bFlag)
+void CNNICDlg::SetFinished(const BOOLEAN bFlag)
 {
 	m_bFinished=bFlag;
 }
@@ -1400,7 +1548,7 @@ void CNNICDlg::OnButtonOptions()
 	propOptions.AddPage(&pageDCT);
 
 	UINT uiMethod=GetCheckedRadioButton(IDC_RADIO_BACK,IDC_RADIO_DCTBACK)-IDC_RADIO_BACK;
-	propOptions.SetActivePage(/*&pageCP*/uiMethod);
+	propOptions.SetActivePage(uiMethod);
 	propOptions.DoModal();
 	pageBP.GetOptionsBP(&m_optionsDefault.st_optionsBP);
 	pageCP.GetOptionsCP(&m_optionsDefault.st_optionsCP);

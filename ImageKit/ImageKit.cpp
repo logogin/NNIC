@@ -22,13 +22,14 @@ ImageKit::ImageKit():m_bmInfo(NULL),m_pImage(NULL)
 
 ImageKit::ImageKit(const ImageKit &Image,const BYTE *pData)
 {
-	m_bmInfo=(BITMAPINFO *)new BYTE[sizeof(*Image.m_bmInfo)];
-	ASSERT(m_bmInfo!=NULL);
-	CopyMemory(m_bmInfo,Image.m_bmInfo,sizeof(*Image.m_bmInfo));
-	CopyMemory(&m_ImageInfo,&Image.m_ImageInfo,sizeof(IMAGEKITINFO));
-	m_pImage=new BYTE[m_ImageInfo.dwImageSize];
-	ASSERT(m_pImage!=NULL);
-	CopyMemory(m_pImage,pData,m_ImageInfo.dwImageSize);
+//	m_bmInfo=(BITMAPINFO *)new BYTE[sizeof(*Image.m_bmInfo)];
+//	ASSERT(m_bmInfo!=NULL);
+//	CopyMemory(m_bmInfo,Image.m_bmInfo,sizeof(*Image.m_bmInfo));
+//	CopyMemory(&m_ImageInfo,&Image.m_ImageInfo,sizeof(IMAGEKITINFO));
+//	m_pImage=new BYTE[m_ImageInfo.dwImageSize];
+//	ASSERT(m_pImage!=NULL);
+//	CopyMemory(m_pImage,pData,m_ImageInfo.dwImageSize);
+	FromObject(Image,pData);
 }
 
 ImageKit::~ImageKit()
@@ -36,7 +37,7 @@ ImageKit::~ImageKit()
 
 }
 
-BOOL ImageKit::DecodeBMP(const CString &sFileName)
+BOOLEAN ImageKit::DecodeBMP(const CString &sFileName)
 {
 	CFile BMPFile;
 	BMPFile.Open(sFileName,CFile::modeRead);
@@ -61,14 +62,14 @@ BOOL ImageKit::DecodeBMP(const CString &sFileName)
 			((1<<bmiHeader.biBitCount) * sizeof(RGBQUAD))]);
 
 		ASSERT(m_bmInfo!=NULL);
-		ASSERT(memcpy(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER))!=NULL);
+		CopyMemory(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER));
 
 		BMPFile.Read(m_bmInfo->bmiColors,((1<<bmiHeader.biBitCount) * sizeof(RGBQUAD)));
 		break;
 	case 24:
 		m_bmInfo=(BITMAPINFO *)(new BYTE[sizeof(BITMAPINFO)]);
 		ASSERT(m_bmInfo!=NULL);
-		ASSERT(memcpy(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER))!=NULL);
+		CopyMemory(&m_bmInfo->bmiHeader,&bmiHeader,sizeof(BITMAPINFOHEADER));
 		break;
 	}
 	
@@ -85,28 +86,31 @@ BOOL ImageKit::DecodeBMP(const CString &sFileName)
 
 void ImageKit::FillImageInfo()
 {
-	m_ImageInfo.bBitsPerPixel=(BYTE)m_bmInfo->bmiHeader.biBitCount;
-	m_ImageInfo.bBytesPerPixel=(BYTE)BITS2BYTES(m_bmInfo->bmiHeader.biBitCount);
-	m_ImageInfo.dwWidth=m_bmInfo->bmiHeader.biWidth;
-	m_ImageInfo.dwHeight=m_bmInfo->bmiHeader.biHeight;
-	m_ImageInfo.dwPaddedWidth=ALIGNBYTES(m_ImageInfo.dwWidth*m_ImageInfo.bBitsPerPixel);
-	m_ImageInfo.dwImageSize=BITS2BYTES(m_ImageInfo.dwHeight*m_ImageInfo.dwWidth*m_ImageInfo.bBitsPerPixel);
+	m_ImageInfo.st_bBitsPerPixel=(BYTE)m_bmInfo->bmiHeader.biBitCount;
+	m_ImageInfo.st_bBytesPerPixel=(BYTE)BITS2BYTES(m_bmInfo->bmiHeader.biBitCount);
+	m_ImageInfo.st_dwWidth=m_bmInfo->bmiHeader.biWidth;
+	m_ImageInfo.st_dwHeight=m_bmInfo->bmiHeader.biHeight;
+	m_ImageInfo.st_dwPaddedWidth=
+		ALIGNBYTES(m_ImageInfo.st_dwWidth*m_ImageInfo.st_bBitsPerPixel);
+	m_ImageInfo.st_dwImageSize=
+		BITS2BYTES(m_ImageInfo.st_dwHeight*m_ImageInfo.st_dwWidth*m_ImageInfo.st_bBitsPerPixel);
 }
 
 void ImageKit::DeletePadding()
 {
-	if (m_ImageInfo.dwWidth==m_ImageInfo.dwPaddedWidth)
+	if (m_ImageInfo.st_dwWidth==m_ImageInfo.st_dwPaddedWidth)
 		return;
 
-	BYTE *pClearImage=new BYTE[BITS2BYTES(m_ImageInfo.dwHeight*m_ImageInfo.dwWidth
-		*m_ImageInfo.bBitsPerPixel)];
+	BYTE *pClearImage=new BYTE[BITS2BYTES(m_ImageInfo.st_dwHeight*m_ImageInfo.st_dwWidth
+		*m_ImageInfo.st_bBitsPerPixel)];
 	ASSERT(pClearImage!=NULL);
-	for (ULONG i=0; i<m_ImageInfo.dwHeight; i++)
-		ASSERT(memcpy(pClearImage+m_ImageInfo.dwWidth*i,m_pImage+m_ImageInfo.dwPaddedWidth*i,
-			sizeof(BYTE)*m_ImageInfo.dwWidth)!=NULL);
+	DWORD i;
+	for (i=0; i<m_ImageInfo.st_dwHeight; i++)
+		CopyMemory(pClearImage+m_ImageInfo.st_dwWidth*i,m_pImage+m_ImageInfo.st_dwPaddedWidth*i,
+			sizeof(BYTE)*m_ImageInfo.st_dwWidth);
 
 	delete []m_pImage;
-	ASSERT(memcpy(m_pImage,pClearImage,sizeof(BYTE)*m_ImageInfo.dwImageSize)!=NULL);
+	CopyMemory(m_pImage,pClearImage,sizeof(BYTE)*m_ImageInfo.st_dwImageSize);
 	delete []pClearImage;
 }
 
@@ -115,18 +119,19 @@ void ImageKit::GetSegment(const CRect rSeg, FLOAT *pSeg,
 						  const FLOAT fMinValue,
 						  const FLOAT fRange)
 {
-	ULONG uiWidth=rSeg.Width();
-	ASSERT(rSeg.left<m_ImageInfo.dwWidth);
-	ASSERT(rSeg.top<m_ImageInfo.dwHeight);
-	
-	for (ULONG i=0; i<rSeg.Height(); i++)
-		for (ULONG j=0; j<rSeg.Width(); j++)
-			if ((i+rSeg.top)<m_ImageInfo.dwHeight&&(j+rSeg.left)<m_ImageInfo.dwWidth)
-				pSeg[i*uiWidth+j]=fMinValue+
-					m_pImage[((i+rSeg.top)*m_ImageInfo.dwWidth+
-						(j+rSeg.left))*m_ImageInfo.bBytesPerPixel+bColor]/255.0f*fRange;
+	DWORD dwWidth=rSeg.Width();
+	ASSERT(rSeg.left<m_ImageInfo.st_dwWidth);
+	ASSERT(rSeg.top<m_ImageInfo.st_dwHeight);
+
+	DWORD i,j;
+	for (i=0; i<rSeg.Height(); i++)
+		for (j=0; j<rSeg.Width(); j++)
+			if ((i+rSeg.top)<m_ImageInfo.st_dwHeight&&(j+rSeg.left)<m_ImageInfo.st_dwWidth)
+				pSeg[i*dwWidth+j]=fMinValue+
+					m_pImage[((i+rSeg.top)*m_ImageInfo.st_dwWidth+
+						(j+rSeg.left))*m_ImageInfo.st_bBytesPerPixel+bColor]/255.0f*fRange;
 			else
-				pSeg[i*uiWidth+j]=0.0f;
+				pSeg[i*dwWidth+j]=0.0f;
 }
 
 BYTE *ImageKit::GetBits()
@@ -137,59 +142,63 @@ BYTE *ImageKit::GetBits()
 HBITMAP ImageKit::GetHandle(CDC *pDC)
 {
 	ASSERT(pDC!=NULL);
-	HBITMAP hBitmap =CreateDIBitmap(pDC->GetSafeHdc(), 
+	HBITMAP hBitmap=CreateDIBitmap(pDC->GetSafeHdc(), 
 		&m_bmInfo->bmiHeader, CBM_INIT, m_pImage, m_bmInfo, DIB_RGB_COLORS);
 	return hBitmap;
 }
 
 ULONG ImageKit::GetImageHeight()
 {
-	return m_ImageInfo.dwHeight;
+	return m_ImageInfo.st_dwHeight;
 }
 
 ULONG ImageKit::GetImageWidth()
 {
-	return m_ImageInfo.dwWidth;
+	return m_ImageInfo.st_dwWidth;
 }
 
-DOUBLE ImageKit::GetPSNR(const UINT uiChannel, const ImageKit &Image)
+DOUBLE ImageKit::GetPSNR(const BYTE bChannel, const ImageKit &Image)
 {
-	const UINT uiChannelWidth=65025; /*255*255*/
-	if (uiChannel>=m_ImageInfo.bBytesPerPixel)
+	const DWORD dwChannelWidth=65025; /*255*255*/
+	if (bChannel>=m_ImageInfo.st_bBytesPerPixel)
 		return -1.0;
 	DOUBLE fDist;
 	DOUBLE fMSE=0.0;
-	DOUBLE uiSize=m_ImageInfo.dwWidth*m_ImageInfo.dwHeight;
-	for (UINT i=0; i<uiSize; i++)
+	DWORD dwSize=m_ImageInfo.st_dwWidth*m_ImageInfo.st_dwHeight;
+	DWORD i;
+	for (i=0; i<dwSize; i++)
 	{
-		fDist=(FLOAT)m_pImage[i*m_ImageInfo.bBytesPerPixel+uiChannel]-
-			(FLOAT)Image.m_pImage[i*m_ImageInfo.bBytesPerPixel+uiChannel];
+		fDist=(FLOAT)m_pImage[i*m_ImageInfo.st_bBytesPerPixel+bChannel]-
+			(FLOAT)Image.m_pImage[i*m_ImageInfo.st_bBytesPerPixel+bChannel];
 		fMSE+=fDist*fDist;
 	}
-	fMSE/=uiSize;
+	fMSE/=dwSize;
 
-	return 10.0*log10(uiChannelWidth/fMSE);
+	return 10.0*log10(dwChannelWidth/fMSE);
 }
 
 DOUBLE ImageKit::GetPSNRFullChannel(const ImageKit &Image)
 {
-	const UINT uiChannelWidth=(1<<m_ImageInfo.bBitsPerPixel)-1;
+	const DWORD dwChannelWidth=(1<<m_ImageInfo.st_bBitsPerPixel)-1;
 	DOUBLE fDist;
 	DOUBLE fMSE=0.0f;
-	UINT uiSize=m_ImageInfo.dwWidth*m_ImageInfo.dwHeight;
-	ULONG uiDist1;
-	ULONG uiDist2;
-	for (UINT i=0; i<uiSize; i++)
+	DWORD dwSize=m_ImageInfo.st_dwWidth*m_ImageInfo.st_dwHeight;
+	DWORD dwDist1;
+	DWORD dwDist2;
+	DWORD i;
+	for (i=0; i<dwSize; i++)
 	{
-		uiDist1=uiDist2=0;
-		CopyMemory(&uiDist1,&m_pImage[i*m_ImageInfo.bBytesPerPixel],m_ImageInfo.bBytesPerPixel);
-		CopyMemory(&uiDist2,&Image.m_pImage[i*m_ImageInfo.bBytesPerPixel],m_ImageInfo.bBytesPerPixel);
-		fDist=(DOUBLE)uiDist1-(DOUBLE)uiDist2;
+		dwDist1=dwDist2=0;
+		CopyMemory(&dwDist1,&m_pImage[i*m_ImageInfo.st_bBytesPerPixel],
+			m_ImageInfo.st_bBytesPerPixel);
+		CopyMemory(&dwDist2,&Image.m_pImage[i*m_ImageInfo.st_bBytesPerPixel],
+			m_ImageInfo.st_bBytesPerPixel);
+		fDist=(DOUBLE)dwDist1-(DOUBLE)dwDist2;
 		fMSE+=fDist*fDist;
 	}
-	fMSE/=uiSize;
+	fMSE/=dwSize;
 
-	return 10.0*(2.0*log10(uiChannelWidth)-log10(fMSE));
+	return 10.0*(2.0*log10(dwChannelWidth)-log10(fMSE));
 }
 
 void ImageKit::FromObject(const ImageKit &Image, const BYTE *pData)
@@ -200,15 +209,15 @@ void ImageKit::FromObject(const ImageKit &Image, const BYTE *pData)
 	if (m_bmInfo!=NULL)
 		delete []m_bmInfo;
 
-	ULONG ulPaletteSize;
-	switch (m_ImageInfo.bBitsPerPixel)
+	DWORD dwPaletteSize;
+	switch (m_ImageInfo.st_bBitsPerPixel)
 	{
 	case 8:
-		ulPaletteSize=sizeof(BITMAPINFOHEADER) + 
-			((1<<m_ImageInfo.bBitsPerPixel) * sizeof(RGBQUAD));
-		m_bmInfo=(BITMAPINFO *)(new BYTE[ulPaletteSize]);
+		dwPaletteSize=sizeof(BITMAPINFOHEADER) + 
+			((1<<m_ImageInfo.st_bBitsPerPixel) * sizeof(RGBQUAD));
+		m_bmInfo=(BITMAPINFO *)(new BYTE[dwPaletteSize]);
 		ASSERT(m_bmInfo!=NULL);
-		CopyMemory(m_bmInfo,Image.m_bmInfo,ulPaletteSize);
+		CopyMemory(m_bmInfo,Image.m_bmInfo,dwPaletteSize);
 		break;
 	case 24:
 		m_bmInfo=(BITMAPINFO *)(new BYTE[sizeof(BITMAPINFO)]);
@@ -219,27 +228,207 @@ void ImageKit::FromObject(const ImageKit &Image, const BYTE *pData)
 
 	if (m_pImage!=NULL)
 		delete []m_pImage;
-	m_pImage=new BYTE[m_ImageInfo.dwImageSize];
+	m_pImage=new BYTE[m_ImageInfo.st_dwImageSize];
 	ASSERT(m_pImage!=NULL);
-	CopyMemory(m_pImage,pData,m_ImageInfo.dwImageSize);
+	CopyMemory(m_pImage,pData,m_ImageInfo.st_dwImageSize);
 }
 
 DWORD ImageKit::GetImageSize()
 {
-	return m_ImageInfo.dwImageSize;
+	return m_ImageInfo.st_dwImageSize;
 }
 
 BYTE ImageKit::GetBitsPerPixel()
 {
-	return m_ImageInfo.bBitsPerPixel;
+	return m_ImageInfo.st_bBitsPerPixel;
 }
 
-ULONG ImageKit::GetColors()
+DWORD ImageKit::GetColors()
 {
-	return (1<<m_ImageInfo.bBitsPerPixel);
+	return (1<<m_ImageInfo.st_bBitsPerPixel);
 }
 
 BYTE ImageKit::GetBytesPerPixel()
 {
-	return m_ImageInfo.bBytesPerPixel;
+	return m_ImageInfo.st_bBytesPerPixel;
+}
+
+HBITMAP ImageKit::Resample(CDC *pDC,
+						   const DWORD dwWidth,
+						   const DWORD dwHeight,
+						   const BOOLEAN bChange)
+{
+	const DOUBLE fXScale=(DOUBLE)dwWidth/m_ImageInfo.st_dwWidth;
+	const DOUBLE fYScale=(DOUBLE)dwHeight/m_ImageInfo.st_dwHeight;
+	
+	DOUBLE fWidth;
+	DOUBLE fFilterScale;
+	
+	if (fXScale<1.0)
+	{
+		fWidth=FILTER_WIDTH/fXScale;
+		fFilterScale=1.0/fXScale;
+	}
+	else
+	{
+		fWidth=FILTER_WIDTH;
+		fFilterScale=1.0;
+	}
+
+	DWORD i,k,m;
+	LONG j; 
+	LONG lPixel;
+	DOUBLE fCenter;
+	LONG lLeft;
+	LONG lRight;
+	DOUBLE fWeight;
+
+	CArray<CList<CONTRIBUTOR,CONTRIBUTOR>,CList<CONTRIBUTOR,CONTRIBUTOR>&> array;
+	array.SetSize(dwWidth);
+	for (i=0; i<dwWidth; i++)
+	{
+		fCenter=(DOUBLE)i/fXScale;
+		lLeft=(LONG)ceil(fCenter-fWidth);
+		lRight=(LONG)floor(fCenter+fWidth);
+		for (j=lLeft; j<=lRight; j++)
+		{
+			fWeight=Filter((fCenter-j)/fFilterScale)/fFilterScale;
+			lPixel=j;
+			if (lPixel<0)
+				lPixel=-lPixel;
+			if (lPixel>=m_ImageInfo.st_dwWidth)
+				lPixel=m_ImageInfo.st_dwWidth-(lPixel-m_ImageInfo.st_dwWidth)-1;
+			array[i].AddTail(CONTRIBUTOR((DWORD)lPixel,fWeight));
+		}
+	}
+
+	BYTE **pTmpImage=AllocateByteMatrix(m_ImageInfo.st_dwHeight,
+		dwWidth*m_ImageInfo.st_bBytesPerPixel);
+	ASSERT(pTmpImage!=NULL);
+
+	DOUBLE *pWeight=new DOUBLE[m_ImageInfo.st_bBytesPerPixel];
+	POSITION pos;
+	CONTRIBUTOR contributor;
+	ASSERT(pWeight!=NULL);
+	for (i=0; i<m_ImageInfo.st_dwHeight; i++)
+		for (j=0; j<dwWidth; j++)
+		{
+			ZeroMemory(pWeight,sizeof(DOUBLE)*m_ImageInfo.st_bBytesPerPixel);
+			pos=array[(DWORD)j].GetHeadPosition();
+			for (k=0; k<array[(DWORD)j].GetCount(); k++)
+			{
+				contributor=array[(DWORD)j].GetNext(pos);
+				for (m=0; m<m_ImageInfo.st_bBytesPerPixel; m++)
+					pWeight[m]+=m_pImage[(i*m_ImageInfo.st_dwWidth+contributor.st_dwPixel)*
+						m_ImageInfo.st_bBytesPerPixel+m]*contributor.st_fWeight;
+			}
+			for (k=0; k<m_ImageInfo.st_bBytesPerPixel; k++)
+			{
+				fWeight+=0.5;
+				if (fWeight<0.0)
+					fWeight=0.0;
+				if (fWeight>255.0)
+					fWeight=255.0;
+				pTmpImage[i][j*m_ImageInfo.st_bBytesPerPixel+k]=(BYTE)pWeight[k];
+			}
+		}
+	array.RemoveAll();
+	array.SetSize(dwHeight);
+	
+	if (fYScale<1.0)
+	{
+		fWidth=FILTER_WIDTH/fYScale;
+		fFilterScale=1.0/fYScale;
+	}
+	else
+	{
+		fWidth=FILTER_WIDTH;
+		fFilterScale=1.0;
+	}
+
+	for (i=0; i<dwHeight; i++)
+	{
+		fCenter=(DOUBLE)i/fYScale;
+		lLeft=(LONG)(fCenter-fWidth+0.5);
+		lRight=(LONG)(fCenter+fWidth-0.5);
+		for (j=lLeft; j<=lRight; j++)
+		{
+			fWeight=Filter((fCenter-j)/fFilterScale)/fFilterScale;
+			lPixel=j;
+			if (lPixel<0)
+				lPixel=-lPixel;
+			if (lPixel>=m_ImageInfo.st_dwHeight)
+				lPixel=m_ImageInfo.st_dwHeight-(lPixel-m_ImageInfo.st_dwHeight)-1;
+			array[i].AddTail(CONTRIBUTOR((DWORD)lPixel,fWeight));
+		}
+	}
+
+	BYTE **pResultImage=AllocateByteMatrix(dwHeight,dwWidth*m_ImageInfo.st_bBytesPerPixel);
+	ASSERT(pResultImage!=NULL);
+	for (i=0; i<dwWidth; i++)
+		for (j=0; j<dwHeight; j++)
+		{
+			ZeroMemory(pWeight,sizeof(DOUBLE)*m_ImageInfo.st_bBytesPerPixel);
+			pos=array[(DWORD)j].GetHeadPosition();
+			for (k=0; k<array[(DWORD)j].GetCount(); k++)
+			{
+				contributor=array[(DWORD)j].GetNext(pos);
+				for (m=0; m<m_ImageInfo.st_bBytesPerPixel; m++)
+					pWeight[m]+=pTmpImage[contributor.st_dwPixel][i*
+						m_ImageInfo.st_bBytesPerPixel+m]*contributor.st_fWeight;
+			}
+			for (k=0; k<m_ImageInfo.st_bBytesPerPixel; k++)
+			{
+				fWeight+=0.5;
+				if (fWeight<0.0)
+					fWeight=0.0;
+				if (fWeight>255.0)
+					fWeight=255.0;
+				pResultImage[j][i*m_ImageInfo.st_bBytesPerPixel+k]=(BYTE)pWeight[k];
+			}
+		}
+
+	delete []pWeight;
+	array.RemoveAll();
+	DestroyMatrix((LPVOID *)pTmpImage);
+
+	ASSERT(pDC!=NULL);
+	m_bmInfo->bmiHeader.biWidth=dwWidth;
+	m_bmInfo->bmiHeader.biHeight=dwHeight;
+	
+	HBITMAP hBitmap=CreateDIBitmap(pDC->GetSafeHdc(), 
+		&m_bmInfo->bmiHeader, CBM_INIT, pResultImage[0], m_bmInfo, DIB_RGB_COLORS);
+
+	if (bChange)
+	{
+		delete []m_pImage;
+		m_pImage=new BYTE[dwHeight,dwWidth*m_ImageInfo.st_bBytesPerPixel];
+		ASSERT(m_pImage!=NULL);
+		CopyMemory(m_pImage,pResultImage[0],dwHeight*dwWidth*m_ImageInfo.st_bBytesPerPixel);
+		FillImageInfo();
+		DestroyMatrix((LPVOID *)pResultImage);
+		return hBitmap;
+	}
+
+	m_bmInfo->bmiHeader.biWidth=m_ImageInfo.st_dwWidth;
+	m_bmInfo->bmiHeader.biHeight=m_ImageInfo.st_dwHeight;
+	DestroyMatrix((LPVOID *)pResultImage);
+	return hBitmap;
+}
+
+DOUBLE ImageKit::Filter(const DOUBLE fSample)
+{
+	DOUBLE fValue=fSample;
+	if (fValue<0.0)
+		fValue=-fValue;
+	if (fValue<3.0)
+		return sinc(fValue)*sinc(fValue/3.0);
+	return 0.0;
+}
+
+DOUBLE ImageKit::sinc(const double fValue)
+{
+	if (fValue==0.0)
+		return 1.0;
+	return sin(M_PI*fValue)/(M_PI*fValue);
 }

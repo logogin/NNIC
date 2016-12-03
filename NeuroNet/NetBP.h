@@ -42,7 +42,7 @@ public:
 	void ForwardPass(const UINT uiFrom);
 	void SetAxons(const UINT uiLayer,const FLOAT *fAxons);
 	void InitWeights(void);
-	void UseBiases(const BOOL bFlag);
+	void UseBiases(const BOOLEAN bFlag);
 	void SetSignalBoundaries(const FLOAT fMinSignal,const FLOAT fMaxSignal);
 	NetBP(const UINT uiNetRank,const UINT uiLayerRank[]);
 	virtual ~NetBP();
@@ -59,7 +59,7 @@ protected:
 	FLOAT ***m_vWeights[ARRAY_SIZE];
 	FLOAT **m_vBiases[ARRAY_SIZE];
 	FLOAT **m_vErrorSignal;
-	BOOL m_bUseBias;
+	BOOLEAN m_bUseBias;
 	FLOAT m_fMinSignal;
 	FLOAT m_fMaxSignal;
 	FLOAT m_fLearnRate;
@@ -68,7 +68,7 @@ protected:
 	UINT m_uiSigmoidType;
 	UINT m_uiLearnType;
 	FLOAT m_fSigmoidAlpha;
-	BOOL m_bFirstEpoch;
+	BOOLEAN m_bFirstEpoch;
 };
 
 #endif // !defined(AFX_NETBP_H__752BE5F1_2382_4ABE_9B12_F27789C632EF__INCLUDED_)

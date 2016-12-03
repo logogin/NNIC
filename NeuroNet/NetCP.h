@@ -9,43 +9,52 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define NETRANK 3
+//#define NETRANK 3
 enum Layers {INPUT_LAYER,KOHONEN_LAYER,GROSSBERG_LAYER};
 enum Neurons {KOHONEN_NEURON,GROSSBERG_NEURON};
 
-//const INT bQuadrants[8][3]={{1,1,1},{-1,1,1},{1,-1,1},{1,1,-1},
-//								{-1,-1,1},{-1,1,-1},{1,-1,-1},{-1,-1,-1}};
+#define NET_TYPE_KOHONEN_GROSSBERG 1
+#define NET_TYPE_KOHONEN 2
+
+#define MAX_COLOR_VALUE 256
+
 class NetCP  
 {
 public:
-	void FinilizeGrossberg(void);
-	void LearnGrossberg(const BYTE *bTarget);
-	FLOAT GetTargetDistance(const FLOAT *fTarget);
-	void SetWinnerNeuron(const UINT uiWinner);
-	void SetAxons(const UINT uiLayer, const FLOAT *vAxons,const BOOL bNormalize=FALSE);
+	void CalculateLearnRate(FLOAT *pLearnRate);
+	void SetLearnRate(const FLOAT fLearnRate);
+	void FinalizeGrossberg(void);
+	void SetWinnerNeuron(const WORD wWinner);
+	void SetAxons(const BYTE bLayer, const FLOAT *vAxons,const BOOLEAN bNormalize=FALSE);
+	void SetAxons(const BYTE bLayer, const BYTE *vAxons,const BOOLEAN bNormalize=FALSE);
 	FLOAT GetWinnerDistance(void);
-	void SetNeighborhoodSize(const UINT uiNeighborhoodSize);
-	void LearnKohonen(const FLOAT fLearnRate);
-	FLOAT GetWeight(const UINT uiLayer,const UINT uiNeuron,const UINT uiWeight);
+	void SetNeighbouringRadius(const WORD wNeighRadius);
+//	void LearnKohonen(const FLOAT fLearnRate);
+	void LearnKohonen(const FLOAT *pLearnRate);
+	void LearnGrossberg(const BYTE *bTarget);
+	FLOAT GetWeight(const BYTE bLayer,const WORD wNeuron,const WORD wWeight);
 	UINT GetWinnerNeuron(void);
-	
-	void LearnGrossberg(const FLOAT fLearnRate,const FLOAT *fTarget);
 	void PropagateGrossberg(void);
-	void PropagateKohonen(void);
-	void NormalizeVector(FLOAT *vVector,const UINT uiVectorSize);
+	void PropagateKohonenMin(void);
+	void PropagateKohonenMax(void);
+	void NormalizeVector(FLOAT *vVector,const DWORD dwVectorSize);
+	void InitWeights(void);
 	void InitWeights(const FLOAT fMinValue,const FLOAT fRange);
-	NetCP(const UINT uiRanks[NETRANK]);
+	NetCP(const WORD *pRanks,const BYTE bNetType);
 	virtual ~NetCP();
 
 protected:
-	UINT m_uiWinnerNeuron;
-	UINT m_uiNeighborhoodSize;
-
-	UINT m_uiLayerRank[NETRANK];
-	UINT m_uiNeuronRank[NETRANK-1];
-	FLOAT *m_vAxons[NETRANK];
-	FLOAT **m_vWeights[NETRANK-1];
-	UINT *m_uiCounts;
+	BYTE m_bNetRank;
+	WORD m_wWinnerNeuron;
+	FLOAT m_fLearnRate;
+	WORD m_wNeighRadius;
+	WORD *m_vLayerRank;
+	WORD *m_vNeuronRank;
+	FLOAT **m_vAxons;
+	FLOAT ***m_vWeights;
+	DWORD *m_vCounts;
+	BYTE m_bNetType;
+	BYTE m_bLearnType;
 };
 
 #endif // !defined(AFX_NETCP_H__F015352A_097D_45AD_BD96_EA31A10F0FEB__INCLUDED_)
