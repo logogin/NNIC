@@ -241,5 +241,6 @@ FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD *pWidth);
 void DestroyMatrix(LPVOID *pMatrix);
 
 DWORD FindPrimeNumber(const DWORD dwFrom);
+LONG Round(const FLOAT fValue);
 
 #endif // !defined(AFX_GLOBALS_H__76BA1620_20A5_4B58_9D57_375E431EC133__INCLUDED_)

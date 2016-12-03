@@ -22,7 +22,7 @@ class CNNICDlg : public CDialog
 // Construction
 public:
 	OPTIONSDCT * GetOptionsDCT(void);
-	DWORD GetLoadedFileSize(void);
+	ULONGLONG GetLoadedFileSize(void);
 	OPTIONSBP * GetOptionsBP(void);
 	void SetFinished(const BOOLEAN bFlag);
 	void DisplayRightBitmap(void);
@@ -75,6 +75,8 @@ protected:
 	afx_msg void OnButtonOptions();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+//	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 //{{AFX_INSERT_LOCATION}}

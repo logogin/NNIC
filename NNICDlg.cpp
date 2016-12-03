@@ -13,6 +13,7 @@
 #include "BPDlg.h"
 #include "DCTDlg.h"
 #include "DCT.h"
+#include ".\nnicdlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -104,6 +105,7 @@ BEGIN_MESSAGE_MAP(CNNICDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON_STOP, OnButtonStop)
 	ON_BN_CLICKED(IDC_BUTTON_OPTIONS, OnButtonOptions)
 	//}}AFX_MSG_MAP
+//	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -210,21 +212,17 @@ void CNNICDlg::OnFileOpen()
 	{
 		m_strLoadedFileName=dlgFile.GetPathName();
 		m_leftBitmap.LoadBMP(m_strLoadedFileName);
-//		CResampleDlg dlg(&m_leftBitmap);
-//		dlg.DoModal();
-		m_leftBitmap.Scale(m_staticLeft.GetDC(),100,100);
-		//m_staticLeft.SetBitmap(m_leftBitmap.Scale(256,200)/*dlg.GetHandle()*/);
-		//m_staticLeft.SetBitmap(m_leftBitmap.Scale(m_staticLeft.GetDC(),100,100));
+		m_staticRight.SetBitmap(NULL);
+		DisplayLeftBitmap();
 		EnableCompress(TRUE);
 	}
-
 }
 
 void CNNICDlg::OnButtonCompress() 
 {
 	// TODO: Add your control notification handler code here
+	m_staticRight.SetBitmap(NULL);
 	UINT uiMethod=GetCheckedRadioButton(IDC_RADIO_BACK,IDC_RADIO_DCTBACK);
-
 	switch (uiMethod)
 	{
 	case IDC_RADIO_BACK:
@@ -276,31 +274,31 @@ UINT StartBP(LPVOID pParam)
 	pDlg->EnableStop(TRUE);
 
 	OPTIONSBP *optionsBP=pDlg->GetOptionsBP();
-	UINT uiInput=optionsBP->st_wInputBlock*optionsBP->st_wInputBlock;
-	UINT uiHidden=optionsBP->st_wHiddenBlock*optionsBP->st_wHiddenBlock;
-	UINT uiLayers[4];
+	WORD wInput=optionsBP->st_wInputBlock*optionsBP->st_wInputBlock;
+	WORD wHidden=optionsBP->st_wHiddenBlock*optionsBP->st_wHiddenBlock;
+	WORD wLayers[4];
 	//BYTE bInputLayer=0;
 	BYTE bHiddenLayer;
 	BYTE bOutputLayer;
 	if (optionsBP->st_bSecondHidden)
 	{
-		uiLayers[0]=uiInput;
-		uiLayers[1]=optionsBP->st_wNeurons;
-		uiLayers[2]=uiHidden;
-		uiLayers[3]=uiInput;
+		wLayers[0]=wInput;
+		wLayers[1]=optionsBP->st_wNeurons;
+		wLayers[2]=wHidden;
+		wLayers[3]=wInput;
 		bHiddenLayer=2;
 		bOutputLayer=3;
 	}
 	else
 	{
-		uiLayers[0]=uiInput;
-		uiLayers[1]=uiHidden;
-		uiLayers[2]=uiInput;
+		wLayers[0]=wInput;
+		wLayers[1]=wHidden;
+		wLayers[2]=wInput;
 		bHiddenLayer=1;
 		bOutputLayer=2;
 	}
 	
-	NetBP Net(bOutputLayer+1,uiLayers);
+	NetBP Net(bOutputLayer+1,wLayers);
 	Net.SetSignalBoundaries(-0.5,0.5);
 
 	switch (optionsBP->st_bSigmoidType)
@@ -316,30 +314,31 @@ UINT StartBP(LPVOID pParam)
 	Net.SetSigmoidAlpha(optionsBP->st_fSigmoidAlpha);
 	Net.SetScaleParam(0.5);
 	Net.UseBiases(optionsBP->st_bUseBiases);
-	UINT uiMethod;
+	BYTE bMethod;
 	//optionsBP->st_wLearnMode=1;
 	switch (optionsBP->st_bLearnMode)
 	{
 	case 0:
-		uiMethod=LEARN_TYPE_SEQUENTIAL;
+		bMethod=LEARN_TYPE_SEQUENTIAL;
 		break;
 	case 1:
-		uiMethod=LEARN_TYPE_BATCH;
+		bMethod=LEARN_TYPE_BATCH;
 		break;
 	}
 	if (optionsBP->st_bUseMomentum)
-		uiMethod|=LEARN_TYPE_MOMENTUM;
+		bMethod|=LEARN_TYPE_MOMENTUM;
 	
-	Net.SetLearnType(uiMethod);
+	Net.SetLearnType(bMethod);
 	Net.InitWeights();
 
 	CBitmapKit *pBitmap=pDlg->GetLeftBitmap();
 	/********!!!!!!!!!!!*********/
 //	optionsBP->st_wPatterns=1024;
 
+	DWORD i,j;
 	FLOAT Segments[32][32][64];
-	for (UINT i=0 ;i<32; i++)
-		for (UINT j=0; j<32; j++)
+	for (i=0; i<32; i++)
+		for (j=0; j<32; j++)
 		{
 			CPoint point(j*8,i*8);
 			CSize size(8,8);
@@ -358,7 +357,7 @@ UINT StartBP(LPVOID pParam)
 	CString sString;
 
 	QueryPerformanceFrequency(&liFreq);
-	if (uiMethod & LEARN_TYPE_SEQUENTIAL)
+	if (bMethod & LEARN_TYPE_SEQUENTIAL)
 	{
 		ULONG ulLearnCount=0;
 		ULONG ulMomentCount=0;
@@ -403,7 +402,7 @@ UINT StartBP(LPVOID pParam)
 							fLearnRate=optionsBP->st_fFinalLearnRate;
 						Net.SetLearnRate(fLearnRate);
 					}
-					if (uiMethod & LEARN_TYPE_MOMENTUM)
+					if (bMethod & LEARN_TYPE_MOMENTUM)
 					{
 						ulMomentCount++;
 						if (ulMomentCount==optionsBP->st_dwMomentSteps
@@ -430,7 +429,7 @@ UINT StartBP(LPVOID pParam)
 		}
 		while (uiPatterns<optionsBP->st_wPatterns&&ulCycles<optionsBP->st_dwLearnCycles&&!bFlag);
 	}
-	if (uiMethod & LEARN_TYPE_BATCH)
+	if (bMethod & LEARN_TYPE_BATCH)
 	{
 		FLOAT fError;
 		FLOAT *fPatterns[1024];
@@ -1184,31 +1183,31 @@ UINT StartDCTBack(LPVOID pParam)
 
 	/***** Back ********/
 	OPTIONSBP *optionsBP=pDlg->GetOptionsBP();
-	UINT uiInput=optionsBP->st_wInputBlock*optionsBP->st_wInputBlock;
-	UINT uiHidden=optionsBP->st_wHiddenBlock*optionsBP->st_wHiddenBlock;
-	UINT uiLayers[4];
+	WORD wInput=optionsBP->st_wInputBlock*optionsBP->st_wInputBlock;
+	WORD wHidden=optionsBP->st_wHiddenBlock*optionsBP->st_wHiddenBlock;
+	WORD wLayers[4];
 	BYTE bInputLayer=0;
 	BYTE bHiddenLayer;
 	BYTE bOutputLayer;
 	if (optionsBP->st_bSecondHidden)
 	{
-		uiLayers[0]=uiInput;
-		uiLayers[1]=optionsBP->st_wNeurons;
-		uiLayers[2]=uiHidden;
-		uiLayers[3]=uiInput;
+		wLayers[0]=wInput;
+		wLayers[1]=optionsBP->st_wNeurons;
+		wLayers[2]=wHidden;
+		wLayers[3]=wInput;
 		bHiddenLayer=2;
 		bOutputLayer=3;
 	}
 	else
 	{
-		uiLayers[0]=uiInput;
-		uiLayers[1]=uiHidden;
-		uiLayers[2]=uiInput;
+		wLayers[0]=wInput;
+		wLayers[1]=wHidden;
+		wLayers[2]=wInput;
 		bHiddenLayer=1;
 		bOutputLayer=2;
 	}
 	
-	NetBP Net(bOutputLayer+1,uiLayers);
+	NetBP Net(bOutputLayer+1,wLayers);
 	Net.SetSignalBoundaries(-0.5,0.5);
 
 	switch (optionsBP->st_bSigmoidType)
@@ -1533,14 +1532,32 @@ CBitmapKit * CNNICDlg::GetRightBitmap()
 
 void CNNICDlg::DisplayLeftBitmap()
 {
-	m_staticLeft.SetBitmap(m_leftBitmap);
-//	UpdateData(FALSE);
+	CRect rect;
+	m_staticLeft.GetClientRect(&rect);
+	FLOAT fRatio=(FLOAT)m_leftBitmap.GetWidth()/m_leftBitmap.GetHeight();
+	DWORD dwNewWidth=rect.Width();
+	DWORD dwNewHeight=(DWORD)(dwNewWidth/fRatio);
+	if (dwNewHeight>rect.Height())
+	{
+		dwNewHeight=rect.Height();
+		dwNewWidth=(DWORD)(dwNewHeight*fRatio);
+	}
+	m_staticLeft.SetBitmap(m_leftBitmap.Scale(m_staticLeft.GetDC(),dwNewWidth,dwNewHeight));
 }
 
 void CNNICDlg::DisplayRightBitmap()
 {
-	m_staticRight.SetBitmap(m_rightBitmap);
-//	UpdateData(FALSE);
+	CRect rect;
+	m_staticRight.GetClientRect(&rect);
+	FLOAT fRatio=(FLOAT)m_leftBitmap.GetWidth()/m_leftBitmap.GetHeight();
+	DWORD dwNewWidth=rect.Width();
+	DWORD dwNewHeight=(DWORD)(dwNewWidth/fRatio);
+	if (dwNewHeight>rect.Height())
+	{
+		dwNewHeight=rect.Height();
+		dwNewWidth=(DWORD)(dwNewHeight*fRatio);
+	}
+	m_staticRight.SetBitmap(m_rightBitmap.Scale(m_staticLeft.GetDC(),dwNewWidth,dwNewHeight));
 }
 
 void CNNICDlg::OnButtonStop() 
@@ -1588,7 +1605,7 @@ OPTIONSBP * CNNICDlg::GetOptionsBP()
 	return &m_optionsDefault.st_optionsBP;
 }
 
-DWORD CNNICDlg::GetLoadedFileSize()
+ULONGLONG CNNICDlg::GetLoadedFileSize()
 {
 	CFile file;
 	CFileStatus fileStatus;

@@ -18,7 +18,7 @@ public:
 	void SetCompressionMethod(const CString &sMethod);
 	void SetCompressionTime(const FLOAT fTime);
 	void SetPSNR(const DOUBLE fRed,const DOUBLE fGreen, const DOUBLE fBlue, const DOUBLE fAverange, const DOUBLE fFull);
-	void SetFileSize(const ULONG ulOriginalSize,const ULONG ulCompressedSize);
+	void SetFileSize(const ULONGLONG ulOriginalSize,const ULONGLONG ulCompressedSize);
 	void SetOriginalColors(const BYTE bBitsPerPixel,const ULONG ulColors);
 	void SetImageSize(const ULONG ulWidth,const ULONG ulHeight);
 	void SetDirectory(const CString &sPath);

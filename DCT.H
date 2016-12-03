@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #define DCT_SIZE 8
-#define ARRAY_RANK 5
+#define DCT_ARRAY_RANK 5
 
 #define CTM 0
 #define TCTM 1
@@ -40,14 +40,14 @@ public:
 	void GetBlock(FLOAT *fBlock);
 	void DequantizateBlock(void);
 	void QuantizateBlock(void);
-	void SetQuality(const UINT uiQuality);
+	void SetQuality(const BYTE bQuality);
 	void DCTransform(const FLOAT *fBlock);
-	DCT(const UINT uiBlockSize);
+	DCT(const BYTE bBlockSize);
 	virtual ~DCT();
 
 protected:
-	UINT m_uiBlockSize;
-	FLOAT **m_vMatrices[ARRAY_RANK];
+	BYTE m_bBlockSize;
+	FLOAT **m_vMatrices[DCT_ARRAY_RANK];
 };
 
 #endif // !defined(AFX_DCT_H__5C2C8F3D_5C97_4882_8221_4489BC0EE718__INCLUDED_)

@@ -282,7 +282,7 @@ void NetCP::LearnKohonen(const FLOAT *pLearnRate)
 	for (i=iFirstNeuron; i<=iLastNeuron; i++)
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
 			m_vWeights[KOHONEN_NEURON][i][j]+=
-				pLearnRate[abs(m_wWinnerNeuron-i)]*(m_vAxons[INPUT_LAYER][j]
+				pLearnRate[labs(m_wWinnerNeuron-i)]*(m_vAxons[INPUT_LAYER][j]
 					-m_vWeights[KOHONEN_NEURON][i][j]);
 //	DWORD i,j;
 //	INT iFirstNeuron=m_wWinnerNeuron-m_wNeighRadius;

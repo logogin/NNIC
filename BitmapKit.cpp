@@ -22,7 +22,7 @@ CBitmapKit::CBitmapKit():m_bPresent(FALSE),m_lpBits(NULL)
 	ZeroMemory(&m_bmBitmap,sizeof(BITMAP));
 }
 
-CBitmapKit::~CB itmapKit()
+CBitmapKit::~CBitmapKit()
 {
 	if (m_lpBits!=NULL)
 		delete []m_lpBits;
@@ -137,31 +137,41 @@ void CBitmapKit::GetSegment(const CRect &rect,
 
 HBITMAP CBitmapKit::Scale(CDC *pDC,const DWORD dwWidth, const DWORD dwHeight)
 {
-	CDC memoryDC;
-	memoryDC.CreateCompatibleDC(pDC);
+//	CDC memoryDC;
+//	memoryDC.CreateCompatibleDC(pDC);
+	// 
+//	CBitmap destBitmap;
+//	destBitmap.CreateCompatibleBitmap(pDC, dwWidth, dwHeight );
+//	memoryDC.SelectObject(this);
+//	CBitmap *pOldBitmap=pDC->SelectObject( &destBitmap );
+//	pDC->SetStretchBltMode(HALFTONE);
+//	pDC->StretchBlt( 0,0,dwWidth,dwHeight,&memoryDC,
+//	0,0,m_bmBitmap.bmWidth,m_bmBitmap.bmHeight,SRCCOPY);
+//	pDC->SelectObject(pOldBitmap);
+//	return reinterpret_cast<HBITMAP>(destBitmap.Detach());
+	CDC mem_dc1;
+    mem_dc1.CreateCompatibleDC(NULL);
+	CBitmap* old_bmp1 = mem_dc1.SelectObject(this);
+// 
+//	//рисуею на ней по вышеуказанным причинам ;)
+//	mem_dc1.FillSolidRect(0, 0, src_width, src_height, RGB(10, 255, 10));
+//	mem_dc1.MoveTo(0, 0);
+//	mem_dc1.LineTo(src_width, src_height);
+// 
+	CDC mem_dc2;
+	mem_dc2.CreateCompatibleDC(NULL);
+	CBitmap scaled_bmp;
+	scaled_bmp.CreateCompatibleBitmap(pDC, dwWidth, dwHeight);
+	CBitmap* old_bmp2 = mem_dc2.SelectObject(&scaled_bmp);
+ 
+	mem_dc2.SetStretchBltMode(HALFTONE);
+	BOOL result = mem_dc2.StretchBlt(0, 0, dwWidth, dwHeight,&mem_dc1, 0, 0, m_bmBitmap.bmWidth,m_bmBitmap.bmHeight, SRCCOPY);
+	ASSERT(result);
+ 
+	mem_dc1.SelectObject(old_bmp1);
+	mem_dc2.SelectObject(old_bmp2);
 
-	CBitmap destBitmap;
-	//destBitmap.CreateCompatibleBitmap(pDC, dwWidth, dwHeight );
-	LPVOID lpBits;
-	BITMAP bm;
-	this->GetBitmap(&bm);
-	bm.bmWidth=dwWidth;
-	bm.bmHeight=dwHeight;
-	bm.bmWidthBytes=ALIGNBYTES(32*bm.bmWidth);
-
-	HBITMAP hBitmap=CreateDIBSection(bm,&lpBits);
-	destBitmap.Attach(hBitmap);
-	memoryDC.SelectObject(this);
-	CBitmap *OldBitmap=pDC->SelectObject( &destBitmap );
-    int e=GetLastError();
-	pDC->SetStretchBltMode(HALFTONE);
-	e=pDC->StretchBlt( 0,0,dwWidth,dwHeight,&memoryDC,
-		0,0,m_bmBitmap.bmWidth,m_bmBitmap.bmHeight,SRCCOPY);
-
-	pDC->SelectObject(OldBitmap);
-//	BITMAP bm;
-	destBitmap.GetBitmap(&bm);
-	return (HBITMAP)destBitmap;
+    return /*reinterpret_cast<HBITMAP>*/(HBITMAP)(scaled_bmp.Detach());
 }
 
 DWORD CBitmapKit::GetSizeBytes()
@@ -247,7 +257,7 @@ DOUBLE CBitmapKit::GetPSNRFullChannel(const CBitmapKit *pBitmapKit)
 		}
 	fMSE/=GetSizePixel();
 
-	return 10.0*(2.0*log10(dwChannelWidth)-log10(fMSE));
+	return 10.0*(2.0*log10l(dwChannelWidth)-log10(fMSE));
 }
 
 LPBYTE * CBitmapKit::GetBits()

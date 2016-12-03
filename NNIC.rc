@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -27,18 +27,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
     "#define _AFX_NO_OLE_RESOURCES\r\n"
@@ -66,15 +66,15 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON    DISCARDABLE     "res\\NNIC.ico"
+IDR_MAINFRAME           ICON                    "res\\NNIC.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ABOUTBOX DIALOG  0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About NNIC"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -85,36 +85,36 @@ BEGIN
 END
 
 IDD_NNIC_DIALOG DIALOGEX 0, 0, 462, 318
-STYLE DS_MODALFRAME | DS_3DLOOK | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | 
-    WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_3DLOOK | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "NNIC - Neural Network Image Compressor"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC_LEFT,"Static",SS_BITMAP | SS_CENTERIMAGE | 
-                    SS_SUNKEN | WS_BORDER,7,7,221,197
+                    SS_SUNKEN | WS_BORDER,7,7,220,200
     CONTROL         "",IDC_STATIC_RIGHT,"Static",SS_BITMAP | SS_CENTERIMAGE | 
-                    SS_SUNKEN | WS_BORDER,240,7,213,198
+                    SS_SUNKEN | WS_BORDER,235,7,220,200
     PUSHBUTTON      "Compress",IDC_BUTTON_COMPRESS,129,250,45,15
     GROUPBOX        "Use method",IDC_STATIC,7,223,115,75
     CONTROL         "Back Propagation",IDC_RADIO_BACK,"Button",
                     BS_AUTORADIOBUTTON,13,238,73,10
     CONTROL         "Counter Propagation",IDC_RADIO_COUNTER,"Button",
                     BS_AUTORADIOBUTTON,13,253,80,10
-    CONTROL         "DC Transform",IDC_RADIO_DCT,"Button",BS_AUTORADIOBUTTON,
-                    13,268,59,10
+    CONTROL         "DC transform",IDC_RADIO_DCT,"Button",BS_AUTORADIOBUTTON,
+                    13,268,57,10
     CONTROL         "DCT with Back Propagation",IDC_RADIO_DCTBACK,"Button",
                     BS_AUTORADIOBUTTON,13,283,100,10
     PUSHBUTTON      "Stop",IDC_BUTTON_STOP,177,250,45,15
     CONTROL         "Progress1",IDC_PROGRESS_COMPR,"msctls_progress32",
-                    PBS_SMOOTH | WS_BORDER,127,278,158,15
+                    WS_BORDER | 0x1,127,278,158,15
     PUSHBUTTON      "Options",IDC_BUTTON_OPTIONS,129,234,60,15
     LTEXT           "Av. Distance:",IDC_STATIC,304,243,44,8
-    LTEXT           "",IDC_STATIC_AVDIST,361,245,79,7
+    LTEXT           "",IDC_STATIC_AVDIST,361,245,79,8
     LTEXT           "Time: ",IDC_STATIC,304,257,20,8
-    LTEXT           "",IDC_STATIC_TIME,361,256,41,7
+    LTEXT           "",IDC_STATIC_TIME,361,256,41,8
     LTEXT           "Learn Cycle:",IDC_STATIC,304,231,40,8
-    LTEXT           "",IDC_STATIC_CYCLES,361,232,41,7
+    LTEXT           "",IDC_STATIC_CYCLES,361,232,41,8
     GROUPBOX        "Compression",IDC_STATIC,125,223,165,75
     GROUPBOX        "Status",IDC_STATIC,294,223,147,75
     LTEXT           "Unused clusters:",IDC_STATIC,304,268,54,8
@@ -122,10 +122,10 @@ BEGIN
     LTEXT           "Cycle progress",IDC_STATIC,129,268,47,8
 END
 
-IDD_PROPPAGE_BACK DIALOG DISCARDABLE  0, 0, 320, 239
-STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_PROPPAGE_BACK DIALOGEX 0, 0, 320, 239
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Back Propagation"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     GROUPBOX        "Learn mode",IDC_STATIC,7,7,55,39
     CONTROL         "Sequential",IDC_RADIO_SEQUENTIAL,"Button",
@@ -133,12 +133,8 @@ BEGIN
     CONTROL         "Batch",IDC_RADIO_BATCH,"Button",BS_AUTORADIOBUTTON,10,
                     30,35,10
     GROUPBOX        "Configuration",IDC_STATIC,7,58,203,96
-    CONTROL         "Slider1",IDC_SLIDER_INPUT,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,12,82,189,10
     LTEXT           "Input layer block size:",IDC_STATIC,12,70,69,8
     LTEXT           "Hidden layer block size:",IDC_STATIC,12,96,76,8
-    CONTROL         "Slider2",IDC_SLIDER_HIDDEN,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,12,107,192,10
     CONTROL         "Add second hidden layer",IDC_CHECK_SECOND,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,13,135,94,10
     LTEXT           "with",IDC_STATIC_WITH,107,135,14,8
@@ -189,10 +185,12 @@ BEGIN
     LTEXT           "Function alpha",IDC_STATIC,68,44,48,10,NOT WS_GROUP
     EDITTEXT        IDC_EDIT_ALPHA,124,42,32,12,ES_AUTOHSCROLL
     RTEXT           "",IDC_STATIC_HIDDEN,90,95,20,8
+    SCROLLBAR       IDC_SCROLLBAR_INPUT,14,81,187,12
+    SCROLLBAR       IDC_SCROLLBAR_HIDDEN,14,107,188,12
 END
 
-IDD_PROPPAGE_COUNTER DIALOG DISCARDABLE  0, 0, 278, 182
-STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_PROPPAGE_COUNTER DIALOG  0, 0, 278, 182
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Counter Propagation"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -235,8 +233,8 @@ BEGIN
     LTEXT           "Change on",IDC_STATIC,149,129,36,8
 END
 
-IDD_DIALOG_REPORT DIALOG DISCARDABLE  0, 0, 212, 225
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+IDD_DIALOG_REPORT DIALOG  0, 0, 212, 225
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "NNIC - Report"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -282,31 +280,31 @@ BEGIN
     EDITTEXT        IDC_EDIT_TIME,80,187,124,12,ES_AUTOHSCROLL | ES_READONLY
 END
 
-IDD_PROPPAGE_DCT DIALOG DISCARDABLE  0, 0, 235, 156
-STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_PROPPAGE_DCT DIALOGEX 0, 0, 235, 156
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "DC Transform"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    GROUPBOX        "",IDC_STATIC,17,15,188,61
+    GROUPBOX        "",IDC_STATIC,17,15,188,73
     LTEXT           "Quality parameter:",IDC_STATIC,22,25,58,8
-    CONTROL         "Slider1",IDC_SLIDER_QUALITY,"msctls_trackbar32",
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,20,38,180,10
     CONTROL         "Shift matrix values",IDC_CHECK_SHIFT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,59,73,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,67,73,10
     LTEXT           "",IDC_STATIC_QUALITY,83,25,20,8
+    SCROLLBAR       IDC_SCROLLBAR_QUALITY,23,47,170,12
+    LTEXT           "Lowest",IDC_STATIC,167,35,24,8
+    LTEXT           "Highest",IDC_STATIC,23,37,25,8
 END
 
-IDD_DIALOG_RESAMPLE DIALOG DISCARDABLE  0, 0, 180, 42
-STYLE WS_POPUP | WS_BORDER
+IDD_DIALOG_RESAMPLE DIALOG  0, 0, 180, 42
+STYLE DS_SETFONT | WS_POPUP | WS_BORDER
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Progress1",IDC_PROGRESS_RESAMPLE,"msctls_progress32",
-                    PBS_SMOOTH | WS_BORDER,7,20,166,15
+                    WS_BORDER | 0x1,7,20,166,15
     LTEXT           "Resampling...",IDC_STATIC,7,7,44,8
 END
 
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -329,18 +327,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "\0"
-            VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "NNIC MFC Application\0"
-            VALUE "FileVersion", "1, 0, 0, 1\0"
-            VALUE "InternalName", "NNIC\0"
-            VALUE "LegalCopyright", "Copyright (C) 2003\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "NNIC.EXE\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "NNIC Application\0"
-            VALUE "ProductVersion", "1, 0, 0, 1\0"
-            VALUE "SpecialBuild", "\0"
+            VALUE "FileDescription", "NNIC MFC Application"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "NNIC"
+            VALUE "LegalCopyright", "Copyright (C) 2003"
+            VALUE "OriginalFilename", "NNIC.EXE"
+            VALUE "ProductName", "NNIC Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END
     BLOCK "VarFileInfo"
@@ -349,8 +342,6 @@ BEGIN
     END
 END
 
-#endif    // !_MAC
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -358,7 +349,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -425,11 +416,28 @@ END
 // Menu
 //
 
-IDR_MAIN_MENU MENU DISCARDABLE 
+IDR_MAIN_MENU MENU 
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "&Open...",                    ID_FILE_OPEN
+        MENUITEM "Open...",                     ID_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "&Save as...",                 ID_FILE_SAVEAS32777
+        MENUITEM "Save report as...",           ID_FILE_SAVEREPORTAS
+        MENUITEM SEPARATOR
+        MENUITEM "&Quit",                       ID_FILE_QUIT
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "&General...",                 ID_OPTIONS_GENERAL
+        MENUITEM "&Back Propagation...",        ID_OPTIONS_BACKPROPAGATION
+        MENUITEM "&Counter Propagation...",     ID_OPTIONS_COUNTERPROPAGATION
+
+        MENUITEM "&DC Transform...",            ID_OPTIONS_DCTRANSFORM
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About...",                   ID_HELP_ABOUT
     END
 END
 
@@ -439,7 +447,7 @@ END
 // Accelerator
 //
 
-IDR_ACCELERATOR ACCELERATORS DISCARDABLE 
+IDR_ACCELERATOR ACCELERATORS 
 BEGIN
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
 END
@@ -447,10 +455,10 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// 24
+// RT_MANIFEST
 //
 
-1 24 MOVEABLE PURE 
+1 RT_MANIFEST 
 BEGIN
     0x3f3c, 0x6d78, 0x206c, 0x6576, 0x7372, 0x6f69, 0x206e, 0x203d, 0x3122, 
     0x302e, 0x2022, 0x6e65, 0x6f63, 0x6964, 0x676e, 0x3d20, 0x2220, 0x5455, 
@@ -483,7 +491,7 @@ END
 // String Table
 //
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_ABOUTBOX            "&About NNIC..."
 END

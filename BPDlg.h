@@ -34,8 +34,6 @@ public:
 	float	m_fMinError;
 	float	m_fMomentChangeRate;
 	DWORD	m_dwMomentSteps;
-	int		m_iHidden;
-	int		m_iInput;
 	CString	m_strHidden;
 	CString	m_strInput;
 	CString	m_strRatio;
@@ -72,10 +70,14 @@ protected:
 	afx_msg void OnRadioHypertan();
 	afx_msg void OnCheckSecond();
 	afx_msg void OnCheckMomentum();
-	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+//	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	int m_iInput;
+	int m_iHidden;
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -22,7 +22,7 @@
 #include <afxtempl.h>
 #include <afxmt.h>
 #include <math.h>
-#include <fstream.h>
+//#include <fstream.h>
 #include "Globals.h"
 #include "BitmapKit.h"
 #include "./ZLib121/ZLib.h"

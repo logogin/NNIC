@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by NNIC.rc
 //
 #define IDM_ABOUTBOX                    0x0010
@@ -87,6 +87,25 @@
 #define IDC_RADIO_KOHONEN               1107
 #define IDC_CHECK_TRAINNEIGH            1110
 #define IDC_PROGRESS_RESAMPLE           1117
+#define IDC_SCROLLBAR_INPUT             1118
+#define IDC_SCROLLBAR_INPUT2            1119
+#define IDC_SCROLLBAR_HIDDEN            1119
+#define IDC_SCROLLBAR1                  1119
+#define IDC_SCROLLBAR_QUALITY           1119
+#define ID_FILE_LOADBITMAP              32772
+#define ID_FILE_LOADCOMPRESSEDFILE      32773
+#define ID_FILE_LOADBITMAPFILE          32774
+#define ID_FILE_LOADCOMPRESSEDFILE32775 32775
+#define ID_FILE_SAVEAS                  32776
+#define ID_FILE_SAVEAS32777             32777
+#define ID_FILE_QUIT                    32778
+#define ID_OPTIONS_GENERAL              32779
+#define ID_OPTIONS_BACKPROPAGATION      32780
+#define ID_OPTIONS_COUNTERPROPAGATION   32781
+#define ID_OPTIONS_DCTRANSFORM          32782
+#define ID_Menu                         32784
+#define ID_FILE_SAVEREPORTAS            32785
+#define ID_HELP_ABOUT                   32786
 
 // Next default values for new objects
 // 
@@ -94,8 +113,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        140
-#define _APS_NEXT_COMMAND_VALUE         32772
-#define _APS_NEXT_CONTROL_VALUE         1118
+#define _APS_NEXT_COMMAND_VALUE         32787
+#define _APS_NEXT_CONTROL_VALUE         1120
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

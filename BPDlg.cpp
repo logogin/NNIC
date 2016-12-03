@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "NNIC.h"
 #include "BPDlg.h"
+#include ".\bpdlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,6 +25,8 @@ CBPDlg::CBPDlg() : CPropertyPage(CBPDlg::IDD)
 CBPDlg::CBPDlg(const OPTIONSBP &optionsBP) : CPropertyPage(CBPDlg::IDD)
 {
 	//{{AFX_DATA_INIT(CBPDlg)
+	m_iInput=0;
+	m_iHidden=0;
 	m_fAlpha = 0.0f;
 	m_fFinalLearnRate = 0.0f;
 	m_fFinalMoment = 0.0f;
@@ -34,8 +37,6 @@ CBPDlg::CBPDlg(const OPTIONSBP &optionsBP) : CPropertyPage(CBPDlg::IDD)
 	m_fMinError = 0.0f;
 	m_fMomentChangeRate = 0.0f;
 	m_dwMomentSteps = 0;
-	m_iHidden = 0;
-	m_iInput = 0;
 	m_strHidden = _T("");
 	m_strInput = _T("");
 	m_strRatio = _T("");
@@ -73,8 +74,6 @@ void CBPDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_MOMENTCHANGERATE, m_fMomentChangeRate);
 	DDV_MinMaxFloat(pDX, m_fMomentChangeRate, 0.f, 1.f);
 	DDX_Text(pDX, IDC_EDIT_MOMENTSTEPS, m_dwMomentSteps);
-	DDX_Slider(pDX, IDC_SLIDER_HIDDEN, m_iHidden);
-	DDX_Slider(pDX, IDC_SLIDER_INPUT, m_iInput);
 	DDX_Text(pDX, IDC_STATIC_HIDDEN, m_strHidden);
 	DDX_Text(pDX, IDC_STATIC_INPUT, m_strInput);
 	DDX_Text(pDX, IDC_STATIC_RATIO, m_strRatio);
@@ -86,6 +85,8 @@ void CBPDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_PATTERNS, m_dwPatterns);
 	DDV_MinMaxDWord(pDX, m_dwPatterns, 1, 65535);
 	DDX_Text(pDX, IDC_EDIT_CYCLES, m_dwCycles);
+	DDX_Scroll(pDX, IDC_SCROLLBAR_INPUT, m_iInput);
+	DDX_Scroll(pDX, IDC_SCROLLBAR_HIDDEN, m_iHidden);
 	//}}AFX_DATA_MAP
 }
 
@@ -98,8 +99,9 @@ BEGIN_MESSAGE_MAP(CBPDlg, CPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO_HYPERTAN, OnRadioHypertan)
 	ON_BN_CLICKED(IDC_CHECK_SECOND, OnCheckSecond)
 	ON_BN_CLICKED(IDC_CHECK_MOMENTUM, OnCheckMomentum)
-	ON_WM_HSCROLL()
+//	ON_WM_HSCROLL()
 	//}}AFX_MSG_MAP
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -118,18 +120,17 @@ BOOL CBPDlg::OnInitDialog()
 		IDC_RADIO_SIGMOID+m_optionsBP.st_bSigmoidType);
 
 	m_fAlpha=m_optionsBP.st_fSigmoidAlpha;
-
 	m_bBiases=m_optionsBP.st_bUseBiases;
 	m_bMomentum=m_optionsBP.st_bUseMomentum;
 
-	CSliderCtrl *pSlider=(CSliderCtrl *)GetDlgItem(IDC_SLIDER_INPUT);
-	pSlider->SetRange(3,32);
-	m_iInput=m_optionsBP.st_wInputBlock;
+	CScrollBar *pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_INPUT);
+	pScroll->SetScrollRange(4,8);
+	m_iInput=m_optionsBP.st_wInputBlock/2;
 	m_strInput.Format(_T("%dx%d"),m_optionsBP.st_wInputBlock,m_optionsBP.st_wInputBlock);
 
-	pSlider=(CSliderCtrl *)GetDlgItem(IDC_SLIDER_HIDDEN);
-	pSlider->SetRange(2,32);
-	m_iHidden=m_optionsBP.st_wHiddenBlock;
+	pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_HIDDEN);
+	pScroll->SetScrollRange(1,7);
+	m_iHidden=m_optionsBP.st_wHiddenBlock/2;
 	m_strHidden.Format(_T("%dx%d"),m_optionsBP.st_wHiddenBlock,m_optionsBP.st_wHiddenBlock);
 
 	m_strRatio.Format(_T("%.2f"),(FLOAT)(m_iHidden*m_iHidden)/(m_iInput*m_iInput)*100);
@@ -233,22 +234,6 @@ void CBPDlg::OnCheckMomentum()
 	EnableMomentum(m_optionsBP.st_bUseMomentum);
 }
 
-void CBPDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
-{
-	// TODO: Add your message handler code here and/or call default
-	UpdateData(TRUE);
-	m_optionsBP.st_wInputBlock=m_iInput;
-	m_optionsBP.st_wHiddenBlock=m_iHidden;
-	m_strInput.Format(_T("%dx%d"),m_iInput,m_iInput);
-	m_strHidden.Format(_T("%dx%d"),m_iHidden,m_iHidden);
-	
-	m_strRatio.Format(_T("%.2f"),(FLOAT)(m_iHidden*m_iHidden)/(m_iInput*m_iInput)*100);
-	m_strRatio+=_T("%");
-	UpdateData(FALSE);
-
-	CPropertyPage::OnHScroll(nSBCode, nPos, pScrollBar);
-}
-
 void CBPDlg::OnOK() 
 {
 	// TODO: Add your specialized code here and/or call the base class
@@ -257,8 +242,8 @@ void CBPDlg::OnOK()
 	m_optionsBP.st_dwLearnCycles=m_dwCycles;
 	m_optionsBP.st_fMinError=m_fMinError;
 	m_optionsBP.st_wPatterns=(WORD)m_dwPatterns;
-	m_optionsBP.st_wInputBlock=m_iInput;
-	m_optionsBP.st_wHiddenBlock=m_iHidden;
+	m_optionsBP.st_wInputBlock=m_iInput*2;
+	m_optionsBP.st_wHiddenBlock=m_iHidden*2;
 	m_optionsBP.st_wNeurons=(WORD)m_dwNeurons;
 	m_optionsBP.st_fInitLearnRate=m_fInitLearnRate;
 	m_optionsBP.st_fFinalLearnRate=m_fFinalLearnRate;
@@ -274,4 +259,53 @@ void CBPDlg::OnOK()
 void CBPDlg::GetOptionsBP(OPTIONSBP *optionsBP)
 {
 	CopyMemory(optionsBP,&m_optionsBP,sizeof(OPTIONSBP));
+}
+void CBPDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: Add your message handler code here and/or call default
+	int iMinPos;
+	int iMaxPos;
+	pScrollBar->GetScrollRange(&iMinPos, &iMaxPos); 
+	iMaxPos = pScrollBar->GetScrollLimit();
+
+	// Get the current position of scroll box.
+	int iCurPos = pScrollBar->GetScrollPos();
+
+	// Determine the new position of scroll box.
+	switch (nSBCode)
+	{
+	case SB_LEFT:      // Scroll to far left.
+		iCurPos = iMinPos;
+		break;
+	case SB_RIGHT:      // Scroll to far right.
+		iCurPos = iMaxPos;
+		break;
+	case SB_ENDSCROLL:   // End scroll.
+		break;
+	case SB_LINELEFT:      // Scroll left.
+		if (iCurPos > iMinPos)
+			iCurPos--;
+		break;
+	case SB_LINERIGHT:   // Scroll right.
+		if (iCurPos < iMaxPos)
+			iCurPos++;
+		break;
+	case SB_THUMBPOSITION: // Scroll to absolute position. nPos is the position
+	   iCurPos = nPos;      // of the scroll box at the end of the drag operation.
+	   break;
+	case SB_THUMBTRACK:   // Drag scroll box to specified position. nPos is the
+		iCurPos = nPos;     // position that the scroll box has been dragged to.
+		break;
+	}
+	// Set the new position of the thumb (scroll box).
+	pScrollBar->SetScrollPos(iCurPos);
+	CPropertyPage::OnHScroll(nSBCode, nPos, pScrollBar);
+
+	UpdateData(TRUE);
+	m_strInput.Format(_T("%dx%d"),m_iInput*2,m_iInput*2);
+	m_strHidden.Format(_T("%dx%d"),m_iHidden*2,m_iHidden*2);
+	
+	m_strRatio.Format(_T("%.2f"),(FLOAT)(m_iHidden*m_iHidden)/(m_iInput*m_iInput)*100);
+	m_strRatio+=_T("%");
+	UpdateData(FALSE);
 }

@@ -40,7 +40,7 @@ void CDCTDlg::DoDataExchange(CDataExchange* pDX)
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDCTDlg)
 	DDX_Check(pDX, IDC_CHECK_SHIFT, m_bShift);
-	DDX_Slider(pDX, IDC_SLIDER_QUALITY, m_iQuality);
+	DDX_Scroll(pDX, IDC_SCROLLBAR_QUALITY, m_iQuality);
 	DDX_Text(pDX, IDC_STATIC_QUALITY, m_strQuality);
 	//}}AFX_DATA_MAP
 }
@@ -60,8 +60,8 @@ BOOL CDCTDlg::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 	
 	// TODO: Add extra initialization here
-	CSliderCtrl *pSlider=(CSliderCtrl *)GetDlgItem(IDC_SLIDER_QUALITY);
-	pSlider->SetRange(0,25);
+	CScrollBar *pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_QUALITY);
+	pScroll->SetScrollRange(0,25);
 	m_iQuality=m_optionsDCT.st_bQuality;
 	m_strQuality.Format(_T("%d"),m_optionsDCT.st_bQuality);
 	m_bShift=m_optionsDCT.st_bShift;
@@ -75,14 +75,44 @@ BOOL CDCTDlg::OnInitDialog()
 void CDCTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
 	// TODO: Add your message handler code here and/or call default
-	UpdateData(TRUE);
-
-	m_optionsDCT.st_bQuality=m_iQuality;
-	m_strQuality.Format(_T("%d"),m_optionsDCT.st_bQuality);
-
-	UpdateData(FALSE);
-
+	int iMinPos;
+	int iMaxPos;
+	pScrollBar->GetScrollRange(&iMinPos, &iMaxPos); 
+	iMaxPos = pScrollBar->GetScrollLimit();
+	// Get the current position of scroll box.
+	int iCurPos = pScrollBar->GetScrollPos();
+	// Determine the new position of scroll box.
+	switch (nSBCode)
+	{
+	case SB_LEFT:      // Scroll to far left.
+		iCurPos = iMinPos;
+		break;
+	case SB_RIGHT:      // Scroll to far right.
+		iCurPos = iMaxPos;
+		break;
+	case SB_ENDSCROLL:   // End scroll.
+		break;
+	case SB_LINELEFT:      // Scroll left.
+		if (iCurPos > iMinPos)
+			iCurPos--;
+		break;
+	case SB_LINERIGHT:   // Scroll right.
+		if (iCurPos < iMaxPos)
+			iCurPos++;
+		break;
+	case SB_THUMBPOSITION: // Scroll to absolute position. nPos is the position
+	   iCurPos = nPos;      // of the scroll box at the end of the drag operation.
+	   break;
+	case SB_THUMBTRACK:   // Drag scroll box to specified position. nPos is the
+		iCurPos = nPos;     // position that the scroll box has been dragged to.
+		break;
+	}
+	// Set the new position of the thumb (scroll box).
+	pScrollBar->SetScrollPos(iCurPos);
 	CPropertyPage::OnHScroll(nSBCode, nPos, pScrollBar);
+	UpdateData(TRUE);
+	m_strQuality.Format(_T("%d"),m_iQuality);
+	UpdateData(FALSE);
 }
 
 void CDCTDlg::GetOptionsDCT(OPTIONSDCT *optionsDCT)

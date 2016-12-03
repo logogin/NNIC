@@ -87,7 +87,7 @@ DWORD FindPrimeNumber(const DWORD dwFrom)
 	{
 		bFound=TRUE;
 		bFlag=FALSE;
-		for (i=2; i<=(DWORD)sqrt(dwNumber)&&!bFlag; i++)
+		for (i=2; i<=(DWORD)sqrtf((FLOAT)dwNumber)&&!bFlag; i++)
 			if (!(dwNumber%i))
 			{
 				bFlag=TRUE;
@@ -98,4 +98,11 @@ DWORD FindPrimeNumber(const DWORD dwFrom)
 	}
 	while (!bFound);
 	return dwNumber;
+}
+
+LONG Round(const FLOAT fValue)
+{
+	if (fValue<0.0)
+		return (LONG)(fValue-0.5);
+	return (LONG)(fValue+0.5);
 }

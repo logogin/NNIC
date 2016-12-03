@@ -74,7 +74,7 @@ void CReportDlg::SetDirectory(const CString &sPath)
 	m_sDirectory=sPath.Left(sPath.GetLength()-m_sFileName.GetLength());
 }
 
-void CReportDlg::SetFileSize(const ULONG ulOriginalSize,const ULONG ulCompressedSize)
+void CReportDlg::SetFileSize(const ULONGLONG ulOriginalSize,const ULONGLONG ulCompressedSize)
 {
 	m_sRatio.Format(_T("%.2f"),(FLOAT)ulCompressedSize/ulOriginalSize*100.0);
 	m_sRatio+=_T("%");
