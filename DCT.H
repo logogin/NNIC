@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #define DCT_SIZE 8
+#define DCT_BLOCK_SIZE 64
 #define DCT_ARRAY_RANK 5
 
 #define CTM 0
@@ -48,6 +49,8 @@ public:
 protected:
 	BYTE m_bBlockSize;
 	FLOAT **m_vMatrices[DCT_ARRAY_RANK];
+public:
+	void DeZigZagSequence(const SHORT * sSequence);
 };
 
 #endif // !defined(AFX_DCT_H__5C2C8F3D_5C97_4882_8221_4489BC0EE718__INCLUDED_)

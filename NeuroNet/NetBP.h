@@ -12,7 +12,7 @@
 #define SIGMOID_TYPE_ORIGINAL 1
 #define SIGMOID_TYPE_HYPERTAN 2
 
-#define NET_INPUT_LAYER 0
+#define BP_INPUT_LAYER 0
 
 #define BP_ARRAY_RANK 4
 #define WEIGH 0
@@ -42,6 +42,7 @@ public:
 	void ForwardPass(const BYTE bFrom);
 	void SetAxons(const BYTE bLayer,const FLOAT *fAxons);
 	void InitWeights(void);
+	void InitWeights(const BYTE bLayer, const LPVOID pWeights);
 	void UseBiases(const BOOLEAN bFlag);
 	void SetSignalBoundaries(const FLOAT fMinSignal,const FLOAT fMaxSignal);
 	NetBP(const BYTE bNetRank,const WORD *wLayerRank);
@@ -71,6 +72,8 @@ protected:
 	FLOAT m_fSigmoidAlpha;
 	BOOLEAN m_bFirstEpoch;
 	DWORD m_dwBiasMatrixSize;
+public:
+	DWORD GetWeightsSize(const BYTE bLayer);
 };
 
 #endif // !defined(AFX_NETBP_H__752BE5F1_2382_4ABE_9B12_F27789C632EF__INCLUDED_)

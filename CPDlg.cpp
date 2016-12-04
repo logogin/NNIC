@@ -92,10 +92,13 @@ BOOL CCPDlg::OnInitDialog()
 	switch (m_optionsCP.st_bNetType)
 	{
 	case NET_TYPE_KOHONEN_GROSSBERG:
+		OnRadioKohgros();
 		CheckRadioButton(IDC_RADIO_KOHGROS,IDC_RADIO_KOHONEN,IDC_RADIO_KOHGROS);
 		break;
 	case NET_TYPE_KOHONEN:
+		OnRadioKohonen();
 		CheckRadioButton(IDC_RADIO_KOHGROS,IDC_RADIO_KOHONEN,IDC_RADIO_KOHONEN);
+		GetDlgItem(IDC_EDIT_MINDIST)->EnableWindow(FALSE);
 		EnableLearnRateChange(FALSE);
 		EnableNeighRadiusChange(FALSE);
 		break;
@@ -113,6 +116,8 @@ BOOL CCPDlg::OnInitDialog()
 	m_wNeighFinal=m_optionsCP.st_wFinalNeighRadius;
 	m_wNeighChange=m_optionsCP.st_wNeighChangeRate;
 	m_dwNeighSteps=m_optionsCP.st_dwNeighRadiusSteps;
+
+	EnableNeighRadius(m_bTrainNeighbours);
 
 	UpdateData(FALSE);
 

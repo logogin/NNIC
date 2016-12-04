@@ -1,0 +1,17 @@
+------------- 29.05.2004 12:47:10 -------------
+File name:                UnTitled.nni
+Directory:                .
+Image size:               256x256 pixels
+Original colors:          16777216 (24 bpp)
+Compression method:       Counter Propagation
+Original file size:       192.05 KB (196662 bytes)
+Compressed file size:     47.72 KB (48869 bytes)
+Ratio:                    24.85%
+Red channel PSNR:         24.11 dB
+Green channel PSNR:       26.35 dB
+Blue channel PSNR:        25.68 dB
+Average PSNR:             25.38 dB
+Full channel PSNR:        25.69 dB
+Compressed in:            8.68 sec.
+
+

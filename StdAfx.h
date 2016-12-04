@@ -22,10 +22,11 @@
 #include <afxtempl.h>
 #include <afxmt.h>
 #include <math.h>
-//#include <fstream.h>
+
 #include "Globals.h"
 #include "BitmapKit.h"
 #include "./ZLib121/ZLib.h"
+#include <afxdlgs.h>
 
 #pragma warning(disable : 4018)
 //{{AFX_INSERT_LOCATION}}

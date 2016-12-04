@@ -1,7 +1,6 @@
 #if !defined(AFX_CPDLG_H__2D2186EC_F233_4DDB_BE96_CF000B1F6B65__INCLUDED_)
 #define AFX_CPDLG_H__2D2186EC_F233_4DDB_BE96_CF000B1F6B65__INCLUDED_
 
-#include "Globals.h"	// Added by ClassView
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

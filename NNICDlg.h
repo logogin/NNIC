@@ -10,11 +10,29 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CNNICDlg dialog
+
+const DWORD StatusID[5]={IDC_STATIC_STATUS1,
+	IDC_STATIC_STATUS2,
+	IDC_STATIC_STATUS3,
+	IDC_STATIC_STATUS4,
+	IDC_STATIC_STATUS5};
+
+const DWORD StatusTextID[5]={IDC_STATIC_STATUSTEXT1,
+	IDC_STATIC_STATUSTEXT2,
+	IDC_STATIC_STATUSTEXT3,
+	IDC_STATIC_STATUSTEXT4,
+	IDC_STATIC_STATUSTEXT5};
+
 UINT StartBP(LPVOID pParam);
 UINT StartCP(LPVOID pParam);
 UINT StartDCT(LPVOID pParam);
 UINT StartDCTBack(LPVOID pParam);
+UINT StartDeCompress(LPVOID pParam);
 
+#define PAGE_GENERAL 0
+#define PAGE_BP 1
+#define PAGE_CP 2
+#define PAGE_DCT 3
 
 class CNNICDlg : public CDialog
 {
@@ -56,10 +74,11 @@ public:
 // Implementation
 protected:
 	CWinThread * m_threadCompress;
+	CWinThread * m_threadDeCompress;
 	BOOLEAN m_bFinished;
 	OPTIONS m_optionsDefault;
-	CBitmapKit m_leftBitmap;
-	CBitmapKit m_rightBitmap;
+	CBitmapKit m_bitmapRight;
+	CBitmapKit m_bitmapLeft;
 	CString m_strLoadedFileName;
 	HICON m_hIcon;
 
@@ -69,14 +88,30 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnFileOpen();
+	afx_msg void OnFileLoadBitmapFile();
+	afx_msg void OnFileLoadComprFile();
 	afx_msg void OnButtonCompress();
 	afx_msg void OnButtonStop();
 	afx_msg void OnButtonOptions();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-//	afx_msg void OnSize(UINT nType, int cx, int cy);
+	CString GetLoadedFileName(void);
+	afx_msg void OnOptionsBP();
+	void ShowOptions(const BYTE bActivePage);
+	afx_msg void OnOptionsCP();
+	afx_msg void OnOptionsDCT();
+	afx_msg void OnHelpAbout();
+	afx_msg void OnFileSaveLeftBitmap();
+	afx_msg void OnOptionsGENERAL();
+	OPTIONSGENERAL * GetOptionsGENERAL(void);
+	afx_msg void OnFileSaveRightBitmap();
+	CString GetComprFileName(void);
+	void WriteReportFile(const CString & strReportString);
+	void SetStatusOperation(const CString & strOperation);
+	void SetStatus(const DWORD dwID, const CString & strName, const CString & strValue);
+	void ClearStatus(void);
+	void SetProgressRange(const INT iLower, const INT iUpper);
 };
 
 //{{AFX_INSERT_LOCATION}}

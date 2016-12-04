@@ -7,6 +7,7 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_DIALOG_RESAMPLE             101
 #define IDD_NNIC_DIALOG                 102
+#define IDD_PROPPAGE_GENERAL            106
 #define IDD_PROPPAGE_DCT                107
 #define IDR_MAINFRAME                   128
 #define IDR_MAIN_MENU                   129
@@ -14,9 +15,7 @@
 #define IDD_PROPPAGE_COUNTER            133
 #define IDR_ACCELERATOR                 136
 #define IDD_DIALOG_REPORT               137
-#define IDC_STATIC_ORIGINAL             1000
 #define IDC_STATIC_LEFT                 1000
-#define IDC_STATIC_COMPRESSED           1001
 #define IDC_STATIC_RIGHT                1001
 #define IDC_BUTTON_COMPRESS             1004
 #define IDC_RADIO_BACK                  1013
@@ -26,10 +25,7 @@
 #define IDC_BUTTON_OPTIONS              1017
 #define IDC_EDIT_CYCLES                 1022
 #define IDC_EDIT_CLUSTERS               1026
-#define IDC_STATIC_AVDIST               1029
 #define IDC_EDIT_LEARNCHANGE            1029
-#define IDC_STATIC_TIME                 1030
-#define IDC_STATIC_CYCLES               1031
 #define IDC_EDIT_LEARNFINAL             1031
 #define IDC_EDIT_LEARNINIT              1032
 #define IDC_EDIT_NEIGHCHANGE            1033
@@ -41,18 +37,17 @@
 #define IDC_EDIT_IMAGESIZE              1040
 #define IDC_EDIT_COLORS                 1041
 #define IDC_EDIT_METHOD                 1042
-#define IDC_EDIT_ORSIZE                 1043
+#define IDC_EDIT_ORIGINALSIZE           1043
 #define IDC_EDIT_COMPRSIZE              1044
 #define IDC_EDIT_RATIO                  1045
 #define IDC_EDIT_RED                    1046
 #define IDC_EDIT_GREEN                  1048
 #define IDC_EDIT_BLUE                   1049
-#define IDC_EDIT_AVERANGE               1050
+#define IDC_EDIT_AVERAGE                1050
 #define IDC_EDIT_FULL                   1051
 #define IDC_EDIT_TIME                   1052
 #define IDC_BUTTON_STOP                 1053
 #define IDC_PROGRESS_COMPR              1054
-#define IDC_STATIC_UNUSED               1055
 #define IDC_EDIT_INITLEARNRATE          1068
 #define IDC_EDIT_MINDIST                1069
 #define IDC_EDIT_INITMOMENT             1069
@@ -60,8 +55,6 @@
 #define IDC_EDIT_LEARNCHANGERATE        1072
 #define IDC_RADIO_SEQUENTIAL            1073
 #define IDC_RADIO_BATCH                 1074
-#define IDC_SLIDER_INPUT                1075
-#define IDC_SLIDER_HIDDEN               1076
 #define IDC_CHECK_SECOND                1077
 #define IDC_EDIT_NEURONS                1078
 #define IDC_CHECK_BIASES                1079
@@ -80,7 +73,6 @@
 #define IDC_STATIC_RATIO                1097
 #define IDC_STATIC_WITH                 1098
 #define IDC_STATIC_NEURONS              1099
-#define IDC_SLIDER_QUALITY              1102
 #define IDC_CHECK_SHIFT                 1103
 #define IDC_STATIC_QUALITY              1104
 #define IDC_RADIO_KOHGROS               1106
@@ -88,24 +80,48 @@
 #define IDC_CHECK_TRAINNEIGH            1110
 #define IDC_PROGRESS_RESAMPLE           1117
 #define IDC_SCROLLBAR_INPUT             1118
-#define IDC_SCROLLBAR_INPUT2            1119
 #define IDC_SCROLLBAR_HIDDEN            1119
-#define IDC_SCROLLBAR1                  1119
 #define IDC_SCROLLBAR_QUALITY           1119
-#define ID_FILE_LOADBITMAP              32772
-#define ID_FILE_LOADCOMPRESSEDFILE      32773
-#define ID_FILE_LOADBITMAPFILE          32774
-#define ID_FILE_LOADCOMPRESSEDFILE32775 32775
-#define ID_FILE_SAVEAS                  32776
-#define ID_FILE_SAVEAS32777             32777
+#define IDC_EDIT_COMPRNAME              1120
+#define IDC_CHECK_SHOWREPORT            1121
+#define IDC_CHECK_WRITEREPORT           1122
+#define IDC_RADIO_OVERWRITE             1123
+#define IDC_RADIO_APPEND                1124
+#define IDC_EDIT_REPORTNAME             1125
+#define IDC_EDIT_FILESIZE               1126
+#define IDC_CHECK_PROMTOVERWRITE        1127
+#define IDC_BUTTON_SAVEDEFAULTS         1128
+#define IDC_BUTTON_LOADDEAFULTS         1129
+#define IDC_CHECK_LIMITFILESIZE         1131
+#define IDC_STATIC_KB                   1132
+#define IDC_BUTTON_START                1134
+#define IDC_STATIC_OLDWIDTH             1135
+#define IDC_STATIC_OLDHEIGHT            1136
+#define IDC_STATIC_NEWWIDTH             1137
+#define IDC_STATIC_NEWHEIGHT            1138
+#define IDC_STATIC_STATUS1              1139
+#define IDC_STATIC_STATUSTEXT1          1140
+#define IDC_STATIC_STATUS2              1141
+#define IDC_STATIC_OPERATION            1142
+#define IDC_STATIC_STATUS3              1143
+#define IDC_STATIC_STATUSTEXT3          1144
+#define IDC_STATIC_STATUSTEXT2          1145
+#define IDC_STATIC_STATUS4              1146
+#define IDC_STATIC_STATUSTEXT4          1147
+#define IDC_STATIC_STATUS5              1148
+#define IDC_STATIC_yuSTATUSTEXT6        1149
+#define IDC_STATIC_STATUSTEXT5          1149
 #define ID_FILE_QUIT                    32778
 #define ID_OPTIONS_GENERAL              32779
-#define ID_OPTIONS_BACKPROPAGATION      32780
-#define ID_OPTIONS_COUNTERPROPAGATION   32781
-#define ID_OPTIONS_DCTRANSFORM          32782
-#define ID_Menu                         32784
-#define ID_FILE_SAVEREPORTAS            32785
 #define ID_HELP_ABOUT                   32786
+#define ID_FILE_LOADCOMPRFILE           32790
+#define ID_FILE_LOADBITMAPFILE          32791
+#define ID_OPTIONS_BP                   32794
+#define ID_OPTIONS_CP                   32795
+#define ID_OPTIONS_DCT                  32796
+#define ID_FILE_SAVELEFTBITMAP          32800
+#define ID_FILE_SAVERIGHTBITMAP         32801
+#define ID_TOOLS_COMPAREBITMAPS         32802
 
 // Next default values for new objects
 // 
@@ -113,8 +129,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        140
-#define _APS_NEXT_COMMAND_VALUE         32787
-#define _APS_NEXT_CONTROL_VALUE         1120
+#define _APS_NEXT_COMMAND_VALUE         32803
+#define _APS_NEXT_CONTROL_VALUE         1141
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

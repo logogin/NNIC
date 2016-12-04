@@ -6,6 +6,7 @@
 #include "NNIC.h"
 #include "BitmapKit.h"
 #include "ResampleDlg.h"
+#include ".\bitmapkit.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -49,6 +50,75 @@ BOOLEAN CBitmapKit::LoadBMP(const CString &strFileName)
 	m_bPresent=TRUE;
 
 	return m_bPresent;
+}
+
+BOOL CBitmapKit::SaveBMP(CFile * pFile)
+{
+	if (!m_bPresent)
+		return FALSE;
+
+	BYTE bBitsPixel;
+	BITMAPFILEHEADER hdr;
+	PBITMAPINFO pbmi;
+
+	// Convert the color format to a count of bits.
+	bBitsPixel = m_bmBitmap.bmPlanes * m_bmBitmap.bmBitsPixel;
+
+	// Allocate memory for the BITMAPINFO structure. (This structure 
+    // contains a BITMAPINFOHEADER structure and an array of RGBQUAD 
+	// data structures.) 
+	if (bBitsPixel != 24)
+	{
+		DWORD i;
+		pbmi=(PBITMAPINFO)new BYTE[sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*(1<<bBitsPixel)];
+		for (i=0; i<(1<<bBitsPixel); i++)
+		{
+			RGBQUAD rgb={(BYTE)i,(BYTE)i,(BYTE)i,0};
+			CopyMemory(&pbmi->bmiColors[i],&rgb,sizeof(RGBQUAD));
+		}
+	}
+	else
+	// There is no RGBQUAD array for the 24-bit-per-pixel format. 
+		pbmi=(PBITMAPINFO)new BYTE[sizeof(BITMAPINFOHEADER)];
+
+	ASSERT(pbmi!=NULL);
+
+	ZeroMemory(pbmi,sizeof(BITMAPINFOHEADER));
+	// Initialize the fields in the BITMAPINFO structure. 
+	pbmi->bmiHeader.biSize=sizeof(BITMAPINFOHEADER);
+	pbmi->bmiHeader.biWidth=m_bmBitmap.bmWidth; 
+    pbmi->bmiHeader.biHeight=m_bmBitmap.bmHeight;
+	pbmi->bmiHeader.biPlanes=m_bmBitmap.bmPlanes; 
+    pbmi->bmiHeader.biBitCount=m_bmBitmap.bmBitsPixel;
+	pbmi->bmiHeader.biClrUsed=0;//(1<<bBitsPixel);
+
+	// If the bitmap is not compressed, set the BI_RGB flag. 
+    pbmi->bmiHeader.biCompression=BI_RGB;
+
+    // Compute the number of bytes in the array of color 
+    // indices and store the result in biSizeImage. 
+    // Width must be DWORD aligned unless bitmap is RLE compressed.
+    pbmi->bmiHeader.biSizeImage = m_bmBitmap.bmWidthBytes*m_bmBitmap.bmHeight;
+
+	hdr.bfType = 0x4d42; // 0x42 = "B" 0x4d = "M"
+	// Compute the size of the entire file. 
+	hdr.bfSize = sizeof(BITMAPFILEHEADER)+
+		pbmi->bmiHeader.biSize+
+		pbmi->bmiHeader.biClrUsed*sizeof(RGBQUAD)+
+		pbmi->bmiHeader.biSizeImage;
+    hdr.bfReserved1 = 0; 
+    hdr.bfReserved2 = 0; 
+	
+	// Compute the offset to the array of color indices. 
+	hdr.bfOffBits = sizeof(BITMAPFILEHEADER)+
+		pbmi->bmiHeader.biSize+
+		pbmi->bmiHeader.biClrUsed*sizeof (RGBQUAD);
+
+	pFile->Write(&hdr,sizeof(BITMAPFILEHEADER));
+	pFile->Write(pbmi,sizeof(BITMAPINFOHEADER)+pbmi->bmiHeader.biClrUsed*sizeof(RGBQUAD));
+	pFile->Write(m_lpBits[0],pbmi->bmiHeader.biSizeImage);
+
+	return TRUE;
 }
 
 BOOLEAN CBitmapKit::InitBitmapBits()
@@ -116,7 +186,7 @@ HBITMAP CBitmapKit::Detach()
 	return hBitmap;
 }
 
-void CBitmapKit::GetSegment(const CRect &rect,
+void CBitmapKit::GetBlock(const CRect &rect,
 							PFLOAT pSegment,
 							const BYTE bColor,
 							const FLOAT fMinValue,
@@ -128,36 +198,22 @@ void CBitmapKit::GetSegment(const CRect &rect,
 	DWORD dwSegWidth=rect.Width();
 
 	DWORD i,j;
-
+	DWORD dwIndex;
 	for (i=0; i<rect.Height(); i++)
-		for (j=0; j<dwSegWidth; j++)
-			pSegment[i*dwSegWidth+j]=fMinValue+(m_lpBits[i+rect.top][(j+rect.left)*
+	{
+		dwIndex=i*dwSegWidth;
+		for (j=0; j<dwSegWidth; j++)	
+			pSegment[dwIndex+j]=fMinValue+(m_lpBits[i+rect.top][(j+rect.left)*
 				m_bBytesPixel+bColor]/255.0f)*fRange;
+	}
 }
 
 HBITMAP CBitmapKit::Scale(CDC *pDC,const DWORD dwWidth, const DWORD dwHeight)
 {
-//	CDC memoryDC;
-//	memoryDC.CreateCompatibleDC(pDC);
-	// 
-//	CBitmap destBitmap;
-//	destBitmap.CreateCompatibleBitmap(pDC, dwWidth, dwHeight );
-//	memoryDC.SelectObject(this);
-//	CBitmap *pOldBitmap=pDC->SelectObject( &destBitmap );
-//	pDC->SetStretchBltMode(HALFTONE);
-//	pDC->StretchBlt( 0,0,dwWidth,dwHeight,&memoryDC,
-//	0,0,m_bmBitmap.bmWidth,m_bmBitmap.bmHeight,SRCCOPY);
-//	pDC->SelectObject(pOldBitmap);
-//	return reinterpret_cast<HBITMAP>(destBitmap.Detach());
 	CDC mem_dc1;
     mem_dc1.CreateCompatibleDC(NULL);
 	CBitmap* old_bmp1 = mem_dc1.SelectObject(this);
-// 
-//	//рисуею на ней по вышеуказанным причинам ;)
-//	mem_dc1.FillSolidRect(0, 0, src_width, src_height, RGB(10, 255, 10));
-//	mem_dc1.MoveTo(0, 0);
-//	mem_dc1.LineTo(src_width, src_height);
-// 
+
 	CDC mem_dc2;
 	mem_dc2.CreateCompatibleDC(NULL);
 	CBitmap scaled_bmp;
@@ -171,7 +227,7 @@ HBITMAP CBitmapKit::Scale(CDC *pDC,const DWORD dwWidth, const DWORD dwHeight)
 	mem_dc1.SelectObject(old_bmp1);
 	mem_dc2.SelectObject(old_bmp2);
 
-    return /*reinterpret_cast<HBITMAP>*/(HBITMAP)(scaled_bmp.Detach());
+    return (HBITMAP)(scaled_bmp.Detach());
 }
 
 DWORD CBitmapKit::GetSizeBytes()
@@ -194,7 +250,7 @@ DWORD CBitmapKit::GetHeight()
 	return m_bmBitmap.bmHeight;
 }
 
-DWORD CBitmapKit::GetSizePixel()
+DWORD CBitmapKit::GetSizePixels()
 {
 	return m_bmBitmap.bmWidth*m_bmBitmap.bmHeight;
 }
@@ -221,17 +277,19 @@ DOUBLE CBitmapKit::GetPSNR(const CBitmapKit *pBitmapKit, const BYTE bChannel)
 		return -1.0;
 	DOUBLE fDist;
 	DOUBLE fMSE=0.0;
-	//DWORD dwSize=m_ImageInfo.st_dwWidth*m_ImageInfo.st_dwHeight;
 	DWORD i,j;
-	for (i=0; i<m_bmBitmap.bmHeight; i++)
-		for (j=0; j<m_bmBitmap.bmWidth; j++)
+	DWORD dwIndex;
+	for (j=0; j<m_bmBitmap.bmWidth; j++)
+	{
+		dwIndex=j*m_bBytesPixel+bChannel;
+		for (i=0; i<m_bmBitmap.bmHeight; i++)
 		{
-			fDist=(FLOAT)m_lpBits[i][j*m_bBytesPixel+bChannel]-
-				(FLOAT)pBitmapKit->m_lpBits[i][j*m_bBytesPixel+bChannel];
+			fDist=(FLOAT)m_lpBits[i][dwIndex]-
+				(FLOAT)pBitmapKit->m_lpBits[i][dwIndex];
 			fMSE+=fDist*fDist;
 		}
-
-	fMSE/=GetSizePixel();
+	}
+	fMSE/=GetSizePixels();
 
 	return 10.0*log10(dwChannelWidth/fMSE);
 }
@@ -245,17 +303,20 @@ DOUBLE CBitmapKit::GetPSNRFullChannel(const CBitmapKit *pBitmapKit)
 	DWORD dwDist1;
 	DWORD dwDist2;
 	DWORD i,j;
-	for (i=0; i<m_bmBitmap.bmHeight; i++)
-	
-		for (j=0; j<m_bmBitmap.bmWidth; j++)
+	DWORD dwIndex;
+	for (j=0; j<m_bmBitmap.bmWidth; j++)
+	{
+		dwIndex=j*m_bBytesPixel;
+		for (i=0; i<m_bmBitmap.bmHeight; i++)
 		{
 			dwDist1=dwDist2=0;
 			CopyMemory(&dwDist1,&(m_lpBits[i][j*m_bBytesPixel]),m_bBytesPixel);
-			CopyMemory(&dwDist2,&(pBitmapKit->m_lpBits[i][j*m_bBytesPixel]),m_bBytesPixel);
+			CopyMemory(&dwDist2,&(pBitmapKit->m_lpBits[i][dwIndex]),m_bBytesPixel);
 			fDist=(DOUBLE)dwDist1-(DOUBLE)dwDist2;
 			fMSE+=fDist*fDist;
 		}
-	fMSE/=GetSizePixel();
+	}
+	fMSE/=GetSizePixels();
 
 	return 10.0*(2.0*log10l(dwChannelWidth)-log10(fMSE));
 }
@@ -326,7 +387,7 @@ HBITMAP CBitmapKit::CreateDIBSection(const BITMAP &bm, LPVOID *lpBits)
     pbmi->bmiHeader.biHeight=bm.bmHeight;
 	pbmi->bmiHeader.biPlanes=bm.bmPlanes; 
     pbmi->bmiHeader.biBitCount=bm.bmBitsPixel;
-	pbmi->bmiHeader.biClrUsed=(1<<bBitsPixel);
+	pbmi->bmiHeader.biClrUsed=0;//(1<<bBitsPixel);
 
 	// If the bitmap is not compressed, set the BI_RGB flag. 
     pbmi->bmiHeader.biCompression=BI_RGB;
@@ -338,7 +399,10 @@ HBITMAP CBitmapKit::CreateDIBSection(const BITMAP &bm, LPVOID *lpBits)
    	return ::CreateDIBSection(NULL,pbmi,DIB_RGB_COLORS,lpBits,NULL,0);
 }
 
-HBITMAP CBitmapKit::Resample(const DWORD dwWidth, const DWORD dwHeight, CResampleDlg *pDlg)
+HBITMAP CBitmapKit::Resample(const DWORD dwWidth,
+							 const DWORD dwHeight,
+							 CResampleDlg *pDlg,
+							 const BOOLEAN bChange)
 {
 	const DOUBLE fXScale=(DOUBLE)dwWidth/m_bmBitmap.bmWidth;
 	const DOUBLE fYScale=(DOUBLE)dwHeight/m_bmBitmap.bmHeight;
@@ -504,12 +568,18 @@ HBITMAP CBitmapKit::Resample(const DWORD dwWidth, const DWORD dwHeight, CResampl
 			}
 		}
 	}
-//	pDlg->EndDialog(IDOK);
 	contributorX.RemoveAll();
 	contributorY.RemoveAll();
 
 	DestroyMatrix((LPVOID *)lpColumn);
 	delete []pWeight;
+
+	if (bChange)
+	{
+		CBitmapKit::Detach();
+		CGdiObject::DeleteObject();
+		CBitmapKit::Attach(hBitmap);
+	}
 
 	return hBitmap;
 }
@@ -531,4 +601,22 @@ DOUBLE CBitmapKit::sinc(const DOUBLE fValue)
 		return 1.0;
 	return sin(fTmp)/fTmp;
 
+}
+
+BOOLEAN CBitmapKit::CheckBitmap(const BYTE bBitsPixel,
+							   const DWORD dwWidthMultiple,
+							   const DWORD dwHeightMultiple)
+{
+	if (bBitsPixel&&bBitsPixel!=m_bmBitmap.bmBitsPixel)
+		return FALSE;
+	if (dwWidthMultiple&&m_bmBitmap.bmWidth%dwWidthMultiple)
+		return FALSE;
+	if (dwHeightMultiple&&m_bmBitmap.bmHeight%dwHeightMultiple)
+		return FALSE;
+
+	return TRUE;
+}
+BOOLEAN CBitmapKit::IsPresent(void)
+{
+	return m_bPresent;
 }

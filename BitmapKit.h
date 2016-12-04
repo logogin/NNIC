@@ -20,34 +20,31 @@ typedef struct tagCONTRIBUTOR
 	tagCONTRIBUTOR(void)
 	{
 	
-	}
+	};
 
 	tagCONTRIBUTOR(const DWORD dwPixel, const DOUBLE fWeight)
 	{
 		st_dwPixel=dwPixel;
 		st_fWeight=fWeight;
-	}
-
-	tagCONTRIBUTOR operator=(const tagCONTRIBUTOR &contributor)
+	};
+	tagCONTRIBUTOR &operator=(const tagCONTRIBUTOR &contributor)
 	{
 		st_dwPixel=contributor.st_dwPixel;
 		st_fWeight=contributor.st_fWeight;
-
 		return *this;
-	}
+	};
 
 	DWORD st_dwPixel;
 	DOUBLE st_fWeight;
 } CONTRIBUTOR;
 
 class CResampleDlg;
-
 class CBitmapKit : public CBitmap  
 {
 public:
 	DOUBLE sinc(const DOUBLE fValue);
 	HBITMAP CreateDIBSection(const BITMAP &bm, LPVOID *lpBits);
-	HBITMAP Resample(const DWORD dwWidth,const DWORD dwHeight,CResampleDlg *pDlg);
+	HBITMAP Resample(const DWORD dwWidth,const DWORD dwHeight,CResampleDlg *pDlg,const BOOLEAN bChange=FALSE);
 	BOOLEAN CreateBitmap(const BITMAP &bm, const LPVOID lpBits);
 	BOOLEAN Attach(HBITMAP hBitmap);
 	BYTE GetBytesPixel(void);
@@ -59,12 +56,12 @@ public:
 	BYTE GetBitsPixel(void);
 	DWORD GetHeight(void);
 	DWORD GetSizeClear(void);
-	DWORD GetSizePixel(void);
+	DWORD GetSizePixels(void);
 	DWORD GetWidth(void);
 	HBITMAP Detach(void);
 	DWORD GetWidthBytes(void);
 	DWORD GetSizeBytes(void);
-	void GetSegment(
+	void GetBlock(
 		const CRect &rect,
 		PFLOAT pSegment,
 		const BYTE bColor,
@@ -82,6 +79,13 @@ protected:
 	BOOLEAN InitBitmapBits(void);
 	BITMAP m_bmBitmap;
 	BOOLEAN m_bPresent;
+public:
+	BOOLEAN CheckBitmap(
+		const BYTE bBItsPixel,
+		const DWORD dwWidthMultiple,
+		const DWORD dwHeightMultiple);
+	BOOL SaveBMP(CFile * pFile);
+	BOOLEAN IsPresent(void);
 };
 
 #endif // !defined(AFX_BITMAPKIT_H__BFFA80A8_7A7D_4A61_A50D_DE7AEBBDEDED__INCLUDED_)

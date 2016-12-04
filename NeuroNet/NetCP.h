@@ -51,7 +51,7 @@ protected:
 	WORD m_vLayerRank[CP_MAX_NETSIZE];
 	WORD m_vNeuronRank[CP_MAX_NETSIZE-1];
 	FLOAT *m_vAxons[CP_MAX_NETSIZE];
-	FLOAT **m_vWeights[CP_MAX_NETSIZE-1];
+	FLOAT *m_vWeights[CP_MAX_NETSIZE-1];
 	DWORD *m_vCounts;
 	BYTE m_bNetType;
 	BYTE m_bLearnType;

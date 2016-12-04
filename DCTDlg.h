@@ -1,7 +1,6 @@
 #if !defined(AFX_DCTDLG_H__0D0217AA_F7E9_4EDA_9A4A_F6792643D6D5__INCLUDED_)
 #define AFX_DCTDLG_H__0D0217AA_F7E9_4EDA_9A4A_F6792643D6D5__INCLUDED_
 
-#include "Globals.h"	// Added by ClassView
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

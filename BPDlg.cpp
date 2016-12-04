@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "NNIC.h"
 #include "BPDlg.h"
-#include ".\bpdlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -125,13 +124,13 @@ BOOL CBPDlg::OnInitDialog()
 
 	CScrollBar *pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_INPUT);
 	pScroll->SetScrollRange(4,8);
-	m_iInput=m_optionsBP.st_wInputBlock/2;
-	m_strInput.Format(_T("%dx%d"),m_optionsBP.st_wInputBlock,m_optionsBP.st_wInputBlock);
+	m_iInput=m_optionsBP.st_bInputBlock/2;
+	m_strInput.Format(_T("%dx%d"),m_optionsBP.st_bInputBlock,m_optionsBP.st_bInputBlock);
 
 	pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_HIDDEN);
 	pScroll->SetScrollRange(1,7);
-	m_iHidden=m_optionsBP.st_wHiddenBlock/2;
-	m_strHidden.Format(_T("%dx%d"),m_optionsBP.st_wHiddenBlock,m_optionsBP.st_wHiddenBlock);
+	m_iHidden=m_optionsBP.st_bHiddenBlock/2;
+	m_strHidden.Format(_T("%dx%d"),m_optionsBP.st_bHiddenBlock,m_optionsBP.st_bHiddenBlock);
 
 	m_strRatio.Format(_T("%.2f"),(FLOAT)(m_iHidden*m_iHidden)/(m_iInput*m_iInput)*100);
 	m_strRatio+=_T("%");
@@ -242,8 +241,8 @@ void CBPDlg::OnOK()
 	m_optionsBP.st_dwLearnCycles=m_dwCycles;
 	m_optionsBP.st_fMinError=m_fMinError;
 	m_optionsBP.st_wPatterns=(WORD)m_dwPatterns;
-	m_optionsBP.st_wInputBlock=m_iInput*2;
-	m_optionsBP.st_wHiddenBlock=m_iHidden*2;
+	m_optionsBP.st_bInputBlock=m_iInput*2;
+	m_optionsBP.st_bHiddenBlock=m_iHidden*2;
 	m_optionsBP.st_wNeurons=(WORD)m_dwNeurons;
 	m_optionsBP.st_fInitLearnRate=m_fInitLearnRate;
 	m_optionsBP.st_fFinalLearnRate=m_fFinalLearnRate;

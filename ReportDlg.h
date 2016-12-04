@@ -15,14 +15,18 @@ class CReportDlg : public CDialog
 // Construction
 public:
 	void SetPSNR(const DOUBLE fFull);
-	void SetCompressionMethod(const CString &sMethod);
-	void SetCompressionTime(const FLOAT fTime);
-	void SetPSNR(const DOUBLE fRed,const DOUBLE fGreen, const DOUBLE fBlue, const DOUBLE fAverange, const DOUBLE fFull);
-	void SetFileSize(const ULONGLONG ulOriginalSize,const ULONGLONG ulCompressedSize);
-	void SetOriginalColors(const BYTE bBitsPerPixel,const ULONG ulColors);
-	void SetImageSize(const ULONG ulWidth,const ULONG ulHeight);
-	void SetDirectory(const CString &sPath);
-	void SetFileName(const CString &sFileName);
+	void SetComprMethod(const CString &strMethod);
+	void SetComprTime(const FLOAT fTime);
+	void SetPSNR(
+		const DOUBLE fRed,
+		const DOUBLE fGreen,
+		const DOUBLE fBlue,
+		const DOUBLE fAverage,
+		const DOUBLE fFull);
+	void SetFileSize(const ULONGLONG ulOriginalSize,const ULONGLONG ulComprSize);
+	void SetOriginalColors(const BYTE bBitsPixel,const DWORD dwColors);
+	void SetImageSize(const DWORD dwWidth,const DWORD dwHeight);
+	void SetFileDirectory(const CString &strFileName,const CString &strPath);
 	CReportDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
@@ -41,26 +45,29 @@ public:
 
 // Implementation
 protected:
-	CString m_sFileName;
-	CString m_sDirectory;
-	CString m_sImageSize;
-	CString m_sOriginalColors;
-	CString m_sOriginalSize;
-	CString m_sCompressedSize;
-	CString m_sRatio;
-	CString m_sCompressionMethod;
-	CString m_sRed;
-	CString m_sGreen;
-	CString m_sBlue;
-	CString m_sAverange;
-	CString m_sFull;
-	CString m_sCompressionTime;
+	CString m_strFileName;
+	CString m_strDirectory;
+	CString m_strImageSize;
+	CString m_strOriginalColors;
+	CString m_strOriginalSize;
+	CString m_strComprSize;
+	CString m_strRatio;
+	CString m_strComprMethod;
+	CString m_strRed;
+	CString m_strGreen;
+	CString m_strBlue;
+	CString m_strAverage;
+	CString m_strFull;
+	CString m_strComprTime;
+	CString m_strReportString;
 
 	// Generated message map functions
 	//{{AFX_MSG(CReportDlg)
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	CString GetReportString(void);
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 // ResampleDlg.h : header file
 //
-
+#include "BitmapKit.h"
 /////////////////////////////////////////////////////////////////////////////
 // CResampleDlg dialog
 UINT ResampleProgress(LPVOID pParam);
@@ -16,13 +16,13 @@ class CResampleDlg : public CDialog
 	DECLARE_DYNCREATE(CResampleDlg)
 // Construction
 public:
-	void SetHandle(HBITMAP hBitmap);
-	HBITMAP GetHandle(void);
+	//void SetHandle(HBITMAP hBitmap);
+	//HBITMAP GetHandle(void);
 	CBitmapKit * GetBitmapKit(void);
 	void StepIt(void);
 	INT SetStep(const INT iStep);
 	CResampleDlg(CWnd* pParent = NULL);   // standard constructor
-	CResampleDlg(CBitmapKit *pBitmap,CWnd* pParent = NULL);   // standard constructor
+	CResampleDlg(CBitmapKit *pBitmap,const DWORD dwMultiple,CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
 	//{{AFX_DATA(CResampleDlg)
@@ -40,7 +40,7 @@ public:
 
 // Implementation
 protected:
-	HBITMAP m_hBitmap;
+	//HBITMAP m_hBitmap;
 	CBitmapKit * m_pBitmapKit;
 
 	// Generated message map functions
@@ -48,6 +48,19 @@ protected:
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButtonStart();
+	afx_msg void OnBnClickedCancel();
+protected:
+	DWORD m_dwOldWidth;
+	DWORD m_dwOldHeight;
+	DWORD m_dwNewWidth;
+	DWORD m_dwNewHeight;
+	DWORD m_dwMultiple;
+	CWinThread *m_threadResample;
+public:
+	DWORD GetNewWidth(void);
+	DWORD GetNewHeight(void);
 };
 
 //{{AFX_INSERT_LOCATION}}

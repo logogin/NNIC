@@ -55,7 +55,7 @@ NetCP::NetCP(const WORD *pRanks,const BYTE bNetType):m_bNetType(bNetType)
 	for (i=0; i<m_bNetRank-1; i++)
 	{
 		m_vNeuronRank[i]=m_vLayerRank[i];
-		m_vWeights[i]=AllocateFloatMatrix(m_vLayerRank[i+1],m_vNeuronRank[i]);
+		m_vWeights[i]=new FLOAT[m_vLayerRank[i+1]*m_vNeuronRank[i]];
 		ASSERT(m_vWeights[i]!=NULL);
 	}
 	
@@ -75,7 +75,7 @@ NetCP::~NetCP()
 
 	for (i=0; i<m_bNetRank-1; i++)
 		if (m_vWeights[i]!=NULL)
-			DestroyMatrix((LPVOID *)m_vWeights[i]);
+			delete []m_vWeights[i];
 
 //	if (m_vWeights!=NULL)
 //		delete []m_vWeights;
@@ -89,33 +89,32 @@ NetCP::~NetCP()
 
 void NetCP::InitWeights(const FLOAT fMinValue, const FLOAT fRange)
 {
-	DWORD i,j;
-
+	DWORD i;
+	DWORD dwSize=m_vLayerRank[KOHONEN_LAYER]*m_vNeuronRank[KOHONEN_NEURON];
 	srand((unsigned)time(NULL));
 
-	for (i=0; i<m_vNeuronRank[KOHONEN_NEURON]; i++)
-		for	(j=0; j<m_vLayerRank[KOHONEN_LAYER]; j++)
-			m_vWeights[KOHONEN_NEURON][j][i]=fMinValue+(FLOAT)rand()/RAND_MAX*fRange;
+	for (i=0; i<dwSize; i++)
+		m_vWeights[KOHONEN_NEURON][i]=fMinValue+(FLOAT)rand()/RAND_MAX*fRange;
 
-	for	(i=0; i<m_vLayerRank[KOHONEN_LAYER]; i++)
-		NormalizeVector(m_vWeights[KOHONEN_NEURON][i],m_vNeuronRank[KOHONEN_NEURON]);
+	for	(i=0; i<dwSize; i+=m_vNeuronRank[KOHONEN_LAYER])
+		NormalizeVector(&(m_vWeights[KOHONEN_NEURON][i]),m_vNeuronRank[KOHONEN_NEURON]);
 
-	for (i=0; i<m_vLayerRank[GROSSBERG_LAYER]; i++)
-		for (j=0; j<m_vNeuronRank[GROSSBERG_NEURON]; j++)
-			m_vWeights[GROSSBERG_NEURON][i][j]=0.0f;
+	ZeroMemory(m_vWeights[GROSSBERG_NEURON],
+		m_vLayerRank[GROSSBERG_LAYER]*m_vNeuronRank[GROSSBERG_NEURON]*sizeof(FLOAT));
 }
 
 void NetCP::InitWeights(void)
 {
-	UINT i,j;
+	DWORD i,j;
+	DWORD dwSize=m_vLayerRank[KOHONEN_LAYER]*m_vNeuronRank[KOHONEN_NEURON];
 	FLOAT fValue;
-	for (i=0; i<m_vLayerRank[KOHONEN_LAYER]; i++)
+
+	for (i=0; i<dwSize; i+=m_vNeuronRank[KOHONEN_NEURON])
 	{
 		fValue=(FLOAT)(i%MAX_COLOR_VALUE);
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-			m_vWeights[KOHONEN_NEURON][i][j]=fValue;
+			m_vWeights[KOHONEN_NEURON][i+j]=fValue;
 	}
-
 }
 
 void NetCP::NormalizeVector(FLOAT *vVector,const DWORD dwVectorSize)
@@ -161,24 +160,25 @@ void NetCP::PropagateKohonenMax()
 //	LARGE_INTEGER liCount2;
 //	QueryPerformanceFrequency(&liFreq);
 
-	for (i=0; i<m_vLayerRank[KOHONEN_LAYER]; i++)
+	DWORD dwSize=m_vLayerRank[KOHONEN_LAYER]*m_vNeuronRank[KOHONEN_NEURON];
+	for (i=0; i<dwSize; i+=m_vNeuronRank[KOHONEN_NEURON])
 	{
 //		QueryPerformanceCounter(&liCount1);
 		fSum=0.0f;
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-			fSum+=m_vWeights[KOHONEN_NEURON][i][j]*m_vAxons[CP_INPUT_LAYER][j];
+			fSum+=m_vWeights[KOHONEN_NEURON][i+j]*m_vAxons[CP_INPUT_LAYER][j];
 		
 		if (bFirst)
 		{
 			fMax=fSum;
-			m_wWinnerNeuron=i;
+			m_wWinnerNeuron=i/m_vNeuronRank[KOHONEN_NEURON];
 			bFirst=FALSE;
 		}
 		else
 			if (fMax<fSum)
 			{
 				fMax=fSum;
-				m_wWinnerNeuron=i;
+				m_wWinnerNeuron=i/m_vNeuronRank[KOHONEN_NEURON];
 			}
 //		QueryPerformanceCounter(&liCount2);
 //		fTime+=(FLOAT)(liCount2.QuadPart-liCount1.QuadPart)/liFreq.QuadPart;
@@ -192,65 +192,45 @@ void NetCP::PropagateKohonenMin()
 	FLOAT fMin;
 	FLOAT fSum;
 
-	for (i=0; i<m_vLayerRank[KOHONEN_LAYER]; i++)
+	DWORD dwSize=m_vLayerRank[KOHONEN_LAYER]*m_vNeuronRank[KOHONEN_NEURON];
+	for (i=0; i<dwSize; i+=m_vNeuronRank[KOHONEN_NEURON])
 	{
 		fSum=0.0f;
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-			if (m_vAxons[CP_INPUT_LAYER][j]>=m_vWeights[KOHONEN_NEURON][i][j])
-				fSum+=m_vAxons[CP_INPUT_LAYER][j]-m_vWeights[KOHONEN_NEURON][i][j];
+			if (m_vAxons[CP_INPUT_LAYER][j]>=m_vWeights[KOHONEN_NEURON][i+j])
+				fSum+=m_vAxons[CP_INPUT_LAYER][j]-m_vWeights[KOHONEN_NEURON][i+j];
 			else
-				fSum+=m_vWeights[KOHONEN_NEURON][i][j]-m_vAxons[CP_INPUT_LAYER][j];
+				fSum+=m_vWeights[KOHONEN_NEURON][i+j]-m_vAxons[CP_INPUT_LAYER][j];
 		if (bFirst)
 		{
 			fMin=fSum;
-			m_wWinnerNeuron=i;
+			m_wWinnerNeuron=i/m_vNeuronRank[KOHONEN_NEURON];
 			bFirst=FALSE;
 		}
 		else
 			if (fMin>fSum) 
 			{
 				fMin=fSum;
-				m_wWinnerNeuron=i;
+				m_wWinnerNeuron=i/m_vNeuronRank[KOHONEN_NEURON];
 			}
 	}
 }
-//void NetCP::PropagateGrossberg()
-//{
-///*	UINT uiOffset=m_uiQuadrant*m_uiQuadrantRank+m_uiCluster;
-//	for (UINT i=0; i<m_uiLayerRank[GROSSBERG_LAYER]; i++)
-//		m_vAxons[GROSSBERG_LAYER][i]=
-//			m_vWeights[GROSSBERG_NEURON][i][uiOffset]*m_vAxons[KOHONEN_LAYER][uiOffset];*/
-//}
-
-//void NetCP::LearnGrossberg(const FLOAT fLearnRate,const FLOAT *fTarget)
-//{
-//	INT iFirstNeuron=m_uiWinnerNeuron-m_uiNeighborhoodSize;
-//	if (iFirstNeuron<0)
-//		iFirstNeuron=0;
-//	INT iLastNeuron=m_uiWinnerNeuron+m_uiNeighborhoodSize;
-//	if (iLastNeuron>=m_uiLayerRank[KOHONEN_LAYER])
-//		iLastNeuron=m_uiLayerRank[KOHONEN_LAYER]-1;
-//
-//	for (UINT i=0; i<m_uiLayerRank[GROSSBERG_LAYER]; i++)
-//		for (UINT j=iFirstNeuron; j<=iLastNeuron; j++)
-//			m_vWeights[GROSSBERG_NEURON][i][j]+=fLearnRate*(fTarget[i]-
-//				m_vWeights[GROSSBERG_NEURON][i][j]);
-//}
 
 void NetCP::LearnGrossberg(const BYTE *bTarget)
 {
 	DWORD i;
 	m_vCounts[m_wWinnerNeuron]++;
 	for (i=0; i<m_vLayerRank[GROSSBERG_LAYER]; i++)
-		m_vWeights[GROSSBERG_NEURON][i][m_wWinnerNeuron]+=bTarget[i];
+		m_vWeights[GROSSBERG_NEURON][i*m_vNeuronRank[GROSSBERG_NEURON]+m_wWinnerNeuron]+=bTarget[i];
 }
 
 void NetCP::FinalizeGrossberg()
 {
 	DWORD i,j;
-	for (i=0; i<m_vLayerRank[KOHONEN_LAYER]; i++)
-		for (j=0; j<m_vLayerRank[GROSSBERG_LAYER]; j++)
-			m_vWeights[GROSSBERG_NEURON][j][i]/=m_vCounts[i];
+	DWORD dwSize=m_vLayerRank[KOHONEN_LAYER]*m_vNeuronRank[KOHONEN_NEURON];
+	for (i=0; i<dwSize; i+=m_vNeuronRank[GROSSBERG_NEURON])
+		for (j=0; j<m_vNeuronRank[GROSSBERG_NEURON]; j++)
+		m_vWeights[GROSSBERG_NEURON][i+j]/=m_vCounts[j];
 }
 
 //void NetCP::LearnKohonen(const FLOAT fLearnRate)
@@ -272,6 +252,7 @@ void NetCP::FinalizeGrossberg()
 void NetCP::LearnKohonen(const FLOAT *pLearnRate)
 {
 	DWORD i,j;
+	DWORD dwIndex;
 	INT iFirstNeuron=m_wWinnerNeuron-m_wNeighRadius;
 	if (iFirstNeuron<0)
 		iFirstNeuron=0;
@@ -279,12 +260,14 @@ void NetCP::LearnKohonen(const FLOAT *pLearnRate)
 	if (iLastNeuron>=m_vLayerRank[KOHONEN_LAYER])
 		iLastNeuron=m_vLayerRank[KOHONEN_LAYER]-1;
 
-	
 	for (i=iFirstNeuron; i<=iLastNeuron; i++)
+	{
+		dwIndex=i*m_vNeuronRank[KOHONEN_NEURON];
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-			m_vWeights[KOHONEN_NEURON][i][j]+=
+			m_vWeights[KOHONEN_NEURON][dwIndex+j]+=
 				pLearnRate[labs(m_wWinnerNeuron-i)]*(m_vAxons[CP_INPUT_LAYER][j]
-					-m_vWeights[KOHONEN_NEURON][i][j]);
+					-m_vWeights[KOHONEN_NEURON][dwIndex+j]);
+	}
 //	DWORD i,j;
 //	INT iFirstNeuron=m_wWinnerNeuron-m_wNeighRadius;
 //	if (iFirstNeuron<0)
@@ -309,7 +292,7 @@ FLOAT NetCP::GetWeight(const BYTE bLayer, const WORD wNeuron, const WORD wWeight
 	ASSERT(bLayer<m_bNetRank&&bLayer);
 	ASSERT(wNeuron<m_vLayerRank[bLayer]);
 	ASSERT(wWeight<m_vNeuronRank[bLayer-1]);
-	return m_vWeights[bLayer-1][wNeuron][wWeight];
+	return m_vWeights[bLayer-1][wNeuron*m_vNeuronRank[bLayer-1]+wWeight];
 }
 
 void NetCP::SetNeighbouringRadius(const WORD wNeighRadius)
@@ -324,7 +307,8 @@ FLOAT NetCP::GetWinnerDistance()
 	FLOAT fSum=0.0f;
 	for (i=0; i<m_vNeuronRank[KOHONEN_NEURON]; i++)
 	{
-		fDistance=m_vAxons[CP_INPUT_LAYER][i]-m_vWeights[KOHONEN_NEURON][m_wWinnerNeuron][i];
+		fDistance=m_vAxons[CP_INPUT_LAYER][i]-
+			m_vWeights[KOHONEN_NEURON][m_wWinnerNeuron*m_vNeuronRank[KOHONEN_NEURON]+i];
 		fSum+=fDistance*fDistance;
 	}
 
@@ -372,14 +356,13 @@ void NetCP::GetWeightsToNeuron(const BYTE bLayer, const WORD wNeuron , FLOAT * p
 	ASSERT(wNeuron<m_vLayerRank[bLayer-1]);
 	DWORD i;
 	for (i=0; i<m_vLayerRank[bLayer]; i++)
-		pWeights[i]=m_vWeights[bLayer-1][i][wNeuron];
+		pWeights[i]=m_vWeights[bLayer-1][i*m_vNeuronRank[bLayer-1]+wNeuron];
 }
 
 void NetCP::GetWeightsFromNeuron(const BYTE bLayer, const WORD wNeuron, FLOAT * pWeights)
 {
 	ASSERT(bLayer>0&&bLayer<m_bNetRank);
 	ASSERT(wNeuron<m_vLayerRank[bLayer]);
-	DWORD i;
-	for (i=0; i<m_vNeuronRank[bLayer-1]; i++)
-		pWeights[i]=m_vWeights[bLayer-1][wNeuron][i];
+	CopyMemory(pWeights,&(m_vWeights[bLayer-1][wNeuron*m_vNeuronRank[bLayer-1]]),
+		m_vNeuronRank[bLayer-1]*sizeof(FLOAT));
 }

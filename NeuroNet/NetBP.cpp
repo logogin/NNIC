@@ -184,6 +184,17 @@ void NetBP::InitWeights()
 				m_vBiases[WEIGH][i][j]=m_fMinSignal+(FLOAT)rand()/RAND_MAX*fRange;
 }
 
+void NetBP::InitWeights(const BYTE bLayer,const LPVOID pWeights)
+{
+	ASSERT(bLayer>0&&bLayer<m_bNetRank);
+	DWORD dwWeightsSize=m_wLayerRank[bLayer]*m_wNeuronRank[bLayer-1];
+	CopyMemory(m_vWeights[WEIGH][bLayer-1][0],pWeights,dwWeightsSize*sizeof(FLOAT));
+	
+	if (m_bUseBias)
+		CopyMemory(m_vBiases[WEIGH][bLayer-1],(FLOAT *)pWeights+dwWeightsSize,
+			m_wLayerRank[bLayer]*sizeof(FLOAT));
+}
+
 void NetBP::SetAxons(const BYTE bLayer, const FLOAT *fAxons)
 {
 	ASSERT(bLayer<m_bNetRank);
@@ -342,8 +353,8 @@ FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const F
 			fNetError=0.0;
 			for (i=0; i<dwPatterns; i++)
 			{
-				SetAxons(NET_INPUT_LAYER,fPatterns[i]);
-				ForwardPass(NET_INPUT_LAYER);
+				SetAxons(BP_INPUT_LAYER,fPatterns[i]);
+				ForwardPass(BP_INPUT_LAYER);
 				fNetError+=TargetFunction(m_bNetRank-1,fPatterns[i]);
 			}
 			if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
@@ -388,8 +399,8 @@ FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const F
 		UpdateWeights(WEIGH,DELTA);
 		for (i=0; i<dwPatterns; i++)
 		{
-			SetAxons(NET_INPUT_LAYER,fPatterns[i]);
-			ForwardPass(NET_INPUT_LAYER);
+			SetAxons(BP_INPUT_LAYER,fPatterns[i]);
+			ForwardPass(BP_INPUT_LAYER);
 			fNetError+=TargetFunction(m_bNetRank-1,fPatterns[i]);
 		}
 		if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
@@ -432,30 +443,31 @@ void NetBP::UpdateGradients(const FLOAT *fTarget)
 		}
 	}
 
-	//if (m_bLearnType & LEARN_TYPE_SEQUENTIAL)
-	//{
-	for (i=0; i<m_bNetRank-1; i++)
-		for (j=0; j<m_wLayerRank[i+1]; j++)
-			for (k=0; k<m_wNeuronRank[i]; k++)
-				m_vWeights[GRAD2][i][j][k]=m_vErrorSignal[i][j]*m_vAxons[i][k];
-	
-	if (m_bUseBias)
+	if (m_bLearnType & LEARN_TYPE_SEQUENTIAL)
+	{
 		for (i=0; i<m_bNetRank-1; i++)
 			for (j=0; j<m_wLayerRank[i+1]; j++)
-				m_vBiases[GRAD2][i][j]=m_vErrorSignal[i][j]*m_fMaxSignal;
-	//}
-	//if (m_bLearnType & LEARN_TYPE_BATCH)
-	//{
-	//	for (i=0; i<m_bNetRank-1; i++)
-	//		for (j=0; j<m_wLayerRank[i+1]; j++)
-	//			for (k=0; k<m_wNeuronRank[i]; k++)
-	//				m_vWeights[GRAD2][i][j][k]+=m_vErrorSignal[i][j]*m_vAxons[i][k];
-	//			
-	//	if (m_bUseBias)
-	//		for (i=0; i<m_bNetRank-1; i++)
-	//			for (UINT j=0; j<m_wLayerRank[i+1]; j++)
-	//				m_vBiases[GRAD2][i][j]+=m_vErrorSignal[i][j]*m_fMaxSignal;
-	//}
+				for (k=0; k<m_wNeuronRank[i]; k++)
+					m_vWeights[GRAD2][i][j][k]=m_vErrorSignal[i][j]*m_vAxons[i][k];
+
+		if (m_bUseBias)
+			for (i=0; i<m_bNetRank-1; i++)
+				for (j=0; j<m_wLayerRank[i+1]; j++)
+					m_vBiases[GRAD2][i][j]=m_vErrorSignal[i][j]*m_fMaxSignal;
+	}
+
+	if (m_bLearnType & LEARN_TYPE_BATCH)
+	{
+		for (i=0; i<m_bNetRank-1; i++)
+			for (j=0; j<m_wLayerRank[i+1]; j++)
+				for (k=0; k<m_wNeuronRank[i]; k++)
+					m_vWeights[GRAD2][i][j][k]+=m_vErrorSignal[i][j]*m_vAxons[i][k];
+				
+		if (m_bUseBias)
+			for (i=0; i<m_bNetRank-1; i++)
+				for (UINT j=0; j<m_wLayerRank[i+1]; j++)
+					m_vBiases[GRAD2][i][j]+=m_vErrorSignal[i][j]*m_fMaxSignal;
+	}
 //	file.close();
 }
 
@@ -523,7 +535,7 @@ FLOAT NetBP::SigmoidFunction(const FLOAT fValue)
 	switch (m_bSigmoidType)
 	{
 		case SIGMOID_TYPE_ORIGINAL:
-			return (FLOAT)(-m_fScaleParam+1.0f/(1.0f+exp(-m_fSigmoidAlpha*fValue)));
+			return (FLOAT)(-m_fScaleParam+1.0/(1.0+exp(-m_fSigmoidAlpha*fValue)));
 		case SIGMOID_TYPE_HYPERTAN:
 			return (FLOAT)(m_fScaleParam*tanh(m_fSigmoidAlpha*fValue));
 	}
@@ -618,6 +630,19 @@ FLOAT NetBP::GetLearnRate()
 void NetBP::CopyWeights(LPVOID pDest,const BYTE bLayer)
 {
 	ASSERT(bLayer<m_bNetRank);
-	CopyMemory(pDest,m_vWeights[WEIGH][bLayer],
-		m_wNeuronRank[bLayer]*m_wLayerRank[bLayer]*sizeof(FLOAT));
+	CopyMemory(pDest,m_vWeights[WEIGH][bLayer-1][0],
+		m_wNeuronRank[bLayer-1]*m_wLayerRank[bLayer]*sizeof(FLOAT));
+	if (m_bUseBias)
+		CopyMemory((FLOAT *)pDest+m_wNeuronRank[bLayer-1]*m_wLayerRank[bLayer],
+			m_vBiases[WEIGH][bLayer-1],m_wLayerRank[bLayer]*sizeof(FLOAT));
+}
+
+
+DWORD NetBP::GetWeightsSize(const BYTE bLayer)
+{
+	ASSERT(bLayer<m_bNetRank);
+	DWORD dwSize=m_wLayerRank[bLayer]*m_wNeuronRank[bLayer-1];
+	if (m_bUseBias)
+		dwSize+=m_wLayerRank[bLayer];
+	return (dwSize*sizeof(FLOAT));
 }
