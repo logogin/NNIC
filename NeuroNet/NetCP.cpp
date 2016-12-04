@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "NetCP.h"
 
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -165,7 +166,7 @@ void NetCP::PropagateKohonenMax()
 //		QueryPerformanceCounter(&liCount1);
 		fSum=0.0f;
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-			fSum+=m_vWeights[KOHONEN_NEURON][i][j]*m_vAxons[INPUT_LAYER][j];
+			fSum+=m_vWeights[KOHONEN_NEURON][i][j]*m_vAxons[CP_INPUT_LAYER][j];
 		
 		if (bFirst)
 		{
@@ -195,10 +196,10 @@ void NetCP::PropagateKohonenMin()
 	{
 		fSum=0.0f;
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-			if (m_vAxons[INPUT_LAYER][j]>=m_vWeights[KOHONEN_NEURON][i][j])
-				fSum+=m_vAxons[INPUT_LAYER][j]-m_vWeights[KOHONEN_NEURON][i][j];
+			if (m_vAxons[CP_INPUT_LAYER][j]>=m_vWeights[KOHONEN_NEURON][i][j])
+				fSum+=m_vAxons[CP_INPUT_LAYER][j]-m_vWeights[KOHONEN_NEURON][i][j];
 			else
-				fSum+=m_vWeights[KOHONEN_NEURON][i][j]-m_vAxons[INPUT_LAYER][j];
+				fSum+=m_vWeights[KOHONEN_NEURON][i][j]-m_vAxons[CP_INPUT_LAYER][j];
 		if (bFirst)
 		{
 			fMin=fSum;
@@ -264,7 +265,7 @@ void NetCP::FinalizeGrossberg()
 //
 //	for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
 //		for (i=iFirstNeuron; i<=iLastNeuron; i++)
-//			m_vWeights[KOHONEN_NEURON][i][j]+=fLearnRate*(m_vAxons[INPUT_LAYER][j]-
+//			m_vWeights[KOHONEN_NEURON][i][j]+=fLearnRate*(m_vAxons[CP_INPUT_LAYER][j]-
 //				m_vWeights[KOHONEN_NEURON][i][j]);
 //}
 
@@ -282,7 +283,7 @@ void NetCP::LearnKohonen(const FLOAT *pLearnRate)
 	for (i=iFirstNeuron; i<=iLastNeuron; i++)
 		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
 			m_vWeights[KOHONEN_NEURON][i][j]+=
-				pLearnRate[labs(m_wWinnerNeuron-i)]*(m_vAxons[INPUT_LAYER][j]
+				pLearnRate[labs(m_wWinnerNeuron-i)]*(m_vAxons[CP_INPUT_LAYER][j]
 					-m_vWeights[KOHONEN_NEURON][i][j]);
 //	DWORD i,j;
 //	INT iFirstNeuron=m_wWinnerNeuron-m_wNeighRadius;
@@ -294,7 +295,7 @@ void NetCP::LearnKohonen(const FLOAT *pLearnRate)
 //
 //	for (i=iFirstNeuron; i<=iLastNeuron; i++)
 //		for (j=0; j<m_vNeuronRank[KOHONEN_NEURON]; j++)
-//			m_vWeights[KOHONEN_NEURON][i][j]+=m_fLearnRate*(m_vAxons[INPUT_LAYER][j]-
+//			m_vWeights[KOHONEN_NEURON][i][j]+=m_fLearnRate*(m_vAxons[CP_INPUT_LAYER][j]-
 //				m_vWeights[KOHONEN_NEURON][i][j]);
 }
 
@@ -323,7 +324,7 @@ FLOAT NetCP::GetWinnerDistance()
 	FLOAT fSum=0.0f;
 	for (i=0; i<m_vNeuronRank[KOHONEN_NEURON]; i++)
 	{
-		fDistance=m_vAxons[INPUT_LAYER][i]-m_vWeights[KOHONEN_NEURON][m_wWinnerNeuron][i];
+		fDistance=m_vAxons[CP_INPUT_LAYER][i]-m_vWeights[KOHONEN_NEURON][m_wWinnerNeuron][i];
 		fSum+=fDistance*fDistance;
 	}
 
@@ -363,4 +364,22 @@ void NetCP::CalculateLearnRate(FLOAT *pLearnRate)
 	else
 		for (i=0; i<=m_wNeighRadius; i++)
 			pLearnRate[i]=m_fLearnRate;
+}
+
+void NetCP::GetWeightsToNeuron(const BYTE bLayer, const WORD wNeuron , FLOAT * pWeights)
+{
+	ASSERT(bLayer>0&&bLayer<m_bNetRank);
+	ASSERT(wNeuron<m_vLayerRank[bLayer-1]);
+	DWORD i;
+	for (i=0; i<m_vLayerRank[bLayer]; i++)
+		pWeights[i]=m_vWeights[bLayer-1][i][wNeuron];
+}
+
+void NetCP::GetWeightsFromNeuron(const BYTE bLayer, const WORD wNeuron, FLOAT * pWeights)
+{
+	ASSERT(bLayer>0&&bLayer<m_bNetRank);
+	ASSERT(wNeuron<m_vLayerRank[bLayer]);
+	DWORD i;
+	for (i=0; i<m_vNeuronRank[bLayer-1]; i++)
+		pWeights[i]=m_vWeights[bLayer-1][wNeuron][i];
 }

@@ -9,11 +9,10 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#define NETRANK 3
-enum Layers {INPUT_LAYER,KOHONEN_LAYER,GROSSBERG_LAYER};
+enum Layers {CP_INPUT_LAYER,KOHONEN_LAYER,GROSSBERG_LAYER};
 enum Neurons {KOHONEN_NEURON,GROSSBERG_NEURON};
 
-#define MAX_NET_SIZE 3
+#define CP_MAX_NETSIZE 3
 #define NET_TYPE_KOHONEN_GROSSBERG 1
 #define NET_TYPE_KOHONEN 2
 
@@ -49,13 +48,16 @@ protected:
 	WORD m_wWinnerNeuron;
 	FLOAT m_fLearnRate;
 	WORD m_wNeighRadius;
-	WORD m_vLayerRank[MAX_NET_SIZE];
-	WORD m_vNeuronRank[MAX_NET_SIZE-1];
-	FLOAT *m_vAxons[MAX_NET_SIZE];
-	FLOAT **m_vWeights[MAX_NET_SIZE-1];
+	WORD m_vLayerRank[CP_MAX_NETSIZE];
+	WORD m_vNeuronRank[CP_MAX_NETSIZE-1];
+	FLOAT *m_vAxons[CP_MAX_NETSIZE];
+	FLOAT **m_vWeights[CP_MAX_NETSIZE-1];
 	DWORD *m_vCounts;
 	BYTE m_bNetType;
 	BYTE m_bLearnType;
+public:
+	void GetWeightsToNeuron(const BYTE bLayer, const WORD wNeuron , FLOAT * pWeights);
+	void GetWeightsFromNeuron(const BYTE bLayer, const WORD wNeuron, FLOAT * pWeights);
 };
 
 #endif // !defined(AFX_NETCP_H__F015352A_097D_45AD_BD96_EA31A10F0FEB__INCLUDED_)
