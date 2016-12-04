@@ -8,16 +8,62 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-BYTE **AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth)
+DWORD GetPageSize(void)
+{
+	SYSTEM_INFO sysInfo;
+	::GetSystemInfo(&sysInfo);
+	return sysInfo.dwPageSize;
+}
+
+HANDLE HeapCreate(const DWORD dwInitalSize,const DWORD dwMaximumSize)
+{
+	return ::HeapCreate(HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE,dwInitalSize,dwMaximumSize);
+}
+
+BOOLEAN HeapFree(HANDLE hHeap,LPVOID lpMem)
+{
+	return HeapFree(hHeap,HEAP_NO_SERIALIZE,lpMem);
+}
+
+HANDLE GetHeapHandle(const LPVOID lpMem)
+{
+	return *((PHANDLE)lpMem-1);
+}
+
+BOOLEAN HeapFree(LPVOID lpMem)
+{
+	HANDLE hHeap=*((PHANDLE)lpMem-1);
+	return ::HeapDestroy(hHeap);
+}
+
+LPVOID HeapAlloc(const HANDLE hHeap,const SIZE_T dwBytes,const BOOLEAN bZero)
+{
+	DWORD dwFlags=HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE;
+	if (bZero)
+		dwFlags |=HEAP_ZERO_MEMORY;
+	return ::HeapAlloc(hHeap,dwFlags,dwBytes); 
+}
+
+LPVOID HeapAlloc(const SIZE_T dwBytes,const BOOLEAN bZero)
+{
+	HANDLE hHeap=HeapCreate(dwBytes+sizeof(HANDLE));
+	LPVOID lpMem=HeapAlloc(hHeap,dwBytes+sizeof(HANDLE),bZero);
+	*((PHANDLE)lpMem)=hHeap;
+	return (PHANDLE)lpMem+1;
+}
+
+LPBYTE *AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth,const BOOLEAN bZero)
 {
 	DWORD i;
-	BYTE **pMatrix=new BYTE *[dwHeight];
+	LPBYTE *pMatrix=(LPBYTE *)HeapAlloc(dwHeight*sizeof(LPBYTE));
 	if (pMatrix==NULL)
 		return NULL;
-	pMatrix[0]=new BYTE[dwHeight*dwWidth];
+
+	HANDLE hHeap=GetHeapHandle(pMatrix);
+	pMatrix[0]=(LPBYTE)HeapAlloc(hHeap,dwHeight*dwWidth,bZero);
 	if (pMatrix[0]==NULL)
 	{
-		delete []pMatrix;
+		HeapFree(pMatrix);
 		return NULL;
 	}
 
@@ -26,17 +72,18 @@ BYTE **AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth)
 	return pMatrix;
 }
 
-FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD dwWidth)
+PFLOAT *AllocateFloatMatrix(const DWORD dwHeight,const DWORD dwWidth,const BOOLEAN bZero)
 {
 	DWORD i;
-	FLOAT **pMatrix=new FLOAT *[dwHeight];
+	PFLOAT *pMatrix=(PFLOAT *)HeapAlloc(dwHeight*sizeof(PFLOAT));
 	if (pMatrix==NULL)
 		return NULL;
 
-	pMatrix[0]=new FLOAT[dwHeight*dwWidth];
+	HANDLE hHeap=GetHeapHandle(pMatrix);
+	pMatrix[0]=(PFLOAT)HeapAlloc(hHeap,dwHeight*dwWidth*sizeof(FLOAT),bZero);
 	if (pMatrix[0]==NULL)
 	{
-		delete []pMatrix;
+		HeapFree(pMatrix);
 		return NULL;
 	}
 	
@@ -45,21 +92,44 @@ FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD dwWidth)
 	return pMatrix;
 }
 
-FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD *pWidth)
+PFLOAT *AllocateFloatMatrix(HANDLE hHeap,
+							const DWORD dwHeight,
+							const DWORD dwWidth,
+							const BOOLEAN bZero)
+{
+	DWORD i;
+	PFLOAT *pMatrix=(PFLOAT *)HeapAlloc(hHeap,dwHeight*sizeof(PFLOAT));
+	if (pMatrix==NULL)
+		return NULL;
+
+	pMatrix[0]=(PFLOAT)HeapAlloc(hHeap,dwHeight*dwWidth*sizeof(FLOAT),bZero);
+	if (pMatrix[0]==NULL)
+	{
+		HeapDestroy(hHeap);
+		return NULL;
+	}
+	
+	for (i=1; i<dwHeight; i++)
+		pMatrix[i]=&(pMatrix[0][dwWidth*i]);
+	return pMatrix;
+}
+
+PFLOAT *AllocateFloatMatrix(const DWORD dwHeight,const PDWORD pWidth,const BOOLEAN bZero)
 {
 	DWORD dwSize=0;
 	DWORD i;
-	FLOAT **pMatrix=new FLOAT *[dwHeight];
+	PFLOAT *pMatrix=(PFLOAT *)HeapAlloc(dwHeight*sizeof(PFLOAT));
 	if (pMatrix==NULL)
 		return NULL;
 
 	for (i=0; i<dwHeight; i++)
 		dwSize+=pWidth[i];
 
-	pMatrix[0]=new FLOAT[dwSize];
+	HANDLE hHeap=GetHeapHandle(pMatrix);
+	pMatrix[0]=(PFLOAT)HeapAlloc(hHeap,dwSize*sizeof(FLOAT),bZero);
 	if (pMatrix[0]==NULL)
 	{
-		delete []pMatrix;
+		HeapFree(pMatrix);
 		return NULL;
 	}
 	
@@ -69,20 +139,21 @@ FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD *pWidth)
 		dwSize+=pWidth[i-1];
 		pMatrix[i]=&(pMatrix[0][dwSize]);
 	}
-
 	return pMatrix;
 }
 
-WORD **AllocateWordMatrix(const DWORD dwHeight,const DWORD dwWidth)
+PWORD *AllocateWordMatrix(const DWORD dwHeight,const DWORD dwWidth,const BOOLEAN bZero)
 {
 	DWORD i;
-	WORD **pMatrix=new WORD *[dwHeight];
+	PWORD *pMatrix=(PWORD *)HeapAlloc(dwHeight*sizeof(PWORD));
 	if (pMatrix==NULL)
 		return NULL;
-	pMatrix[0]=new WORD[dwHeight*dwWidth];
+
+	HANDLE hHeap=GetHeapHandle(pMatrix);
+	pMatrix[0]=(PWORD)HeapAlloc(hHeap,dwHeight*dwWidth*sizeof(WORD),bZero);
 	if (pMatrix[0]==NULL)
 	{
-		delete []pMatrix;
+		HeapFree(pMatrix);
 		return NULL;
 	}
 
@@ -91,34 +162,35 @@ WORD **AllocateWordMatrix(const DWORD dwHeight,const DWORD dwWidth)
 	return pMatrix;
 }
 
-void DestroyMatrix(LPVOID *pMatrix)
+BOOLEAN DestroyMatrix(LPVOID *pMatrix)
 {
-	delete []pMatrix[0];
-	delete []pMatrix;
+	HANDLE hHeap=GetHeapHandle(pMatrix);
+	HeapFree(hHeap,pMatrix[0]);
+	return HeapFree(pMatrix);
 }
 
-DWORD FindPrimeNumber(const DWORD dwFrom)
-{
-	DWORD dwNumber=dwFrom;
-	BOOLEAN bFlag;
-	BOOLEAN bFound;
-	DWORD i;
-	do
-	{
-		bFound=TRUE;
-		bFlag=FALSE;
-		for (i=2; i<=(DWORD)sqrtf((FLOAT)dwNumber)&&!bFlag; i++)
-			if (!(dwNumber%i))
-			{
-				bFlag=TRUE;
-				bFound=FALSE;
-			}
-		if (!bFound)
-			dwNumber++;
-	}
-	while (!bFound);
-	return dwNumber;
-}
+//DWORD FindPrimeNumber(const DWORD dwFrom)
+//{
+//	DWORD dwNumber=dwFrom;
+//	BOOLEAN bFlag;
+//	BOOLEAN bFound;
+//	DWORD i;
+//	do
+//	{
+//		bFound=TRUE;
+//		bFlag=FALSE;
+//		for (i=2; i<=(DWORD)sqrtf((FLOAT)dwNumber)&&!bFlag; i++)
+//			if (!(dwNumber%i))
+//			{
+//				bFlag=TRUE;
+//				bFound=FALSE;
+//			}
+//		if (!bFound)
+//			dwNumber++;
+//	}
+//	while (!bFound);
+//	return dwNumber;
+//}
 
 LONG Round(const FLOAT fValue)
 {

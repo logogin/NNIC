@@ -26,7 +26,7 @@ CBitmapKit::CBitmapKit():m_bPresent(FALSE),m_lpBits(NULL)
 CBitmapKit::~CBitmapKit()
 {
 	if (m_lpBits!=NULL)
-		delete []m_lpBits;
+		HeapFree(m_lpBits);
 }
 
 BOOLEAN CBitmapKit::LoadBMP(const CString &strFileName)
@@ -66,31 +66,32 @@ BOOL CBitmapKit::SaveBMP(CFile * pFile)
 
 	// Allocate memory for the BITMAPINFO structure. (This structure 
     // contains a BITMAPINFOHEADER structure and an array of RGBQUAD 
-	// data structures.) 
+	// data structures.)
+	HANDLE hHeap=HeapCreate(GetPageSize());
 	if (bBitsPixel != 24)
 	{
 		DWORD i;
-		pbmi=(PBITMAPINFO)new BYTE[sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*(1<<bBitsPixel)];
+		pbmi=(PBITMAPINFO)HeapAlloc(hHeap,
+			sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*(1<<bBitsPixel),(BOOLEAN)TRUE);
 		for (i=0; i<(1<<bBitsPixel); i++)
 		{
 			RGBQUAD rgb={(BYTE)i,(BYTE)i,(BYTE)i,0};
 			CopyMemory(&pbmi->bmiColors[i],&rgb,sizeof(RGBQUAD));
 		}
+		pbmi->bmiHeader.biClrUsed=1<<bBitsPixel;
 	}
 	else
 	// There is no RGBQUAD array for the 24-bit-per-pixel format. 
-		pbmi=(PBITMAPINFO)new BYTE[sizeof(BITMAPINFOHEADER)];
+		pbmi=(PBITMAPINFO)HeapAlloc(hHeap,sizeof(BITMAPINFOHEADER),(BOOLEAN)TRUE);
 
 	ASSERT(pbmi!=NULL);
 
-	ZeroMemory(pbmi,sizeof(BITMAPINFOHEADER));
 	// Initialize the fields in the BITMAPINFO structure. 
 	pbmi->bmiHeader.biSize=sizeof(BITMAPINFOHEADER);
 	pbmi->bmiHeader.biWidth=m_bmBitmap.bmWidth; 
     pbmi->bmiHeader.biHeight=m_bmBitmap.bmHeight;
 	pbmi->bmiHeader.biPlanes=m_bmBitmap.bmPlanes; 
     pbmi->bmiHeader.biBitCount=m_bmBitmap.bmBitsPixel;
-	pbmi->bmiHeader.biClrUsed=0;//(1<<bBitsPixel);
 
 	// If the bitmap is not compressed, set the BI_RGB flag. 
     pbmi->bmiHeader.biCompression=BI_RGB;
@@ -118,13 +119,14 @@ BOOL CBitmapKit::SaveBMP(CFile * pFile)
 	pFile->Write(pbmi,sizeof(BITMAPINFOHEADER)+pbmi->bmiHeader.biClrUsed*sizeof(RGBQUAD));
 	pFile->Write(m_lpBits[0],pbmi->bmiHeader.biSizeImage);
 
+	::HeapDestroy(hHeap);
 	return TRUE;
 }
 
 BOOLEAN CBitmapKit::InitBitmapBits()
 {
 	if (m_lpBits!=NULL)
-		delete []m_lpBits;
+		HeapFree(m_lpBits);
 
 	if (!CBitmap::GetBitmap(&m_bmBitmap))
 		return FALSE;
@@ -134,8 +136,8 @@ BOOLEAN CBitmapKit::InitBitmapBits()
 	if (m_bmBitmap.bmBits==NULL)
 		return FALSE;
 
-	m_lpBits=new LPBYTE[m_bmBitmap.bmHeight];
-	ASSERT(m_lpBits);
+	m_lpBits=(LPBYTE *)HeapAlloc(m_bmBitmap.bmHeight*sizeof(LPBYTE));
+	ASSERT(m_lpBits!=NULL);
 
 	DWORD i;
 	m_lpBits[0]=(LPBYTE)m_bmBitmap.bmBits;
@@ -177,7 +179,7 @@ HBITMAP CBitmapKit::Detach()
 	m_bPresent=FALSE;
 
 	if (m_lpBits!=NULL)
-		delete []m_lpBits;
+		HeapFree(m_lpBits);
 	m_lpBits=NULL;
 
 	HBITMAP hBitmap=(HBITMAP)CGdiObject::Detach();
@@ -363,11 +365,13 @@ HBITMAP CBitmapKit::CreateDIBSection(const BITMAP &bm, LPVOID *lpBits)
 	// Allocate memory for the BITMAPINFO structure. (This structure 
     // contains a BITMAPINFOHEADER structure and an array of RGBQUAD 
 	// data structures.) 
+	HANDLE hHeap=HeapCreate(GetPageSize());
 
 	if (bBitsPixel != 24)
 	{
 		DWORD i;
-		pbmi=(PBITMAPINFO)new BYTE[sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*(1<<bBitsPixel)];
+		pbmi=(PBITMAPINFO)HeapAlloc(hHeap,
+			sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*(1<<bBitsPixel),(BOOLEAN)TRUE);
 		for (i=0; i<(1<<bBitsPixel); i++)
 		{
 			RGBQUAD rgb={(BYTE)i,(BYTE)i,(BYTE)i,0};
@@ -376,7 +380,7 @@ HBITMAP CBitmapKit::CreateDIBSection(const BITMAP &bm, LPVOID *lpBits)
 	}
 	else
 	// There is no RGBQUAD array for the 24-bit-per-pixel format. 
-		pbmi=(PBITMAPINFO)new BYTE[sizeof(BITMAPINFOHEADER)];
+		pbmi=(PBITMAPINFO)HeapAlloc(hHeap,sizeof(BITMAPINFOHEADER),(BOOLEAN)TRUE);
 
 	ASSERT(pbmi!=NULL);
 
@@ -396,7 +400,9 @@ HBITMAP CBitmapKit::CreateDIBSection(const BITMAP &bm, LPVOID *lpBits)
     // indices and store the result in biSizeImage. 
     // Width must be DWORD aligned unless bitmap is RLE compressed.
     pbmi->bmiHeader.biSizeImage = bm.bmWidthBytes*bm.bmHeight;
-   	return ::CreateDIBSection(NULL,pbmi,DIB_RGB_COLORS,lpBits,NULL,0);
+	HBITMAP hBitmap=::CreateDIBSection(NULL,pbmi,DIB_RGB_COLORS,lpBits,NULL,0);
+	::HeapDestroy(hHeap);
+   	return hBitmap;
 }
 
 HBITMAP CBitmapKit::Resample(const DWORD dwWidth,
@@ -478,7 +484,7 @@ HBITMAP CBitmapKit::Resample(const DWORD dwWidth,
 	LPBYTE *lpColumn=AllocateByteMatrix(m_bmBitmap.bmHeight,m_bBytesPixel);
 	ASSERT(lpColumn!=NULL);
 
-	DOUBLE *pWeight=new DOUBLE[m_bBytesPixel];
+	DOUBLE *pWeight=(DOUBLE *)HeapAlloc(m_bBytesPixel*sizeof(DOUBLE));
 	ASSERT(pWeight!=NULL);
 
 	CArray<CONTRIBUTOR,CONTRIBUTOR &> contributorX;
@@ -572,7 +578,7 @@ HBITMAP CBitmapKit::Resample(const DWORD dwWidth,
 	contributorY.RemoveAll();
 
 	DestroyMatrix((LPVOID *)lpColumn);
-	delete []pWeight;
+	HeapFree(pWeight);
 
 	if (bChange)
 	{

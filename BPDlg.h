@@ -15,10 +15,10 @@ class CBPDlg : public CPropertyPage
 	DECLARE_DYNCREATE(CBPDlg)
 
 // Construction
-public:
-	void GetOptionsBP(OPTIONSBP *optionsBP);
+//public:
+//	void GetOptionsBP(OPTIONSBP *optionsBP);
 	CBPDlg(void);
-	CBPDlg(const OPTIONSBP &optionsBP);
+	CBPDlg(OPTIONSBP *optionsBP);
 	~CBPDlg();
 
 // Dialog Data
@@ -57,20 +57,10 @@ public:
 
 // Implementation
 protected:
-	void EnableSecondHidden(const BOOLEAN bFlag);
-	void EnableLearnRate(const BOOLEAN bFlag);
-	void EnableMomentum(const BOOLEAN bFlag);
-	OPTIONSBP m_optionsBP; 
+	OPTIONSBP *m_optionsBP; 
 	// Generated message map functions
 	//{{AFX_MSG(CBPDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnRadioBatch();
-	afx_msg void OnRadioSequential();
-	afx_msg void OnRadioSigmoid();
-	afx_msg void OnRadioHypertan();
-	afx_msg void OnCheckSecond();
-	afx_msg void OnCheckMomentum();
-//	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -78,6 +68,18 @@ public:
 	int m_iInput;
 	int m_iHidden;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnBnClickedCheckMomentum();
+	afx_msg void OnBnClickedCheckSecond();
+	afx_msg void OnBnClickedRadioSequential();
+	afx_msg void OnBnClickedRadioBatch();
+	afx_msg void OnBnClickedRadioSigmoid();
+	afx_msg void OnBnClickedRadioHypertan();
+protected:
+	void EnableMomentum(const BOOLEAN bFlag);
+	void EnableLearnRate(const BOOLEAN bFlag);
+	void EnableSecond(const BOOLEAN bFlag);
+	BYTE m_bLearnMode;
+	BYTE m_bSigmoidType;
 };
 
 //{{AFX_INSERT_LOCATION}}

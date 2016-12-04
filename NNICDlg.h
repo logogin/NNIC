@@ -52,6 +52,7 @@ public:
 	OPTIONSCP * GetOptionsCP(void);
 	
 	void EnableOptions(const BOOLEAN bFlag);
+	void EnableFile(const BOOLEAN bFlag);
 	void EnableStop(const BOOLEAN bFlag);
 	void EnableCompress(const BOOLEAN bFlag);
 	CNNICDlg(CWnd* pParent = NULL);	// standard constructor
@@ -109,9 +110,12 @@ public:
 	CString GetComprFileName(void);
 	void WriteReportFile(const CString & strReportString);
 	void SetStatusOperation(const CString & strOperation);
-	void SetStatus(const DWORD dwID, const CString & strName, const CString & strValue);
+	void SetStatus(const DWORD dwID, const CString & strName);
+	void SetStatusText(const DWORD dwID, const CString & strValue);
 	void ClearStatus(void);
 	void SetProgressRange(const INT iLower, const INT iUpper);
+	afx_msg void OnToolsComparebitmaps();
+	afx_msg void OnFileQuit();
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -21,14 +21,14 @@ CDCTDlg::CDCTDlg() : CPropertyPage(CDCTDlg::IDD)
 
 }
 
-CDCTDlg::CDCTDlg(const OPTIONSDCT &optionsDCT) : CPropertyPage(CDCTDlg::IDD)
+CDCTDlg::CDCTDlg(OPTIONSDCT *optionsDCT) : CPropertyPage(CDCTDlg::IDD)
 {
 	//{{AFX_DATA_INIT(CDCTDlg)
 	m_bShift = FALSE;
 	m_iQuality = 0;
 	m_strQuality = _T("");
 	//}}AFX_DATA_INIT
-	CopyMemory(&m_optionsDCT,&optionsDCT,sizeof(OPTIONSDCT));
+	m_optionsDCT=optionsDCT;
 }
 
 CDCTDlg::~CDCTDlg()
@@ -62,9 +62,9 @@ BOOL CDCTDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	CScrollBar *pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_QUALITY);
 	pScroll->SetScrollRange(0,25);
-	m_iQuality=m_optionsDCT.st_bQuality;
-	m_strQuality.Format(_T("%d"),m_optionsDCT.st_bQuality);
-	m_bShift=m_optionsDCT.st_bShift;
+	m_iQuality=m_optionsDCT->st_bQuality;
+	m_strQuality.Format(_T("%d"),m_optionsDCT->st_bQuality);
+	m_bShift=m_optionsDCT->st_bShift;
 
 	UpdateData(FALSE);
 	
@@ -115,18 +115,13 @@ void CDCTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	UpdateData(FALSE);
 }
 
-void CDCTDlg::GetOptionsDCT(OPTIONSDCT *optionsDCT)
-{
-	CopyMemory(optionsDCT,&m_optionsDCT,sizeof(OPTIONSDCT));
-}
-
 void CDCTDlg::OnOK() 
 {
 	// TODO: Add your specialized code here and/or call the base class
 	UpdateData(TRUE);
 
-	m_optionsDCT.st_bQuality=m_iQuality;
-	m_optionsDCT.st_bShift=m_bShift;
+	m_optionsDCT->st_bQuality=m_iQuality;
+	m_optionsDCT->st_bShift=m_bShift;
 
 	CPropertyPage::OnOK();
 }

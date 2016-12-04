@@ -16,9 +16,8 @@ class CCPDlg : public CPropertyPage
 
 // Construction
 public:
-	void GetOptionsCP(OPTIONSCP *optionsCP);
 	CCPDlg(void);
-	CCPDlg(const OPTIONSCP &optionsCP);
+	CCPDlg(OPTIONSCP *optionsCP);
 	~CCPDlg();
 
 // Dialog Data
@@ -53,16 +52,19 @@ protected:
 	void EnableNeighRadius(const BOOLEAN bFlag);
 	void EnableNeighRadiusChange(const BOOLEAN bFlag);
 	void EnableLearnRateChange(const BOOLEAN bFlag);
-	OPTIONSCP m_optionsCP;
+	OPTIONSCP *m_optionsCP;
 	// Generated message map functions
 	//{{AFX_MSG(CCPDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnRadioKohgros();
-	afx_msg void OnRadioKohonen();
-	afx_msg void OnCheckTrainneigh();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	afx_msg void OnBnClickedCheckTrainNeigh();
+	afx_msg void OnBnClickedRadioKohgros();
+	afx_msg void OnBnClickedRadioKohonen();
+protected:
+	BYTE m_bNetType;
 };
 
 //{{AFX_INSERT_LOCATION}}

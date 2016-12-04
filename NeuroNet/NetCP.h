@@ -21,26 +21,25 @@ enum Neurons {KOHONEN_NEURON,GROSSBERG_NEURON};
 class NetCP  
 {
 public:
-	void CalculateLearnRate(FLOAT *pLearnRate);
+	void CalculateLearnRate(PFLOAT pLearnRate);
 	void SetLearnRate(const FLOAT fLearnRate);
 	void FinalizeGrossberg(void);
 	void SetWinnerNeuron(const WORD wWinner);
-	void SetAxons(const BYTE bLayer, const FLOAT *vAxons,const BOOLEAN bNormalize=FALSE);
-	void SetAxons(const BYTE bLayer, const BYTE *vAxons,const BOOLEAN bNormalize=FALSE);
+	void SetAxons(const BYTE bLayer, const PFLOAT vAxons,const BOOLEAN bNormalize=FALSE);
+	void SetAxons(const BYTE bLayer, const LPBYTE vAxons,const BOOLEAN bNormalize=FALSE);
 	FLOAT GetWinnerDistance(void);
 	void SetNeighbouringRadius(const WORD wNeighRadius);
-//	void LearnKohonen(const FLOAT fLearnRate);
-	void LearnKohonen(const FLOAT *pLearnRate);
-	void LearnGrossberg(const BYTE *bTarget);
+	void LearnKohonen(const PFLOAT pLearnRate);
+	void LearnGrossberg(const LPBYTE bTarget);
 	FLOAT GetWeight(const BYTE bLayer,const WORD wNeuron,const WORD wWeight);
 	UINT GetWinnerNeuron(void);
 	void PropagateGrossberg(void);
 	void PropagateKohonenMin(void);
 	void PropagateKohonenMax(void);
-	void NormalizeVector(FLOAT *vVector,const DWORD dwVectorSize);
+	void NormalizeVector(PFLOAT vVector,const DWORD dwVectorSize);
 	void InitWeights(void);
 	void InitWeights(const FLOAT fMinValue,const FLOAT fRange);
-	NetCP(const WORD *pRanks,const BYTE bNetType);
+	NetCP(const PWORD pRanks,const BYTE bNetType);
 	virtual ~NetCP();
 
 protected:
@@ -50,14 +49,14 @@ protected:
 	WORD m_wNeighRadius;
 	WORD m_vLayerRank[CP_MAX_NETSIZE];
 	WORD m_vNeuronRank[CP_MAX_NETSIZE-1];
-	FLOAT *m_vAxons[CP_MAX_NETSIZE];
-	FLOAT *m_vWeights[CP_MAX_NETSIZE-1];
-	DWORD *m_vCounts;
+	PFLOAT m_vAxons[CP_MAX_NETSIZE];
+	PFLOAT m_vWeights[CP_MAX_NETSIZE-1];
+	PDWORD m_vCounts;
 	BYTE m_bNetType;
 	BYTE m_bLearnType;
 public:
-	void GetWeightsToNeuron(const BYTE bLayer, const WORD wNeuron , FLOAT * pWeights);
-	void GetWeightsFromNeuron(const BYTE bLayer, const WORD wNeuron, FLOAT * pWeights);
+	void GetWeightsToNeuron(const BYTE bLayer, const WORD wNeuron , PFLOAT pWeights);
+	void GetWeightsFromNeuron(const BYTE bLayer, const WORD wNeuron, PFLOAT pWeights);
 };
 
 #endif // !defined(AFX_NETCP_H__F015352A_097D_45AD_BD96_EA31A10F0FEB__INCLUDED_)

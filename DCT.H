@@ -35,20 +35,20 @@ const BYTE ZigZag[DCT_SIZE][DCT_SIZE]=
 class DCT  
 {
 public:
-	void ZigZagSequence(SHORT *sSequence);
-	void IDCTransform(const FLOAT *fBlock);
+	void ZigZagSequence(PSHORT sSequence);
+	void IDCTransform(const PFLOAT fBlock);
 	void IDCTransform(void);
-	void GetBlock(FLOAT *fBlock);
+	void GetBlock(PFLOAT fBlock);
 	void DequantizateBlock(void);
 	void QuantizateBlock(void);
 	void SetQuality(const BYTE bQuality);
-	void DCTransform(const FLOAT *fBlock);
+	void DCTransform(const PFLOAT fBlock);
 	DCT(const BYTE bBlockSize);
 	virtual ~DCT();
 
 protected:
 	BYTE m_bBlockSize;
-	FLOAT **m_vMatrices[DCT_ARRAY_RANK];
+	PFLOAT *m_vMatrices[DCT_ARRAY_RANK];
 public:
 	void DeZigZagSequence(const SHORT * sSequence);
 };

@@ -1,0 +1,5646 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg:svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 744.09448819 1052.3622047"
+   height="297mm"
+   width="210mm">
+  <svg:defs
+     id="defs4" />
+  <svg:metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </svg:metadata>
+  <svg:g
+     id="layer1">
+    <svg:g
+       transform="matrix(1.2499981,0,0,1.2499982,6.3711881,79.958903)"
+       id="g5040"
+       style="font-size:12px;overflow:visible;color-interpolation-filters:sRGB;fill:none;fill-rule:evenodd;stroke-linecap:square;stroke-miterlimit:3">
+      <svg:g
+         mID="0"
+         index="1"
+         groupContext="foregroundPage"
+         id="g4142">
+		<userDefs>
+			<ud
+   nameU="UMLDiagramType"
+   val="VT0(0):26" />
+
+			<ud
+   nameU="UMLPageGUID"
+   prompt=""
+   val="VT15({B9B8F669-8486-4474-B9CC-58F0D2889CBF}):41" />
+
+		</userDefs>
+
+		<svg:title
+   id="title4144">Static Structure-1</svg:title>
+
+		<pageProperties
+   drawingScale="0.0393701"
+   pageScale="0.0393701"
+   drawingUnits="24"
+   shadowOffsetX="8.50394"
+   shadowOffsetY="-8.50394" />
+
+		<svg:g
+   id="shape10-1"
+   mID="10"
+   groupContext="shape"
+   transform="translate(0,-841.89)">
+			<svg:title
+   id="title4147">Watermark Title</svg:title>
+
+			<svg:desc
+   id="desc4149">Static Structure</svg:desc>
+
+			<textBlock
+   margins="rect(4,4,4,4)"
+   tabSpace="42.5197" />
+
+			<textRect
+   cx="143.036"
+   cy="816.288"
+   width="286.08"
+   height="51.2036" />
+
+			<svg:text
+   style="font-weight:bold;font-size:36px;font-family:Arial;fill:#cdcdcd"
+   x="9"
+   y="827.09003"
+   class="st1"
+   langID="1033"
+   id="text4151"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+Static Structure</svg:text>
+		</svg:g>
+
+		<svg:g
+   id="group1-3"
+   transform="translate(14.1732,-694.488)"
+   mID="1"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({7E860B09-FA21-4622-A750-FA9947F1BF87})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4154">Class</svg:title>
+
+			<svg:g
+   id="shape2-4"
+   mID="2"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4157">Sheet.2</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape3-5"
+   mID="3"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4160">Sheet.3</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape4-6"
+   mID="4"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4163">Sheet.4</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape5-7"
+   mID="5"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,166.752,1665.1)">
+				<svg:title
+   id="title4166">Sheet.5</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape6-8"
+   mID="6"
+   groupContext="shape">
+				<svg:title
+   id="title4169">Operations</svg:title>
+
+				<svg:desc
+   id="desc4171">+CAboutDlg() #DoDataExchange(in pDX : CDataExchange*)</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="28.3465"
+   cy="841.89"
+   width="56.7"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape7-10"
+   mID="7"
+   groupContext="shape">
+				<svg:title
+   id="title4174">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape8-12"
+   mID="8"
+   groupContext="shape">
+				<svg:title
+   id="title4177">Name</svg:title>
+
+				<svg:desc
+   id="desc4179">CAboutDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="28.3465"
+   cy="834.661"
+   width="56.7"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 56.69,0 0,-14.46 -56.69,0 0,14.46 z"
+   class="st2"
+   id="path4181" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="7.46"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4183"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CAboutDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape9-15"
+   mID="9"
+   groupContext="shape"
+   transform="translate(20.6929,-12.6496)">
+				<svg:title
+   id="title4186">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group11-17"
+   transform="translate(85.0394,-566.929)"
+   mID="11"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({32C3CBAF-93AA-4698-B592-C4929B5D9EF0})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4189">Class.11</svg:title>
+
+			<svg:g
+   id="shape12-18"
+   mID="12"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4192">Sheet.12</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape13-19"
+   mID="13"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4195">Sheet.13</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape14-20"
+   mID="14"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4198">Sheet.14</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape15-21"
+   mID="15"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4201">Sheet.15</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape16-22"
+   mID="16"
+   groupContext="shape">
+				<svg:title
+   id="title4204">Operations</svg:title>
+
+				<svg:desc
+   id="desc4206">+GetRuntimeClass() : CRuntimeClass * +CBPDlg() +CBPDlg(in opt...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape17-24"
+   mID="17"
+   groupContext="shape">
+				<svg:title
+   id="title4209">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4211">+classCBPDlg : CRuntimeClass +m_fAlpha : float +m_fFinalLearn...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape18-26"
+   mID="18"
+   groupContext="shape">
+				<svg:title
+   id="title4214">Name</svg:title>
+
+				<svg:desc
+   id="desc4216">CBPDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4218" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="12.04"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4220"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CBPDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape19-29"
+   mID="19"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4223">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group20-31"
+   transform="translate(456.378,-591.661)"
+   mID="20"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({A3C0ADED-388F-42CC-B451-E027744408C9})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4226">Class.20</svg:title>
+
+			<svg:g
+   id="shape21-32"
+   mID="21"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4229">Sheet.21</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape22-33"
+   mID="22"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4232">Sheet.22</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape23-34"
+   mID="23"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4235">Sheet.23</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape24-35"
+   mID="24"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4238">Sheet.24</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape25-36"
+   mID="25"
+   groupContext="shape">
+				<svg:title
+   id="title4241">Operations</svg:title>
+
+				<svg:desc
+   id="desc4243">+sinc(in fValue : const DOUBLE) : DOUBLE +CreateDIBSection(in...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape26-38"
+   mID="26"
+   groupContext="shape">
+				<svg:title
+   id="title4246">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4248">#m_lpBits : LPBYTE * #m_bBytesPixel : BYTE #m_bmBitmap : BITM...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape27-40"
+   mID="27"
+   groupContext="shape">
+				<svg:title
+   id="title4251">Name</svg:title>
+
+				<svg:desc
+   id="desc4253">CBitmapKit</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4255" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="5.1500001"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4257"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CBitmapKit</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape28-43"
+   mID="28"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4260">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group29-45"
+   transform="translate(158.74,-566.646)"
+   mID="29"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({0C4CC387-1ECA-46EE-8470-056EF3ACAC7D})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4263">Class.29</svg:title>
+
+			<svg:g
+   id="shape30-46"
+   mID="30"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4266">Sheet.30</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape31-47"
+   mID="31"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4269">Sheet.31</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape32-48"
+   mID="32"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4272">Sheet.32</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape33-49"
+   mID="33"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4275">Sheet.33</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape34-50"
+   mID="34"
+   groupContext="shape">
+				<svg:title
+   id="title4278">Operations</svg:title>
+
+				<svg:desc
+   id="desc4280">+CCPDlg() +CCPDlg(in optionsCP : OPTIONSCP*) +~CCPDlg() +OnOK...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape35-52"
+   mID="35"
+   groupContext="shape">
+				<svg:title
+   id="title4283">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4285">+classCCPDlg : CRuntimeClass +m_bTrainNeighbours : BOOL +m_dw...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape36-54"
+   mID="36"
+   groupContext="shape">
+				<svg:title
+   id="title4288">Name</svg:title>
+
+				<svg:desc
+   id="desc4290">CCPDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4292" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="12.04"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4294"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CCPDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape37-57"
+   mID="37"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4297">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group38-59"
+   transform="translate(311.811,-694.488)"
+   mID="38"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({6B76EDAE-E47D-4608-B940-E577EE3FBDA1})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(0.79952959152192):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4300">Class.38</svg:title>
+
+			<svg:g
+   id="shape39-60"
+   mID="39"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,29.158,1676.55)">
+				<svg:title
+   id="title4303">Sheet.39</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape40-61"
+   mID="40"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,29.158,1676.55)">
+				<svg:title
+   id="title4306">Sheet.40</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape41-62"
+   mID="41"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,29.158,1676.55)">
+				<svg:title
+   id="title4309">Sheet.41</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape42-63"
+   mID="42"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,167.564,1665.1)">
+				<svg:title
+   id="title4312">Sheet.42</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape43-64"
+   mID="43"
+   groupContext="shape">
+				<svg:title
+   id="title4315">Operations</svg:title>
+
+				<svg:desc
+   id="desc4317">+CCompareDlg(in pParent : CWnd* = 0) +~CCompareDlg() #DoDataE...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="29.158"
+   cy="841.89"
+   width="58.32"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape44-66"
+   mID="44"
+   groupContext="shape">
+				<svg:title
+   id="title4320">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4322">+classCCompareDlg : CRuntimeClass #m_strFirstPath : CString #...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="29.158"
+   cy="841.89"
+   width="58.32"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape45-68"
+   mID="45"
+   groupContext="shape">
+				<svg:title
+   id="title4325">Name</svg:title>
+
+				<svg:desc
+   id="desc4327">CCompareDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="29.158"
+   cy="834.661"
+   width="58.32"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 58.32,0 0,-14.46 -58.32,0 0,14.46 z"
+   class="st2"
+   id="path4329" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.49"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4331"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CCompareDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape46-71"
+   mID="46"
+   groupContext="shape"
+   transform="translate(22.3159,-12.6496)">
+				<svg:title
+   id="title4334">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group47-73"
+   transform="translate(226.772,-566.646)"
+   mID="47"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({67C1483A-BCC7-4CA6-9680-E354E44FC157})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4337">Class.47</svg:title>
+
+			<svg:g
+   id="shape48-74"
+   mID="48"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4340">Sheet.48</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape49-75"
+   mID="49"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4343">Sheet.49</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape50-76"
+   mID="50"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4346">Sheet.50</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape51-77"
+   mID="51"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4349">Sheet.51</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape52-78"
+   mID="52"
+   groupContext="shape">
+				<svg:title
+   id="title4352">Operations</svg:title>
+
+				<svg:desc
+   id="desc4354">+CDCTDlg() +CDCTDlg(in optionsDCT : OPTIONSDCT*) +~CDCTDlg() ...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape53-80"
+   mID="53"
+   groupContext="shape">
+				<svg:title
+   id="title4357">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4359">+classCDCTDlg : CRuntimeClass +m_bShift : BOOL +m_iQuality : ...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape54-82"
+   mID="54"
+   groupContext="shape">
+				<svg:title
+   id="title4362">Name</svg:title>
+
+				<svg:desc
+   id="desc4364">CDCTDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4366" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="9.3800001"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4368"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CDCTDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape55-85"
+   mID="55"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4371">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group56-87"
+   transform="translate(435.57,-714.047)"
+   mID="56"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({966E4354-0F07-4C95-A4D0-034BBFE21CE2})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(0.75623277755707):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4374">Class.56</svg:title>
+
+			<svg:g
+   id="shape57-88"
+   mID="57"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,27.2244,1676.55)">
+				<svg:title
+   id="title4377">Sheet.57</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape58-89"
+   mID="58"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,27.2244,1676.55)">
+				<svg:title
+   id="title4380">Sheet.58</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape59-90"
+   mID="59"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,27.2244,1676.55)">
+				<svg:title
+   id="title4383">Sheet.59</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape60-91"
+   mID="60"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.63,1665.1)">
+				<svg:title
+   id="title4386">Sheet.60</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape61-92"
+   mID="61"
+   groupContext="shape">
+				<svg:title
+   id="title4389">Operations</svg:title>
+
+				<svg:desc
+   id="desc4391">+CFileBmpDlg(in bOpenFileDialog : BOOL, in lpszFileName : LPC...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="27.2244"
+   cy="841.89"
+   width="54.45"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape62-94"
+   mID="62"
+   groupContext="shape">
+				<svg:title
+   id="title4394">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4396">+classCFileBmpDlg : CRuntimeClass #m_strTitle : CString</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="27.2244"
+   cy="841.89"
+   width="54.45"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape63-96"
+   mID="63"
+   groupContext="shape">
+				<svg:title
+   id="title4399">Name</svg:title>
+
+				<svg:desc
+   id="desc4401">CFileBmpDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="27.2244"
+   cy="834.661"
+   width="54.45"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 54.45,0 0,-14.46 -54.45,0 0,14.46 z"
+   class="st2"
+   id="path4403" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.1099999"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4405"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CFileBmpDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape64-99"
+   mID="64"
+   groupContext="shape"
+   transform="translate(18.4488,-12.6496)">
+				<svg:title
+   id="title4408">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group65-101"
+   transform="translate(518.74,-714.047)"
+   mID="65"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({DED98DD1-866B-4D9A-AD77-5B485F9C3E12})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4411">Class.65</svg:title>
+
+			<svg:g
+   id="shape66-102"
+   mID="66"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4414">Sheet.66</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape67-103"
+   mID="67"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4417">Sheet.67</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape68-104"
+   mID="68"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4420">Sheet.68</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape69-105"
+   mID="69"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4423">Sheet.69</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape70-106"
+   mID="70"
+   groupContext="shape">
+				<svg:title
+   id="title4426">Operations</svg:title>
+
+				<svg:desc
+   id="desc4428">+CFileNniDlg(in bOpenFileDialog : BOOL, in lpszFileName : LPC...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape71-108"
+   mID="71"
+   groupContext="shape">
+				<svg:title
+   id="title4431">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4433">+classCFileNniDlg : CRuntimeClass #m_strTitle : CString</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape72-110"
+   mID="72"
+   groupContext="shape">
+				<svg:title
+   id="title4436">Name</svg:title>
+
+				<svg:desc
+   id="desc4438">CFileNniDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4440" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="4.2600002"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4442"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CFileNniDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape73-113"
+   mID="73"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4445">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group74-115"
+   transform="translate(17.0079,-566.929)"
+   mID="74"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({DBD2AA00-EB7A-48E3-AC23-03BE00C48383})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4448">Class.74</svg:title>
+
+			<svg:g
+   id="shape75-116"
+   mID="75"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4451">Sheet.75</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape76-117"
+   mID="76"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4454">Sheet.76</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape77-118"
+   mID="77"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4457">Sheet.77</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape78-119"
+   mID="78"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4460">Sheet.78</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape79-120"
+   mID="79"
+   groupContext="shape">
+				<svg:title
+   id="title4463">Operations</svg:title>
+
+				<svg:desc
+   id="desc4465">+CGeneralDlg() +CGeneralDlg(in optionsGENERAL : OPTIONSGENERA...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape80-122"
+   mID="80"
+   groupContext="shape">
+				<svg:title
+   id="title4468">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4470">+classCGeneralDlg : CRuntimeClass #m_strDefComprFileName : CS...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape81-124"
+   mID="81"
+   groupContext="shape">
+				<svg:title
+   id="title4473">Name</svg:title>
+
+				<svg:desc
+   id="desc4475">CGeneralDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4477" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.7"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4479"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CGeneralDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape82-127"
+   mID="82"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4482">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group92-129"
+   transform="translate(332.795,-588.189)"
+   mID="92"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({AD2F9A1C-8267-43FF-8F5B-4CEA24518602})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4485">Class.92</svg:title>
+
+			<svg:g
+   id="shape93-130"
+   mID="93"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4488">Sheet.93</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape94-131"
+   mID="94"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4491">Sheet.94</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape95-132"
+   mID="95"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4494">Sheet.95</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape96-133"
+   mID="96"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4497">Sheet.96</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape97-134"
+   mID="97"
+   groupContext="shape">
+				<svg:title
+   id="title4500">Operations</svg:title>
+
+				<svg:desc
+   id="desc4502">+CNNICApp() +InitInstance() : BOOL</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape98-136"
+   mID="98"
+   groupContext="shape">
+				<svg:title
+   id="title4505">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape99-138"
+   mID="99"
+   groupContext="shape">
+				<svg:title
+   id="title4508">Name</svg:title>
+
+				<svg:desc
+   id="desc4510">CNNICApp</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4512" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="6.4899998"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4514"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CNNICApp</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape100-141"
+   mID="100"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4517">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group101-143"
+   transform="translate(85.0394,-694.488)"
+   mID="101"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({DF6CAD6F-D314-4A37-9E78-41BED7B7ECC5})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4520">Class.101</svg:title>
+
+			<svg:g
+   id="shape102-144"
+   mID="102"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4523">Sheet.102</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape103-145"
+   mID="103"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4526">Sheet.103</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape104-146"
+   mID="104"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4529">Sheet.104</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape105-147"
+   mID="105"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,166.752,1665.1)">
+				<svg:title
+   id="title4532">Sheet.105</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape106-148"
+   mID="106"
+   groupContext="shape">
+				<svg:title
+   id="title4535">Operations</svg:title>
+
+				<svg:desc
+   id="desc4537">+GetOptionsDCT() : OPTIONSDCT * +GetLoadedFileSize() : ULONGL...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="28.3465"
+   cy="841.89"
+   width="56.7"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape107-150"
+   mID="107"
+   groupContext="shape">
+				<svg:title
+   id="title4540">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4542">+classCNNICDlg : CRuntimeClass +m_staticRight : CStatic +m_st...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="28.3465"
+   cy="841.89"
+   width="56.7"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape108-152"
+   mID="108"
+   groupContext="shape">
+				<svg:title
+   id="title4545">Name</svg:title>
+
+				<svg:desc
+   id="desc4547">CNNICDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="28.3465"
+   cy="834.661"
+   width="56.7"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 56.69,0 0,-14.46 -56.69,0 0,14.46 z"
+   class="st2"
+   id="path4549" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="9.2399998"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4551"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CNNICDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape109-155"
+   mID="109"
+   groupContext="shape"
+   transform="translate(20.6929,-12.6496)">
+				<svg:title
+   id="title4554">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group110-157"
+   transform="translate(155.906,-694.205)"
+   mID="110"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({7792CD9D-18F1-434E-B7EA-8F2CD23CA246})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4557">Class.110</svg:title>
+
+			<svg:g
+   id="shape111-158"
+   mID="111"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4560">Sheet.111</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape112-159"
+   mID="112"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4563">Sheet.112</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape113-160"
+   mID="113"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,28.3465,1676.55)">
+				<svg:title
+   id="title4566">Sheet.113</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape114-161"
+   mID="114"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,166.752,1665.1)">
+				<svg:title
+   id="title4569">Sheet.114</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape115-162"
+   mID="115"
+   groupContext="shape">
+				<svg:title
+   id="title4572">Operations</svg:title>
+
+				<svg:desc
+   id="desc4574">+SetPSNR(in fFull : const DOUBLE) +SetComprMethod(inout strMe...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="28.3465"
+   cy="841.89"
+   width="56.7"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape116-164"
+   mID="116"
+   groupContext="shape">
+				<svg:title
+   id="title4577">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4579">#m_strFileName : CString #m_strDirectory : CString #m_strImag...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="28.3465"
+   cy="841.89"
+   width="56.7"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape117-166"
+   mID="117"
+   groupContext="shape">
+				<svg:title
+   id="title4582">Name</svg:title>
+
+				<svg:desc
+   id="desc4584">CReportDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="28.3465"
+   cy="834.661"
+   width="56.7"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 56.69,0 0,-14.46 -56.69,0 0,14.46 z"
+   class="st2"
+   id="path4586" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="6.1300001"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4588"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CReportDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape118-169"
+   mID="118"
+   groupContext="shape"
+   transform="translate(20.6929,-12.6496)">
+				<svg:title
+   id="title4591">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group119-171"
+   transform="translate(226.772,-694.205)"
+   mID="119"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({C67F8CB6-D72D-499C-ADB2-109B254E0888})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(0.84287599655122):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4594">Class.119</svg:title>
+
+			<svg:g
+   id="shape120-172"
+   mID="120"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,35.4331,1676.55)">
+				<svg:title
+   id="title4597">Sheet.120</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape121-173"
+   mID="121"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,35.4331,1676.55)">
+				<svg:title
+   id="title4600">Sheet.121</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape122-174"
+   mID="122"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,35.4331,1676.55)">
+				<svg:title
+   id="title4603">Sheet.122</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape123-175"
+   mID="123"
+   groupContext="shape"
+   transform="matrix(-0.99227791,0.12403445,-0.12403445,-0.99227791,139.857,1670.05)">
+				<svg:title
+   id="title4606">Sheet.123</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape124-176"
+   mID="124"
+   groupContext="shape">
+				<svg:title
+   id="title4609">Operations</svg:title>
+
+				<svg:desc
+   id="desc4611">+GetBitmapKit() : CBitmapKit * +StepIt() +SetStep(in iStep : ...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="35.4331"
+   cy="841.89"
+   width="70.87"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape125-178"
+   mID="125"
+   groupContext="shape">
+				<svg:title
+   id="title4614">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4616">+classCResampleDlg : CRuntimeClass +m_progressResample : CPro...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="35.4331"
+   cy="841.89"
+   width="70.87"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape126-180"
+   mID="126"
+   groupContext="shape">
+				<svg:title
+   id="title4619">Name</svg:title>
+
+				<svg:desc
+   id="desc4621">CResampleDlg</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="35.4331"
+   cy="834.661"
+   width="70.87"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 70.87,0 0,-14.46 -70.87,0 0,14.46 z"
+   class="st2"
+   id="path4623" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="7.1999998"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4625"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+CResampleDlg</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape127-183"
+   mID="127"
+   groupContext="shape"
+   transform="translate(34.8661,-12.6496)">
+				<svg:title
+   id="title4628">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group128-185"
+   transform="translate(133.228,-439.37)"
+   mID="128"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({DDF691BF-D5E3-4E27-8E72-013D4E62B4C5})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4631">Class.128</svg:title>
+
+			<svg:g
+   id="shape129-186"
+   mID="129"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4634">Sheet.129</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape130-187"
+   mID="130"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4637">Sheet.130</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape131-188"
+   mID="131"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4640">Sheet.131</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape132-189"
+   mID="132"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4643">Sheet.132</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape133-190"
+   mID="133"
+   groupContext="shape">
+				<svg:title
+   id="title4646">Operations</svg:title>
+
+				<svg:desc
+   id="desc4648">+ZigZagSequence(in sSequence : PSHORT) +IDCTransform(in fBloc...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape134-192"
+   mID="134"
+   groupContext="shape">
+				<svg:title
+   id="title4651">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4653">#m_bBlockSize : BYTE #m_vMatrices[5] : PFLOAT *</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape135-194"
+   mID="135"
+   groupContext="shape">
+				<svg:title
+   id="title4656">Name</svg:title>
+
+				<svg:desc
+   id="desc4658">DCT</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4660" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="18.709999"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4662"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+DCT</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape136-197"
+   mID="136"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4665">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group137-199"
+   transform="translate(296.22,-474.661)"
+   mID="137"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({8087D7E8-9B8A-41CE-8F33-B32970AF65CD})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4668">Class.137</svg:title>
+
+			<svg:g
+   id="shape138-200"
+   mID="138"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4671">Sheet.138</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape139-201"
+   mID="139"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4674">Sheet.139</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape140-202"
+   mID="140"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4677">Sheet.140</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape141-203"
+   mID="141"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4680">Sheet.141</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape142-204"
+   mID="142"
+   groupContext="shape">
+				<svg:title
+   id="title4683">Operations</svg:title>
+
+				<svg:desc
+   id="desc4685">+CopyWeights(in pDest : LPVOID, in bLayer : const BYTE) +GetL...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape143-206"
+   mID="143"
+   groupContext="shape">
+				<svg:title
+   id="title4688">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4690">#m_bNetRank : BYTE #m_wLayerRank : PWORD #m_wNeuronRank : PWO...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape144-208"
+   mID="144"
+   groupContext="shape">
+				<svg:title
+   id="title4693">Name</svg:title>
+
+				<svg:desc
+   id="desc4695">NetBP</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4697" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="14.93"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4699"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+NetBP</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape145-211"
+   mID="145"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4702">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group146-213"
+   transform="translate(379.843,-474.661)"
+   mID="146"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({74015EC2-0911-4E9B-8E8F-63E8396250A0})" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4705">Class.146</svg:title>
+
+			<svg:g
+   id="shape147-214"
+   mID="147"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4708">Sheet.147</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape148-215"
+   mID="148"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4711">Sheet.148</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape149-216"
+   mID="149"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,26.9291,1676.55)">
+				<svg:title
+   id="title4714">Sheet.149</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape150-217"
+   mID="150"
+   groupContext="shape"
+   transform="matrix(-0.98639485,0.16439344,-0.16439344,-0.98639485,165.335,1665.1)">
+				<svg:title
+   id="title4717">Sheet.150</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape151-218"
+   mID="151"
+   groupContext="shape">
+				<svg:title
+   id="title4720">Operations</svg:title>
+
+				<svg:desc
+   id="desc4722">+CalculateLearnRate(in pLearnRate : PFLOAT) +SetLearnRate(in ...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape152-220"
+   mID="152"
+   groupContext="shape">
+				<svg:title
+   id="title4725">Attributes</svg:title>
+
+				<svg:desc
+   id="desc4727">#m_bNetRank : BYTE #m_wWinnerNeuron : WORD #m_fLearnRate : FL...</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197"
+   verticalAlign="0" />
+
+				<textRect
+   cx="26.9291"
+   cy="841.89"
+   width="53.86"
+   height="0" />
+
+			</svg:g>
+
+			<svg:g
+   id="shape153-222"
+   mID="153"
+   groupContext="shape">
+				<svg:title
+   id="title4730">Name</svg:title>
+
+				<svg:desc
+   id="desc4732">NetCP</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="26.9291"
+   cy="834.661"
+   width="53.86"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 53.86,0 0,-14.46 -53.86,0 0,14.46 z"
+   class="st2"
+   id="path4734" />
+
+				<svg:text
+   style="font-weight:bold;font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="14.93"
+   y="837.06"
+   class="st3"
+   langID="1033"
+   id="text4736"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+NetCP</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape154-225"
+   mID="154"
+   groupContext="shape"
+   transform="translate(17.8583,-12.6496)">
+				<svg:title
+   id="title4739">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group155-227"
+   transform="translate(127.105,-807.874)"
+   mID="155"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({D2D3600C-00F0-4D6A-8A23-DA67D98E1C51})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(1.3738513383481):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4742">Class.155</svg:title>
+
+			<svg:g
+   id="shape156-228"
+   mID="156"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,49.8336,1676.55)">
+				<svg:title
+   id="title4745">Sheet.156</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape157-229"
+   mID="157"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,49.8336,1676.55)">
+				<svg:title
+   id="title4748">Sheet.157</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape158-230"
+   mID="158"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,49.8336,1676.55)">
+				<svg:title
+   id="title4751">Sheet.158</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape159-231"
+   mID="159"
+   groupContext="shape"
+   transform="matrix(-0.99654524,0.08305171,-0.08305171,-0.99654524,119.749,1673.64)">
+				<svg:title
+   id="title4754">Sheet.159</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape160-232"
+   mID="160"
+   groupContext="shape">
+				<svg:title
+   id="title4757">Operations</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape161-234"
+   mID="161"
+   groupContext="shape">
+				<svg:title
+   id="title4760">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape162-236"
+   mID="162"
+   groupContext="shape">
+				<svg:title
+   id="title4763">Name</svg:title>
+
+				<svg:desc
+   id="desc4765">External Classes::CDialog</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="49.8336"
+   cy="834.661"
+   width="99.67"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 99.67,0 0,-14.46 -99.67,0 0,14.46 z"
+   class="st2"
+   id="path4767" />
+
+				<svg:text
+   style="font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.49"
+   y="837.06"
+   class="st4"
+   langID="1033"
+   id="text4769"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+External Classes::<svg:tspan
+   style="font-weight:bold;font-size:7.99996805px"
+   class="st5"
+   id="tspan4771">CDialog</svg:tspan>
+</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape163-240"
+   mID="163"
+   groupContext="shape"
+   transform="translate(63.6671,-12.6496)">
+				<svg:title
+   id="title4774">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group164-242"
+   transform="translate(176.938,-807.874)"
+   mID="164"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({92D133C3-8837-4382-86A9-24E054496EBC})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(0.88770477047413):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(-0.046818492836413):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.14763779527559):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4777">Generalization</svg:title>
+
+			<svg:g
+   id="shape165-243"
+   mID="165"
+   groupContext="shape"
+   transform="translate(-18.1291,24.8)">
+				<svg:title
+   id="title4780">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape164-244"
+   mID="164"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 -134.42,0 0,88.3"
+   class="st6"
+   id="path4783" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group166-247"
+   transform="translate(176.938,-807.874)"
+   mID="166"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({970C29A9-F3E8-40F6-947E-F73BBE2A7668})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0.0060948929903639):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.14763779527559):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4786">Generalization.166</svg:title>
+
+			<svg:g
+   id="shape167-248"
+   mID="167"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4789">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape166-249"
+   mID="166"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 85.27,0 0,88.58"
+   class="st6"
+   id="path4792" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group168-252"
+   transform="translate(176.938,-807.874)"
+   mID="168"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({E6FC05DC-4F6C-444F-BE88-CD1154128A56})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(-4.4408920985006E-16):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.13540117000177):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4795">Generalization.168</svg:title>
+
+			<svg:g
+   id="shape169-253"
+   mID="169"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4798">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape168-254"
+   mID="168"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 -63.55,0 0,88.3"
+   class="st6"
+   id="path4801" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group170-257"
+   transform="translate(176.938,-807.874)"
+   mID="170"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({3ACB030C-A2C7-4529-B893-CB3A027E335B})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(-1.2206459063395):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0.070819302439173):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.14763779527559):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4804">Generalization.170</svg:title>
+
+			<svg:g
+   id="shape171-258"
+   mID="171"
+   groupContext="shape"
+   transform="translate(-12.2932,24.8)">
+				<svg:title
+   id="title4807">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape170-259"
+   mID="170"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 163.22,0 0,88.3"
+   class="st6"
+   id="path4810" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group172-262"
+   transform="translate(173.508,-807.874)"
+   mID="172"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({4D254DC7-4D22-404E-A78C-4986B3E98232})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.088772058344688):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4813">Generalization.172</svg:title>
+
+			<svg:g
+   id="shape173-263"
+   mID="173"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4816">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape172-264"
+   mID="172"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 3.43,841.89 0,10.63 7.31,0 0,88.58"
+   class="st6"
+   id="path4819" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group174-267"
+   transform="translate(85.7322,-658.913)"
+   mID="174"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({55AB07C9-15CA-420E-BD90-DE84FEF43D83})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(1.7568240556332):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4822">Class.174</svg:title>
+
+			<svg:g
+   id="shape175-268"
+   mID="175"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,63.2457,1676.55)">
+				<svg:title
+   id="title4825">Sheet.175</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape176-269"
+   mID="176"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,63.2457,1676.55)">
+				<svg:title
+   id="title4828">Sheet.176</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape177-270"
+   mID="177"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,63.2457,1676.55)">
+				<svg:title
+   id="title4831">Sheet.177</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape178-271"
+   mID="178"
+   groupContext="shape"
+   transform="matrix(-0.99805294,0.06237246,-0.06237246,-0.99805294,115.761,1674.91)">
+				<svg:title
+   id="title4834">Sheet.178</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape179-272"
+   mID="179"
+   groupContext="shape">
+				<svg:title
+   id="title4837">Operations</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape180-274"
+   mID="180"
+   groupContext="shape">
+				<svg:title
+   id="title4840">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape181-276"
+   mID="181"
+   groupContext="shape">
+				<svg:title
+   id="title4843">Name</svg:title>
+
+				<svg:desc
+   id="desc4845">External Classes::CPropertyPage</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="63.2457"
+   cy="834.661"
+   width="126.5"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 126.49,0 0,-14.46 -126.49,0 0,14.46 z"
+   class="st2"
+   id="path4847" />
+
+				<svg:text
+   style="font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.1099999"
+   y="837.06"
+   class="st4"
+   langID="1033"
+   id="text4849"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+External Classes::<svg:tspan
+   style="font-weight:bold;font-size:7.99996805px"
+   class="st5"
+   id="tspan4851">CPropertyPage</svg:tspan>
+</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape182-280"
+   mID="182"
+   groupContext="shape"
+   transform="translate(90.4913,-12.6496)">
+				<svg:title
+   id="title4854">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group183-282"
+   transform="translate(148.978,-658.913)"
+   mID="183"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({A153C11D-0045-47A8-B4BE-752B0F1AAE98})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.095447421554082):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4857">Generalization.183</svg:title>
+
+			<svg:g
+   id="shape184-283"
+   mID="184"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4860">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape183-284"
+   mID="183"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 -37.01,0 0,66.9"
+   class="st6"
+   id="path4863" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group185-287"
+   transform="translate(148.978,-658.913)"
+   mID="185"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({A1B709F9-EB30-4607-B8CE-D2F002852957})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(4.4408920985006E-16):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.0954187201782):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4866">Generalization.185</svg:title>
+
+			<svg:g
+   id="shape186-288"
+   mID="186"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4869">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape185-289"
+   mID="185"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 36.69,0 0,67.18"
+   class="st6"
+   id="path4872" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group187-292"
+   transform="translate(148.978,-658.913)"
+   mID="187"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({B0A439A3-A5A7-4519-BAD8-9F7A52C87BA7})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(0.94030418917279):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(-0.0045025396643177):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.14763779527559):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4875">Generalization.187</svg:title>
+
+			<svg:g
+   id="shape188-293"
+   mID="188"
+   groupContext="shape"
+   transform="translate(-18.0604,24.8)">
+				<svg:title
+   id="title4878">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape187-294"
+   mID="187"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 -105.04,0 0,66.9"
+   class="st6"
+   id="path4881" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group191-297"
+   transform="translate(148.978,-658.913)"
+   mID="191"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({15FE91E8-08BC-4594-BB5B-D84E3785B1D0})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0.0044738382884399):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.14763779527559):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4884">Generalization.191</svg:title>
+
+			<svg:g
+   id="shape192-298"
+   mID="192"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4887">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape191-299"
+   mID="191"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 104.72,0 0,67.18"
+   class="st6"
+   id="path4890" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group193-302"
+   transform="translate(447.204,-784.913)"
+   mID="193"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({F3A73349-9DDF-4107-B353-8007DC8E5568})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(1.5652537736508):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4893">Class.193</svg:title>
+
+			<svg:g
+   id="shape194-303"
+   mID="194"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,56.724,1676.55)">
+				<svg:title
+   id="title4896">Sheet.194</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape195-304"
+   mID="195"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,56.724,1676.55)">
+				<svg:title
+   id="title4899">Sheet.195</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape196-305"
+   mID="196"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,56.724,1676.55)">
+				<svg:title
+   id="title4902">Sheet.196</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape197-306"
+   mID="197"
+   groupContext="shape"
+   transform="matrix(-0.99654524,0.08305171,-0.08305171,-0.99654524,126.639,1673.64)">
+				<svg:title
+   id="title4905">Sheet.197</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape198-307"
+   mID="198"
+   groupContext="shape">
+				<svg:title
+   id="title4908">Operations</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape199-309"
+   mID="199"
+   groupContext="shape">
+				<svg:title
+   id="title4911">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape200-311"
+   mID="200"
+   groupContext="shape">
+				<svg:title
+   id="title4914">Name</svg:title>
+
+				<svg:desc
+   id="desc4916">External Classes::CFileDialog</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="56.724"
+   cy="834.661"
+   width="113.45"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 113.45,0 0,-14.46 -113.45,0 0,14.46 z"
+   class="st2"
+   id="path4918" />
+
+				<svg:text
+   style="font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.49"
+   y="837.06"
+   class="st4"
+   langID="1033"
+   id="text4920"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+External Classes::<svg:tspan
+   style="font-weight:bold;font-size:7.99996805px"
+   class="st5"
+   id="tspan4922">CFileDialog</svg:tspan>
+</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape201-315"
+   mID="201"
+   groupContext="shape"
+   transform="translate(77.4481,-12.6496)">
+				<svg:title
+   id="title4925">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group202-317"
+   transform="translate(503.928,-784.913)"
+   mID="202"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({8E0F37B8-D10F-4E9F-97D1-78FD5AA7B66E})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.081792362243172):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4928">Generalization.202</svg:title>
+
+			<svg:g
+   id="shape203-318"
+   mID="203"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4931">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape202-319"
+   mID="202"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 41.74,0 0,45.78"
+   class="st6"
+   id="path4934" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group204-322"
+   transform="translate(503.928,-784.913)"
+   mID="204"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({4D14128F-0F46-4C23-AB22-93C578336FC5})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.081285784947076):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4937">Generalization.204</svg:title>
+
+			<svg:g
+   id="shape205-323"
+   mID="205"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4940">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape204-324"
+   mID="204"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 0,10.63 -41.13,0 0,45.78"
+   class="st6"
+   id="path4943" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group206-327"
+   transform="translate(305.966,-644.598)"
+   mID="206"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({20713D86-C874-4012-A099-6DB81AF43338})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(1.4539294633481):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4946">Class.206</svg:title>
+
+			<svg:g
+   id="shape207-328"
+   mID="207"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,52.3415,1676.55)">
+				<svg:title
+   id="title4949">Sheet.207</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape208-329"
+   mID="208"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,52.3415,1676.55)">
+				<svg:title
+   id="title4952">Sheet.208</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape209-330"
+   mID="209"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,52.3415,1676.55)">
+				<svg:title
+   id="title4955">Sheet.209</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape210-331"
+   mID="210"
+   groupContext="shape"
+   transform="matrix(-0.99654524,0.08305171,-0.08305171,-0.99654524,122.257,1673.64)">
+				<svg:title
+   id="title4958">Sheet.210</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape211-332"
+   mID="211"
+   groupContext="shape">
+				<svg:title
+   id="title4961">Operations</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape212-334"
+   mID="212"
+   groupContext="shape">
+				<svg:title
+   id="title4964">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape213-336"
+   mID="213"
+   groupContext="shape">
+				<svg:title
+   id="title4967">Name</svg:title>
+
+				<svg:desc
+   id="desc4969">External Classes::CWinApp</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="52.3415"
+   cy="834.661"
+   width="104.69"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 104.68,0 0,-14.46 -104.68,0 0,14.46 z"
+   class="st2"
+   id="path4971" />
+
+				<svg:text
+   style="font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.1099999"
+   y="837.06"
+   class="st4"
+   langID="1033"
+   id="text4973"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+External Classes::<svg:tspan
+   style="font-weight:bold;font-size:7.99996805px"
+   class="st5"
+   id="tspan4975">CWinApp</svg:tspan>
+</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape214-340"
+   mID="214"
+   groupContext="shape"
+   transform="translate(68.6829,-12.6496)">
+				<svg:title
+   id="title4978">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group215-342"
+   transform="translate(351.929,-644.598)"
+   mID="215"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({5F1944D5-BD09-4149-A8CF-E7CB2007C5A2})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.036141732283465):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4981">Generalization.215</svg:title>
+
+			<svg:g
+   id="shape216-343"
+   mID="216"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title4984">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape215-344"
+   mID="215"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 6.38,841.89 0,10.63 1.42,0 0,31.32"
+   class="st6"
+   id="path4987" />
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group217-347"
+   transform="translate(431.097,-641.126)"
+   mID="217"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLSuppressOption"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLTemplate"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(20):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="UMLAutoLockTextEdit"
+   val="VT0(1):26" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(10291):26" />
+
+				<ud
+   nameU="UMLPresOption2"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="DefaultWidth"
+   val="VT0(0.74803149606299):24" />
+
+				<ud
+   nameU="EnsureWidthOK"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Represents a descriptor for a set of objects with similar structure, behavior and relationships.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLSuppressOption"
+   prompt=""
+   val="VT0(12):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({D83B91C4-9CB8-45E9-9388-EE8F5464310A})" />
+
+				<ud
+   nameU="DefaultWidth"
+   prompt=""
+   val="VT0(1.4109111222836):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title4990">Class.217</svg:title>
+
+			<svg:g
+   id="shape218-348"
+   mID="218"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,50.7928,1676.55)">
+				<svg:title
+   id="title4993">Sheet.218</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape219-349"
+   mID="219"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,50.7928,1676.55)">
+				<svg:title
+   id="title4996">Sheet.219</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape220-350"
+   mID="220"
+   groupContext="shape"
+   transform="matrix(-1,0,0,-1,50.7928,1676.55)">
+				<svg:title
+   id="title4999">Sheet.220</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape221-351"
+   mID="221"
+   groupContext="shape"
+   transform="matrix(-0.99654524,0.08305171,-0.08305171,-0.99654524,120.708,1673.64)">
+				<svg:title
+   id="title5002">Sheet.221</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape222-352"
+   mID="222"
+   groupContext="shape">
+				<svg:title
+   id="title5005">Operations</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape223-354"
+   mID="223"
+   groupContext="shape">
+				<svg:title
+   id="title5008">Attributes</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape224-356"
+   mID="224"
+   groupContext="shape">
+				<svg:title
+   id="title5011">Name</svg:title>
+
+				<svg:desc
+   id="desc5013">External Classes::CBitmap</svg:desc>
+
+				<textBlock
+   margins="rect(1,1,1,1)"
+   tabSpace="42.5197" />
+
+				<textRect
+   cx="50.7928"
+   cy="834.661"
+   width="101.59"
+   height="14.4567" />
+
+				<svg:path
+   style="fill:#ffffff;stroke:#000000;stroke-width:0.72000003;stroke-linecap:round;stroke-linejoin:round"
+   d="m 0,841.89 101.59,0 0,-14.46 -101.59,0 0,14.46 z"
+   class="st2"
+   id="path5015" />
+
+				<svg:text
+   style="font-size:7.99996805px;font-family:Arial;fill:#000000"
+   x="2.1099999"
+   y="837.06"
+   class="st4"
+   langID="1033"
+   id="text5017"><paragraph
+   horizAlign="1"
+   bulletSize="0" />
+<tabList />
+External Classes::<svg:tspan
+   style="font-weight:bold;font-size:7.99996805px"
+   class="st5"
+   id="tspan5019">CBitmap</svg:tspan>
+</svg:text>
+			</svg:g>
+
+			<svg:g
+   id="shape225-360"
+   mID="225"
+   groupContext="shape"
+   transform="translate(65.5856,-12.6496)">
+				<svg:title
+   id="title5022">Parameters</svg:title>
+
+			</svg:g>
+
+		</svg:g>
+
+		<svg:g
+   id="group226-362"
+   transform="translate(475.512,-641.126)"
+   mID="226"
+   groupContext="group">
+			<userDefs>
+				<ud
+   nameU="UMLShapeType"
+   val="VT0(22):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   val="VT4()" />
+
+				<ud
+   nameU="UMLError"
+   val="VT0(0):26" />
+
+				<ud
+   nameU="BeginAngle"
+   val="VT0(-1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   val="VT0(0.03):1" />
+
+				<ud
+   nameU="UMLPresOption1"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="UMLVersion"
+   val="VT0(2):26" />
+
+				<ud
+   nameU="DY1"
+   val="VT0(-0.03):1" />
+
+				<ud
+   nameU="visDescription"
+   val="VT4(Indicates a classification relationship between a more general and a more specific element.)" />
+
+				<ud
+   nameU="visVersion"
+   val="VT0(11):26" />
+
+				<ud
+   nameU="UMLObjectGUID"
+   prompt=""
+   val="VT4({801236E2-9415-496E-8B98-CA772D98320F})" />
+
+				<ud
+   nameU="BeginAngle"
+   prompt=""
+   val="VT0(1.5707963267949):32" />
+
+				<ud
+   nameU="DX1"
+   prompt=""
+   val="VT0(0):1" />
+
+				<ud
+   nameU="DY1"
+   prompt=""
+   val="VT0(-0.030354330708661):1" />
+
+			</userDefs>
+
+			<svg:title
+   id="title5025">Generalization.226</svg:title>
+
+			<svg:g
+   id="shape227-363"
+   mID="227"
+   groupContext="shape"
+   transform="translate(7.2,24.8)">
+				<svg:title
+   id="title5028">Discriminator</svg:title>
+
+			</svg:g>
+
+			<svg:g
+   id="shape226-364"
+   mID="226"
+   groupContext="groupContent">
+				<svg:path
+   style="stroke:#000000;stroke-width:0.47999999;stroke-linecap:round;stroke-linejoin:round"
+   d="m 6.38,841.89 0,10.63 1.42,0 0,24.38"
+   class="st6"
+   id="path5031" />
+
+			</svg:g>
+
+		</svg:g>
+
+	</svg:g>
+    </svg:g>
+  </svg:g>
+  <svg:style
+     type="text/css"
+     id="style4140">
+	<![CDATA[
+		.st1 {fill:#cdcdcd;font-family:Arial;font-size:3em;font-weight:bold}
+		.st2 {fill:#ffffff;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.72}
+		.st3 {fill:#000000;font-family:Arial;font-size:0.666664em;font-weight:bold}
+		.st4 {fill:#000000;font-family:Arial;font-size:0.666664em}
+		.st5 {font-size:1em;font-weight:bold}
+		.st6 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.48}
+		.st7 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</svg:style>
+</svg:svg>

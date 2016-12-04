@@ -97,11 +97,26 @@ void CReportDlg::SetPSNR(const DOUBLE fRed,
 						 const DOUBLE fAverage,
 						 const DOUBLE fFull)
 {
-	m_strRed.Format(_T("%.2f dB"),fRed);
-	m_strGreen.Format(_T("%.2f dB"),fGreen);
-	m_strBlue.Format(_T("%.2f dB"),fBlue);
-	m_strAverage.Format(_T("%.2f dB"),fAverage);
-	m_strFull.Format(_T("%.2f dB"),fFull);
+	if (_finite(fRed))
+		m_strRed.Format(_T("%.2f dB"),fRed);
+	else
+		m_strRed=_T("Inf");
+	if (_finite(fGreen))
+		m_strGreen.Format(_T("%.2f dB"),fGreen);
+	else
+		m_strGreen=_T("Inf");
+	if (_finite(fBlue))
+		m_strBlue.Format(_T("%.2f dB"),fBlue);
+	else
+		m_strBlue=_T("Inf");
+	if (_finite(fAverage))
+		m_strAverage.Format(_T("%.2f dB"),fAverage);
+	else
+		m_strAverage=_T("Inf");
+	if (_finite(fFull))
+		m_strFull.Format(_T("%.2f dB"),fFull);
+	else
+		m_strFull=_T("Inf");
 }
 
 void CReportDlg::SetComprTime(const FLOAT fTime)
@@ -117,7 +132,10 @@ void CReportDlg::SetComprMethod(const CString &strMethod)
 void CReportDlg::SetPSNR(const DOUBLE fFull)
 {
 	m_strRed=m_strGreen=m_strBlue=m_strAverage=_T("N/A");
-	m_strFull.Format(_T("%.2f dB"),fFull);
+	if (_finite(fFull))
+		m_strFull.Format(_T("%.2f dB"),fFull);
+	else
+		m_strFull=_T("Inf");
 }
 
 CString CReportDlg::GetReportString(void)

@@ -66,23 +66,26 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\NNIC.ico"
+IDR_MAINFRAME           ICON                    "RES\\Nnic1.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+IDD_ABOUTBOX DIALOGEX 0, 0, 240, 94
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About NNIC"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "NNIC Version 1.32",IDC_STATIC,40,10,60,8,SS_NOPREFIX
-    LTEXT           "Copyright © 2004 Pavel Danchenko",IDC_STATIC,40,25,116,
+    CONTROL         148,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,7,7,
+                    85,79
+    LTEXT           "NNIC - Neural Network Image Compressor",IDC_STATIC,99,
+                    21,134,8,SS_NOPREFIX
+    LTEXT           "Created by Pavel Danchenko (2004)",IDC_STATIC,99,43,116,
                     8
-    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+    DEFPUSHBUTTON   "OK",IDOK,137,73,50,14,WS_GROUP
+    LTEXT           "Version 1.33",IDC_STATIC,99,32,40,8
 END
 
 IDD_NNIC_DIALOG DIALOGEX 0, 0, 462, 326
@@ -90,13 +93,14 @@ STYLE DS_SETFONT | DS_3DLOOK | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE |
     WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "NNIC - Neural Network Image Compressor"
+MENU IDR_MAIN_MENU
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC_LEFT,"Static",SS_BITMAP | SS_CENTERIMAGE | 
                     SS_SUNKEN | WS_BORDER,7,7,220,200
     CONTROL         "",IDC_STATIC_RIGHT,"Static",SS_BITMAP | SS_CENTERIMAGE | 
                     SS_SUNKEN | WS_BORDER,235,7,220,200
-    PUSHBUTTON      "Compress",IDC_BUTTON_COMPRESS,137,252,48,15
+    PUSHBUTTON      "Compress",IDC_BUTTON_COMPRESS,136,252,48,15
     GROUPBOX        "Use method",IDC_STATIC,11,222,114,84
     CONTROL         "Back Propagation",IDC_RADIO_BACK,"Button",
                     BS_AUTORADIOBUTTON,17,234,73,10
@@ -104,13 +108,13 @@ BEGIN
                     BS_AUTORADIOBUTTON,17,252,80,10
     CONTROL         "DC Transform",IDC_RADIO_DCT,"Button",BS_AUTORADIOBUTTON,
                     17,270,59,10
-    PUSHBUTTON      "Stop",IDC_BUTTON_STOP,191,252,48,15
+    PUSHBUTTON      "Stop",IDC_BUTTON_STOP,190,252,48,15
     CONTROL         "Progress1",IDC_PROGRESS_COMPR,"msctls_progress32",
-                    WS_BORDER | 0x1,137,285,158,15
-    PUSHBUTTON      "Options",IDC_BUTTON_OPTIONS,137,234,48,15
+                    WS_BORDER | 0x1,136,285,158,15
+    PUSHBUTTON      "Options",IDC_BUTTON_OPTIONS,136,234,48,15
     GROUPBOX        "Compression",IDC_STATIC,131,222,168,84
     GROUPBOX        "Status",IDC_STATIC,305,222,144,84
-    LTEXT           "Cycle progress",IDC_STATIC,137,273,47,8
+    LTEXT           "Cycle progress",IDC_STATIC,136,273,47,8
     LTEXT           "Current operation:",IDC_STATIC,311,234,57,8
     LTEXT           "",IDC_STATIC_STATUS1,311,246,60,8
     LTEXT           "",IDC_STATIC_STATUSTEXT1,383,246,60,8
@@ -127,115 +131,115 @@ BEGIN
     LTEXT           "",IDC_STATIC_STATUSTEXT5,383,294,60,8
 END
 
-IDD_PROPPAGE_BACK DIALOGEX 0, 0, 320, 239
+IDD_PROPPAGE_BACK DIALOGEX 0, 0, 305, 238
 STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Back Propagation"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    GROUPBOX        "Learn mode",IDC_STATIC,7,7,55,39
+    GROUPBOX        "Learning mode",IDC_STATIC,38,7,60,52
     CONTROL         "Sequential",IDC_RADIO_SEQUENTIAL,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,10,15,49,10
-    CONTROL         "Batch",IDC_RADIO_BATCH,"Button",BS_AUTORADIOBUTTON,10,
-                    30,35,10
-    GROUPBOX        "Configuration",IDC_STATIC,7,58,203,96
-    LTEXT           "Input layer block size:",IDC_STATIC,12,70,69,8
-    LTEXT           "Hidden layer block size:",IDC_STATIC,12,96,76,8
+                    BS_AUTORADIOBUTTON | WS_GROUP,42,23,49,10
+    CONTROL         "Batch",IDC_RADIO_BATCH,"Button",BS_AUTORADIOBUTTON,42,
+                    39,35,10
+    GROUPBOX        "Configuration",IDC_STATIC,7,60,191,102
+    LTEXT           "Input layer block size:",IDC_STATIC,11,76,69,8
+    LTEXT           "Hidden layer block size:",IDC_STATIC,11,106,76,8
     CONTROL         "Add second hidden layer",IDC_CHECK_SECOND,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,13,135,94,10
-    LTEXT           "with",IDC_STATIC_WITH,107,135,14,8
-    EDITTEXT        IDC_EDIT_NEURONS,121,135,30,12,ES_AUTOHSCROLL | 
+                    BS_AUTOCHECKBOX | WS_TABSTOP,12,145,94,10
+    LTEXT           "with",IDC_STATIC_WITH,106,146,14,8
+    EDITTEXT        IDC_EDIT_NEURONS,123,144,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    LTEXT           "neurons",IDC_STATIC_NEURONS,161,135,26,8
+    LTEXT           "neurons",IDC_STATIC_NEURONS,156,146,26,8
     CONTROL         "Use biases",IDC_CHECK_BIASES,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,204,16,51,10
+                    WS_TABSTOP,198,23,51,10
     CONTROL         "Use momentum",IDC_CHECK_MOMENTUM,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,204,30,63,10
-    GROUPBOX        "Activation function",IDC_STATIC,65,7,114,52
+                    BS_AUTOCHECKBOX | WS_TABSTOP,198,39,63,10
+    GROUPBOX        "Activation function",IDC_STATIC,101,7,90,52
     CONTROL         "Sigmoid",IDC_RADIO_SIGMOID,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP,69,15,41,10
+                    WS_GROUP,105,19,41,10
     CONTROL         "Hypertangent",IDC_RADIO_HYPERTAN,"Button",
-                    BS_AUTORADIOBUTTON,69,31,59,10
-    GROUPBOX        "",IDC_STATIC,200,7,70,40
-    GROUPBOX        "Learn rate",IDC_STATIC,7,159,95,73
-    LTEXT           "Inital",IDC_STATIC,15,172,16,8
-    EDITTEXT        IDC_EDIT_INITLEARNRATE,53,172,30,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_FINALLEARNRATE,53,187,30,12,ES_AUTOHSCROLL
-    LTEXT           "Final",IDC_STATIC,13,187,16,8
-    LTEXT           "Steps",IDC_STATIC,13,202,19,8
-    EDITTEXT        IDC_EDIT_LEARNSTEPS,53,202,30,12,ES_AUTOHSCROLL | 
+                    BS_AUTORADIOBUTTON,105,31,59,10
+    GROUPBOX        "Optimizations",IDC_STATIC,194,7,72,52
+    GROUPBOX        "Learn rate",IDC_STATIC,56,165,78,66
+    LTEXT           "Inital:",IDC_STATIC,60,177,18,8
+    EDITTEXT        IDC_EDIT_INITLEARNRATE,99,175,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_FINALLEARNRATE,99,188,30,12,ES_AUTOHSCROLL
+    LTEXT           "Final:",IDC_STATIC,60,190,18,8
+    LTEXT           "Steps:",IDC_STATIC,60,216,21,8
+    EDITTEXT        IDC_EDIT_LEARNSTEPS,99,214,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    LTEXT           "Change on",IDC_STATIC,13,217,36,8
-    EDITTEXT        IDC_EDIT_LEARNCHANGERATE,53,217,30,12,ES_AUTOHSCROLL
-    GROUPBOX        "Momentum",IDC_STATIC,115,159,95,73
-    LTEXT           "Inital",IDC_STATIC,123,172,16,8
-    EDITTEXT        IDC_EDIT_INITMOMENT,161,172,30,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_FINALMOMENT,161,187,30,12,ES_AUTOHSCROLL
-    LTEXT           "Final",IDC_STATIC,121,187,16,8
-    LTEXT           "Steps",IDC_STATIC,121,202,19,8
-    EDITTEXT        IDC_EDIT_MOMENTSTEPS,161,202,30,12,ES_AUTOHSCROLL | 
+    LTEXT           "Change on:",IDC_STATIC,60,203,38,8
+    EDITTEXT        IDC_EDIT_LEARNCHANGERATE,99,201,30,12,ES_AUTOHSCROLL
+    GROUPBOX        "Momentum",IDC_STATIC,172,165,78,66
+    LTEXT           "Inital:",IDC_STATIC,176,177,18,8
+    EDITTEXT        IDC_EDIT_INITMOMENT,215,175,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_FINALMOMENT,215,188,30,12,ES_AUTOHSCROLL
+    LTEXT           "Final:",IDC_STATIC,176,190,18,8
+    LTEXT           "Steps:",IDC_STATIC,176,216,21,8
+    EDITTEXT        IDC_EDIT_MOMENTSTEPS,215,214,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    LTEXT           "Change on",IDC_STATIC,121,217,36,8
-    EDITTEXT        IDC_EDIT_MOMENTCHANGERATE,161,217,30,12,ES_AUTOHSCROLL
-    LTEXT           "Estimated compression ratio:",IDC_STATIC,15,120,90,8
-    LTEXT           "",IDC_STATIC_RATIO,110,120,45,8
-    LTEXT           "Learn cycles",IDC_STATIC,220,73,41,8
-    GROUPBOX        "",IDC_STATIC,213,65,100,60
-    EDITTEXT        IDC_EDIT_CYCLES,275,73,30,12,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Minimal error",IDC_STATIC,220,89,40,8
-    LTEXT           "Patterns to train",IDC_STATIC,220,103,50,8
-    EDITTEXT        IDC_EDIT_MINERROR,275,89,30,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_PATTERNS,275,103,30,12,ES_AUTOHSCROLL | 
+    LTEXT           "Change on:",IDC_STATIC,176,203,38,8
+    EDITTEXT        IDC_EDIT_MOMENTCHANGERATE,215,201,30,12,ES_AUTOHSCROLL
+    LTEXT           "Estimated compression ratio:",IDC_STATIC,11,133,90,8
+    LTEXT           "",IDC_STATIC_RATIO,105,133,45,8
+    LTEXT           "Learn cycles:",IDC_STATIC,206,97,43,8
+    GROUPBOX        "Stopping conditions",IDC_STATIC,202,87,96,54
+    EDITTEXT        IDC_EDIT_CYCLES,262,95,30,12,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Minimal error:",IDC_STATIC,206,110,42,8
+    LTEXT           "Patterns to train:",IDC_STATIC,206,122,52,8
+    EDITTEXT        IDC_EDIT_MINERROR,262,108,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PATTERNS,262,121,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    RTEXT           "",IDC_STATIC_INPUT,85,70,20,8
-    LTEXT           "Function alpha",IDC_STATIC,68,44,48,10,NOT WS_GROUP
-    EDITTEXT        IDC_EDIT_ALPHA,124,42,30,12,ES_AUTOHSCROLL
-    RTEXT           "",IDC_STATIC_HIDDEN,90,95,20,8
-    SCROLLBAR       IDC_SCROLLBAR_INPUT,14,81,187,12
-    SCROLLBAR       IDC_SCROLLBAR_HIDDEN,14,107,188,12
+    RTEXT           "",IDC_STATIC_INPUT,83,76,20,8
+    LTEXT           "Function alpha:",IDC_STATIC,105,44,50,8,NOT WS_GROUP
+    EDITTEXT        IDC_EDIT_ALPHA,157,43,30,12,ES_AUTOHSCROLL
+    RTEXT           "",IDC_STATIC_HIDDEN,89,106,20,8
+    SCROLLBAR       IDC_SCROLLBAR_INPUT,11,87,179,12
+    SCROLLBAR       IDC_SCROLLBAR_HIDDEN,11,117,180,12
 END
 
-IDD_PROPPAGE_COUNTER DIALOG  0, 0, 278, 182
+IDD_PROPPAGE_COUNTER DIALOGEX 0, 0, 240, 138
 STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Counter Propagation"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     CONTROL         "Kohonen && Grossberg layers",IDC_RADIO_KOHGROS,"Button",
-                    BS_AUTORADIOBUTTON,25,33,105,10
+                    BS_AUTORADIOBUTTON,11,19,105,10
     CONTROL         "Kohonen layer only",IDC_RADIO_KOHONEN,"Button",
-                    BS_AUTORADIOBUTTON,25,47,76,10
-    EDITTEXT        IDC_EDIT_CLUSTERS,92,62,30,12,ES_AUTOHSCROLL | ES_NUMBER
-    EDITTEXT        IDC_EDIT_CYCLES,206,30,30,12,ES_AUTOHSCROLL | ES_NUMBER
-    EDITTEXT        IDC_EDIT_MINDIST,206,44,30,12,ES_AUTOHSCROLL
+                    BS_AUTORADIOBUTTON,11,31,76,10
+    EDITTEXT        IDC_EDIT_CLUSTERS,77,44,30,12,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_EDIT_CYCLES,189,17,30,12,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_EDIT_MINDIST,189,30,30,12,ES_AUTOHSCROLL
     CONTROL         "Train neighbouring neurons",IDC_CHECK_TRAINNEIGH,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,147,62,102,10
-    EDITTEXT        IDC_EDIT_LEARNINIT,65,101,30,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_LEARNFINAL,65,114,30,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_LEARNCHANGE,65,127,30,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_LEARNSTEPS,65,140,30,12,ES_MULTILINE | 
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,47,102,10
+    EDITTEXT        IDC_EDIT_LEARNINIT,66,75,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_LEARNFINAL,66,88,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_LEARNCHANGE,66,101,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_LEARNSTEPS,66,114,30,12,ES_MULTILINE | 
                     ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_NEIGHINIT,192,100,30,12,ES_AUTOHSCROLL | 
+    EDITTEXT        IDC_EDIT_NEIGHINIT,184,75,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    EDITTEXT        IDC_EDIT_NEIGHFINAL,192,113,30,12,ES_AUTOHSCROLL | 
+    EDITTEXT        IDC_EDIT_NEIGHFINAL,184,88,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    EDITTEXT        IDC_EDIT_NEIGHCHANGE,192,126,30,12,ES_AUTOHSCROLL | 
+    EDITTEXT        IDC_EDIT_NEIGHCHANGE,184,101,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    EDITTEXT        IDC_EDIT_NEIGHSTEPS,192,139,30,12,ES_AUTOHSCROLL | 
+    EDITTEXT        IDC_EDIT_NEIGHSTEPS,184,114,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    GROUPBOX        "Network configuration",IDC_STATIC,15,17,122,60
-    LTEXT           "Number of clusters",IDC_STATIC,25,64,60,8,NOT WS_GROUP
-    GROUPBOX        "Learning parameters",IDC_STATIC,143,17,109,60
-    LTEXT           "Number of cycles",IDC_STATIC,147,33,56,8
-    LTEXT           "Minimal distance",IDC_STATIC,148,46,53,8
-    GROUPBOX        "Learn rate",IDC_STATIC,17,90,85,68
-    LTEXT           "Inital",IDC_STATIC,23,103,16,8
-    LTEXT           "Final",IDC_STATIC,24,117,19,8
-    LTEXT           "Change on",IDC_STATIC,23,130,36,8
-    LTEXT           "Steps",IDC_STATIC,24,142,19,8
-    GROUPBOX        "Neighbouring radius",IDC_STATIC,146,90,85,68
-    LTEXT           "Inital",IDC_STATIC,152,102,16,8
-    LTEXT           "Final",IDC_STATIC,152,115,19,8
-    LTEXT           "Steps",IDC_STATIC,153,140,19,8
-    LTEXT           "Change on",IDC_STATIC,149,129,36,8
+    GROUPBOX        "Network configuration",IDC_STATIC,7,7,114,54
+    LTEXT           "Number of clusters:",IDC_STATIC,11,46,62,8,NOT WS_GROUP
+    GROUPBOX        "Learning parameters",IDC_STATIC,125,7,108,54
+    LTEXT           "Number of cycles:",IDC_STATIC,129,19,58,8
+    LTEXT           "Minimal distance:",IDC_STATIC,129,32,55,8
+    GROUPBOX        "Learn rate",IDC_STATIC,22,64,78,68
+    LTEXT           "Inital:",IDC_STATIC,26,77,18,8
+    LTEXT           "Final:",IDC_STATIC,26,90,19,8
+    LTEXT           "Change on:",IDC_STATIC,26,102,38,8
+    LTEXT           "Steps:",IDC_STATIC,26,116,21,8
+    GROUPBOX        "Neighbouring radius",IDC_STATIC,140,64,78,68
+    LTEXT           "Inital:",IDC_STATIC,144,77,18,8
+    LTEXT           "Final:",IDC_STATIC,144,90,19,8
+    LTEXT           "Steps:",IDC_STATIC,144,116,21,8
+    LTEXT           "Change on:",IDC_STATIC,144,102,38,8
 END
 
 IDD_DIALOG_REPORT DIALOGEX 0, 0, 212, 225
@@ -243,22 +247,22 @@ STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "NNIC - Report"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,80,202,50,14
+    DEFPUSHBUTTON   "OK",IDOK,80,206,50,14
     CONTROL         "File name:",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | 
-                    WS_GROUP,5,8,33,8
-    LTEXT           "Directory:",IDC_STATIC,5,22,31,8
-    LTEXT           "Image size:",IDC_STATIC,5,36,36,8
-    LTEXT           "Original colors:",IDC_STATIC,5,50,47,8
-    LTEXT           "Compression method:",IDC_STATIC,5,64,68,8
-    LTEXT           "Original file size:",IDC_STATIC,5,78,51,8
-    LTEXT           "Compressed file size:",IDC_STATIC,5,92,66,8
-    LTEXT           "Ratio:",IDC_STATIC,5,106,20,8
-    LTEXT           "Red channel PSNR:",IDC_STATIC,5,120,66,8
-    LTEXT           "Green channel PSNR:",IDC_STATIC,5,134,71,8
-    LTEXT           "Blue channel PSNR:",IDC_STATIC,5,148,66,8
-    LTEXT           "Average PSNR:",IDC_STATIC,5,162,52,8
-    LTEXT           "Full channel PSNR:",IDC_STATIC,5,176,63,8
-    LTEXT           "Compressed in:",IDC_STATIC,5,190,49,8
+                    WS_GROUP,5,6,33,8
+    LTEXT           "Directory:",IDC_STATIC,5,21,31,8
+    LTEXT           "Image size:",IDC_STATIC,5,35,36,8
+    LTEXT           "Original colors:",IDC_STATIC,5,49,47,8
+    LTEXT           "Compression method:",IDC_STATIC,5,63,68,8
+    LTEXT           "Original file size:",IDC_STATIC,5,77,51,8
+    LTEXT           "Compressed file size:",IDC_STATIC,5,91,66,8
+    LTEXT           "Ratio:",IDC_STATIC,5,105,20,8
+    LTEXT           "Red channel PSNR:",IDC_STATIC,5,119,66,8
+    LTEXT           "Green channel PSNR:",IDC_STATIC,5,133,71,8
+    LTEXT           "Blue channel PSNR:",IDC_STATIC,5,147,66,8
+    LTEXT           "Average PSNR:",IDC_STATIC,5,161,52,8
+    LTEXT           "Full channel PSNR:",IDC_STATIC,5,175,63,8
+    LTEXT           "Compressed in:",IDC_STATIC,5,189,49,8
     EDITTEXT        IDC_EDIT_FILENAME,80,5,124,12,ES_AUTOHSCROLL | 
                     ES_READONLY
     EDITTEXT        IDC_EDIT_DIRECTORY,80,19,124,12,ES_AUTOHSCROLL | 
@@ -285,19 +289,19 @@ BEGIN
     EDITTEXT        IDC_EDIT_TIME,80,187,124,12,ES_AUTOHSCROLL | ES_READONLY
 END
 
-IDD_PROPPAGE_DCT DIALOGEX 0, 0, 235, 156
+IDD_PROPPAGE_DCT DIALOGEX 0, 0, 194, 86
 STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "DC Transform"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    GROUPBOX        "",IDC_STATIC,17,15,188,73
-    LTEXT           "Quality parameter:",IDC_STATIC,22,25,58,8
+    GROUPBOX        "",IDC_STATIC,7,7,180,72
+    LTEXT           "Quality parameter:",IDC_STATIC,11,17,58,8
     CONTROL         "Shift matrix values",IDC_CHECK_SHIFT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,67,73,10
-    LTEXT           "",IDC_STATIC_QUALITY,83,25,20,8
-    SCROLLBAR       IDC_SCROLLBAR_QUALITY,23,47,170,12
-    LTEXT           "Lowest",IDC_STATIC,167,35,24,8
-    LTEXT           "Highest",IDC_STATIC,23,37,25,8
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,60,73,10
+    LTEXT           "",IDC_STATIC_QUALITY,71,17,20,8
+    SCROLLBAR       IDC_SCROLLBAR_QUALITY,11,41,170,12
+    LTEXT           "Lowest",IDC_STATIC,157,30,24,8
+    LTEXT           "Highest",IDC_STATIC,13,31,25,8
 END
 
 IDD_DIALOG_RESAMPLE DIALOGEX 0, 0, 182, 109
@@ -321,34 +325,62 @@ BEGIN
     LTEXT           "",IDC_STATIC_OLDHEIGHT,52,63,25,8
 END
 
-IDD_PROPPAGE_GENERAL DIALOGEX 0, 0, 276, 172
+IDD_PROPPAGE_GENERAL DIALOGEX 0, 0, 193, 142
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General Options"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    LTEXT           "Default Compressed File name:",IDC_STATIC,12,18,100,8
-    EDITTEXT        IDC_EDIT_COMPRNAME,120,18,70,12,ES_AUTOHSCROLL
+    LTEXT           "Default Compressed File name:",IDC_STATIC,11,18,100,8
+    EDITTEXT        IDC_EDIT_COMPRNAME,113,17,70,12,ES_AUTOHSCROLL
     CONTROL         "Show Report Dialog after compression",
                     IDC_CHECK_SHOWREPORT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,13,70,135,10
+                    WS_TABSTOP,11,65,135,10
     CONTROL         "Write Report File:",IDC_CHECK_WRITEREPORT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,13,81,73,10
-    GROUPBOX        "Report",IDC_STATIC,7,57,181,79
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,79,73,10
+    GROUPBOX        "Report",IDC_STATIC,7,52,179,83
     CONTROL         "Overwrite",IDC_RADIO_OVERWRITE,"Button",
-                    BS_AUTORADIOBUTTON,25,94,48,10
-    CONTROL         "Append",IDC_RADIO_APPEND,"Button",BS_AUTORADIOBUTTON,25,
-                    105,41,10
-    EDITTEXT        IDC_EDIT_REPORTNAME,91,81,70,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_FILESIZE,109,118,30,12,ES_AUTOHSCROLL | 
+                    BS_AUTORADIOBUTTON,21,92,48,10
+    CONTROL         "Append",IDC_RADIO_APPEND,"Button",BS_AUTORADIOBUTTON,21,
+                    103,41,10
+    EDITTEXT        IDC_EDIT_REPORTNAME,86,79,70,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_FILESIZE,99,116,30,12,ES_AUTOHSCROLL | 
                     ES_NUMBER
-    LTEXT           "KB",IDC_STATIC_KB,145,118,9,8
+    LTEXT           "KB",IDC_STATIC_KB,132,117,9,8
     CONTROL         "Promt on overwrite",IDC_CHECK_PROMTOVERWRITE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,14,32,79,10
-    PUSHBUTTON      "Save as Defaults",IDC_BUTTON_SAVEDEFAULTS,85,147,60,18
-    PUSHBUTTON      "Load Defaults",IDC_BUTTON_LOADDEAFULTS,15,147,60,18
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,34,79,10
     CONTROL         "Limit file size to:",IDC_CHECK_LIMITFILESIZE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,39,118,67,10
-    GROUPBOX        "",IDC_STATIC,7,7,190,45
+                    BS_AUTOCHECKBOX | WS_TABSTOP,34,117,62,10
+    GROUPBOX        "Compressed file",IDC_STATIC,7,7,179,43
+END
+
+IDD_DIALOG_COMPARE DIALOGEX 0, 0, 202, 198
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Compare Bitmaps"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Compare",IDC_BUTTON_COMPARE,34,176,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,116,176,50,15
+    EDITTEXT        IDC_EDIT_FIRSTPATH,13,31,150,12,ES_AUTOHSCROLL
+    GROUPBOX        "Bitmaps",IDC_STATIC,7,7,188,72
+    PUSHBUTTON      "...",IDC_BUTTON_FIRSTLOAD,169,31,20,12
+    EDITTEXT        IDC_EDIT_SECONDPATH,13,61,150,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_SECONDLOAD,169,61,20,12
+    LTEXT           "First bitmap:",IDC_STATIC,13,18,66,8
+    LTEXT           "Second bitmap:",IDC_STATIC,13,49,76,8
+    GROUPBOX        "Comparison results",IDC_STATIC,34,82,132,84
+    LTEXT           "Red channel PSNR:",IDC_STATIC,39,94,66,8
+    LTEXT           "Green channel PSNR:",IDC_STATIC,39,108,71,8
+    LTEXT           "Blue channel PSNR:",IDC_STATIC,39,122,66,8
+    LTEXT           "Average PSNR:",IDC_STATIC,39,136,52,8
+    LTEXT           "Full channel PSNR:",IDC_STATIC,39,150,63,8
+    EDITTEXT        IDC_EDIT_RED,109,92,50,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_GREEN,109,106,50,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_BLUE,109,120,50,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_AVERAGE,109,134,50,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_FULL,109,148,50,12,ES_AUTOHSCROLL | ES_READONLY
 END
 
 
@@ -401,9 +433,9 @@ BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 228
+        RIGHTMARGIN, 233
         TOPMARGIN, 7
-        BOTTOMMARGIN, 48
+        BOTTOMMARGIN, 87
     END
 
     IDD_NNIC_DIALOG, DIALOG
@@ -417,17 +449,17 @@ BEGIN
     IDD_PROPPAGE_BACK, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 313
+        RIGHTMARGIN, 298
         TOPMARGIN, 7
-        BOTTOMMARGIN, 232
+        BOTTOMMARGIN, 231
     END
 
     IDD_PROPPAGE_COUNTER, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 271
+        RIGHTMARGIN, 233
         TOPMARGIN, 7
-        BOTTOMMARGIN, 175
+        BOTTOMMARGIN, 131
     END
 
     IDD_DIALOG_REPORT, DIALOG
@@ -442,9 +474,9 @@ BEGIN
     IDD_PROPPAGE_DCT, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 228
+        RIGHTMARGIN, 187
         TOPMARGIN, 7
-        BOTTOMMARGIN, 149
+        BOTTOMMARGIN, 79
     END
 
     IDD_DIALOG_RESAMPLE, DIALOG
@@ -458,9 +490,17 @@ BEGIN
     IDD_PROPPAGE_GENERAL, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 269
+        RIGHTMARGIN, 186
         TOPMARGIN, 7
-        BOTTOMMARGIN, 165
+        BOTTOMMARGIN, 135
+    END
+
+    IDD_DIALOG_COMPARE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 195
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 191
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -533,6 +573,13 @@ BEGIN
     0x6573, 0x626d, 0x796c, "\076" 
 END
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_LOGO         BITMAP                  "RES\\NNic.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

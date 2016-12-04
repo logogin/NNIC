@@ -1,17 +1,68 @@
-------------- 29.05.2004 12:47:10 -------------
+------------- 13/09/2004 19:23:07 -------------
 File name:                UnTitled.nni
 Directory:                .
 Image size:               256x256 pixels
-Original colors:          16777216 (24 bpp)
-Compression method:       Counter Propagation
-Original file size:       192.05 KB (196662 bytes)
-Compressed file size:     47.72 KB (48869 bytes)
-Ratio:                    24.85%
-Red channel PSNR:         24.11 dB
-Green channel PSNR:       26.35 dB
-Blue channel PSNR:        25.68 dB
-Average PSNR:             25.38 dB
-Full channel PSNR:        25.69 dB
-Compressed in:            8.68 sec.
+Original colors:          256 (8 bpp)
+Compression method:       Back Propagation
+Original file size:       65.05 KB (66614 bytes)
+Compressed file size:     16.89 KB (17297 bytes)
+Ratio:                    25.97%
+Red channel PSNR:         N/A
+Green channel PSNR:       N/A
+Blue channel PSNR:        N/A
+Average PSNR:             N/A
+Full channel PSNR:        16.82 dB
+Compressed in:            0.37 sec.
+
+
+------------- 13/09/2004 19:24:35 -------------
+File name:                UnTitled.nni
+Directory:                .
+Image size:               256x256 pixels
+Original colors:          256 (8 bpp)
+Compression method:       Back Propagation
+Original file size:       65.05 KB (66614 bytes)
+Compressed file size:     0.38 KB (390 bytes)
+Ratio:                    0.59%
+Red channel PSNR:         N/A
+Green channel PSNR:       N/A
+Blue channel PSNR:        N/A
+Average PSNR:             N/A
+Full channel PSNR:        5.50 dB
+Compressed in:            49.20 sec.
+
+
+------------- 13/09/2004 19:25:23 -------------
+File name:                UnTitled.nni
+Directory:                .
+Image size:               256x256 pixels
+Original colors:          256 (8 bpp)
+Compression method:       Back Propagation
+Original file size:       65.05 KB (66614 bytes)
+Compressed file size:     0.39 KB (397 bytes)
+Ratio:                    0.60%
+Red channel PSNR:         N/A
+Green channel PSNR:       N/A
+Blue channel PSNR:        N/A
+Average PSNR:             N/A
+Full channel PSNR:        5.50 dB
+Compressed in:            31.38 sec.
+
+
+------------- 13/09/2004 19:26:22 -------------
+File name:                UnTitled.nni
+Directory:                .
+Image size:               256x256 pixels
+Original colors:          256 (8 bpp)
+Compression method:       Back Propagation
+Original file size:       65.05 KB (66614 bytes)
+Compressed file size:     0.39 KB (404 bytes)
+Ratio:                    0.61%
+Red channel PSNR:         N/A
+Green channel PSNR:       N/A
+Blue channel PSNR:        N/A
+Average PSNR:             N/A
+Full channel PSNR:        5.50 dB
+Compressed in:            31.92 sec.
 
 

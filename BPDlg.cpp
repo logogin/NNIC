@@ -2,8 +2,10 @@
 //
 
 #include "stdafx.h"
+#include "NeuroNet/NetBP.h"
 #include "NNIC.h"
 #include "BPDlg.h"
+#include ".\bpdlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,11 +19,13 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CBPDlg, CPropertyPage)
 
 CBPDlg::CBPDlg() : CPropertyPage(CBPDlg::IDD)
+, m_bLearnMode(0)
+, m_bSigmoidType(0)
 {
 
 }
 
-CBPDlg::CBPDlg(const OPTIONSBP &optionsBP) : CPropertyPage(CBPDlg::IDD)
+CBPDlg::CBPDlg(OPTIONSBP *optionsBP) : CPropertyPage(CBPDlg::IDD)
 {
 	//{{AFX_DATA_INIT(CBPDlg)
 	m_iInput=0;
@@ -46,7 +50,7 @@ CBPDlg::CBPDlg(const OPTIONSBP &optionsBP) : CPropertyPage(CBPDlg::IDD)
 	m_dwPatterns = 0;
 	m_dwCycles = 0;
 	//}}AFX_DATA_INIT
-	CopyMemory(&m_optionsBP,&optionsBP,sizeof(OPTIONSBP));
+	m_optionsBP=optionsBP;
 }
 
 CBPDlg::~CBPDlg()
@@ -92,15 +96,14 @@ void CBPDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CBPDlg, CPropertyPage)
 	//{{AFX_MSG_MAP(CBPDlg)
-	ON_BN_CLICKED(IDC_RADIO_BATCH, OnRadioBatch)
-	ON_BN_CLICKED(IDC_RADIO_SEQUENTIAL, OnRadioSequential)
-	ON_BN_CLICKED(IDC_RADIO_SIGMOID, OnRadioSigmoid)
-	ON_BN_CLICKED(IDC_RADIO_HYPERTAN, OnRadioHypertan)
-	ON_BN_CLICKED(IDC_CHECK_SECOND, OnCheckSecond)
-	ON_BN_CLICKED(IDC_CHECK_MOMENTUM, OnCheckMomentum)
-//	ON_WM_HSCROLL()
 	//}}AFX_MSG_MAP
 	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_CHECK_MOMENTUM, OnBnClickedCheckMomentum)
+	ON_BN_CLICKED(IDC_CHECK_SECOND, OnBnClickedCheckSecond)
+	ON_BN_CLICKED(IDC_RADIO_SEQUENTIAL, OnBnClickedRadioSequential)
+	ON_BN_CLICKED(IDC_RADIO_BATCH, OnBnClickedRadioBatch)
+	ON_BN_CLICKED(IDC_RADIO_SIGMOID, OnBnClickedRadioSigmoid)
+	ON_BN_CLICKED(IDC_RADIO_HYPERTAN, OnBnClickedRadioHypertan)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -112,153 +115,95 @@ BOOL CBPDlg::OnInitDialog()
 	
 	// TODO: Add extra initialization here
 	CString sString;
-	CheckRadioButton(IDC_RADIO_SEQUENTIAL,IDC_RADIO_BATCH,
-		IDC_RADIO_SEQUENTIAL+m_optionsBP.st_bLearnMode);
-
-	CheckRadioButton(IDC_RADIO_SIGMOID,IDC_RADIO_HYPERTAN,
-		IDC_RADIO_SIGMOID+m_optionsBP.st_bSigmoidType);
-
-	m_fAlpha=m_optionsBP.st_fSigmoidAlpha;
-	m_bBiases=m_optionsBP.st_bUseBiases;
-	m_bMomentum=m_optionsBP.st_bUseMomentum;
+	switch (m_optionsBP->st_bLearnMode)
+	{
+	case LEARN_TYPE_SEQUENTIAL:
+		CheckRadioButton(IDC_RADIO_SEQUENTIAL,IDC_RADIO_BATCH,IDC_RADIO_SEQUENTIAL);
+		EnableMomentum(m_optionsBP->st_bUseMomentum);
+		break;
+	case LEARN_TYPE_BATCH:
+		CheckRadioButton(IDC_RADIO_SEQUENTIAL,IDC_RADIO_BATCH,IDC_RADIO_BATCH);
+		EnableLearnRate(FALSE);
+		EnableMomentum(FALSE);
+		break;
+	}
+	switch (m_optionsBP->st_bSigmoidType)
+	{
+	case SIGMOID_TYPE_ORIGINAL:
+		CheckRadioButton(IDC_RADIO_SIGMOID,IDC_RADIO_HYPERTAN,IDC_RADIO_SIGMOID);
+		break;
+	case SIGMOID_TYPE_HYPERTAN:
+		CheckRadioButton(IDC_RADIO_SIGMOID,IDC_RADIO_HYPERTAN,IDC_RADIO_HYPERTAN);
+		break;
+	}
+	m_bLearnMode=m_optionsBP->st_bLearnMode;
+	m_bSigmoidType=m_optionsBP->st_bSigmoidType;
+	m_fAlpha=m_optionsBP->st_fSigmoidAlpha;
+	m_bBiases=m_optionsBP->st_bUseBiases;
+	m_bMomentum=m_optionsBP->st_bUseMomentum;
 
 	CScrollBar *pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_INPUT);
 	pScroll->SetScrollRange(4,8);
-	m_iInput=m_optionsBP.st_bInputBlock/2;
-	m_strInput.Format(_T("%dx%d"),m_optionsBP.st_bInputBlock,m_optionsBP.st_bInputBlock);
+	m_iInput=m_optionsBP->st_bInputBlock/2;
+	m_strInput.Format(_T("%dx%d"),m_optionsBP->st_bInputBlock,m_optionsBP->st_bInputBlock);
 
 	pScroll=(CScrollBar *)GetDlgItem(IDC_SCROLLBAR_HIDDEN);
 	pScroll->SetScrollRange(1,7);
-	m_iHidden=m_optionsBP.st_bHiddenBlock/2;
-	m_strHidden.Format(_T("%dx%d"),m_optionsBP.st_bHiddenBlock,m_optionsBP.st_bHiddenBlock);
+	m_iHidden=m_optionsBP->st_bHiddenBlock/2;
+	m_strHidden.Format(_T("%dx%d"),m_optionsBP->st_bHiddenBlock,m_optionsBP->st_bHiddenBlock);
 
 	m_strRatio.Format(_T("%.2f"),(FLOAT)(m_iHidden*m_iHidden)/(m_iInput*m_iInput)*100);
 	m_strRatio+=_T("%");
 
-	m_bSecond=m_optionsBP.st_bSecondHidden;
-	m_dwNeurons=m_optionsBP.st_wNeurons;
+	m_bSecond=m_optionsBP->st_bSecondHidden;
+	m_dwNeurons=m_optionsBP->st_wNeurons;
 
-	m_fInitLearnRate=m_optionsBP.st_fInitLearnRate;
-	m_fFinalLearnRate=m_optionsBP.st_fFinalLearnRate;
-	m_dwLearnSteps=m_optionsBP.st_dwLearnSteps;
-	m_fLearnChangeRate=m_optionsBP.st_fLearnChangeRate;
-	m_fInitMoment=m_optionsBP.st_fInitMoment;
-	m_fFinalMoment=m_optionsBP.st_fFinalMoment;
-	m_dwMomentSteps=m_optionsBP.st_dwMomentSteps;
-	m_fMomentChangeRate=m_optionsBP.st_fMomentChangeRate;
+	m_fInitLearnRate=m_optionsBP->st_fInitLearnRate;
+	m_fFinalLearnRate=m_optionsBP->st_fFinalLearnRate;
+	m_dwLearnSteps=m_optionsBP->st_dwLearnSteps;
+	m_fLearnChangeRate=m_optionsBP->st_fLearnChangeRate;
+	m_fInitMoment=m_optionsBP->st_fInitMoment;
+	m_fFinalMoment=m_optionsBP->st_fFinalMoment;
+	m_dwMomentSteps=m_optionsBP->st_dwMomentSteps;
+	m_fMomentChangeRate=m_optionsBP->st_fMomentChangeRate;
 	
-	m_dwCycles=m_optionsBP.st_dwLearnCycles;
-	m_fMinError=m_optionsBP.st_fMinError;
-	m_dwPatterns=m_optionsBP.st_wPatterns;
+	m_dwCycles=m_optionsBP->st_dwLearnCycles;
+	m_fMinError=m_optionsBP->st_fMinError;
+	m_dwPatterns=m_optionsBP->st_wPatterns;
 
 	UpdateData(FALSE);
-	if (m_optionsBP.st_bLearnMode==0)
-		OnRadioSequential();
-	else
-		OnRadioBatch();
-
-	EnableSecondHidden(m_optionsBP.st_bSecondHidden);
-	UpdateData(FALSE);
+	EnableSecond(m_bSecond);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
-}
-
-void CBPDlg::OnRadioBatch() 
-{
-	// TODO: Add your control notification handler code here
-	m_optionsBP.st_bLearnMode=1;
-	GetDlgItem(IDC_CHECK_MOMENTUM)->EnableWindow(FALSE);
-	EnableLearnRate(FALSE);
-	EnableMomentum(FALSE);
-}
-
-void CBPDlg::OnRadioSequential() 
-{
-	// TODO: Add your control notification handler code here
-	m_optionsBP.st_bLearnMode=0;
-	GetDlgItem(IDC_CHECK_MOMENTUM)->EnableWindow(TRUE);
-	EnableLearnRate(TRUE);
-	EnableMomentum(m_bMomentum);
-}
-
-void CBPDlg::EnableLearnRate(const BOOLEAN bFlag)
-{
-	UpdateData(TRUE);
-	GetDlgItem(IDC_EDIT_INITLEARNRATE)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_FINALLEARNRATE)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_LEARNSTEPS)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_LEARNCHANGERATE)->EnableWindow(bFlag);
-}
-
-void CBPDlg::EnableMomentum(const BOOLEAN bFlag)
-{
-	GetDlgItem(IDC_EDIT_INITMOMENT)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_FINALMOMENT)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_MOMENTSTEPS)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_MOMENTCHANGERATE)->EnableWindow(bFlag);
-}
-
-void CBPDlg::OnRadioSigmoid() 
-{
-	// TODO: Add your control notification handler code here
-	m_optionsBP.st_bSigmoidType=0;
-}
-
-void CBPDlg::OnRadioHypertan() 
-{
-	// TODO: Add your control notification handler code here
-	m_optionsBP.st_bSigmoidType=1;
-}
-
-void CBPDlg::EnableSecondHidden(const BOOLEAN bFlag)
-{
-	GetDlgItem(IDC_STATIC_WITH)->EnableWindow(bFlag);
-	GetDlgItem(IDC_EDIT_NEURONS)->EnableWindow(bFlag);
-	GetDlgItem(IDC_STATIC_NEURONS)->EnableWindow(bFlag);
-}
-
-void CBPDlg::OnCheckSecond() 
-{
-	// TODO: Add your control notification handler code here
-	UpdateData(TRUE);
-	m_optionsBP.st_bSecondHidden=m_bSecond;
-	EnableSecondHidden(m_optionsBP.st_bSecondHidden);
-}
-
-void CBPDlg::OnCheckMomentum() 
-{
-	// TODO: Add your control notification handler code here
-	UpdateData(TRUE);
-	m_optionsBP.st_bUseMomentum=m_bMomentum;
-	EnableMomentum(m_optionsBP.st_bUseMomentum);
 }
 
 void CBPDlg::OnOK() 
 {
 	// TODO: Add your specialized code here and/or call the base class
-	m_optionsBP.st_fSigmoidAlpha=m_fAlpha;
-	m_optionsBP.st_bUseBiases=m_bBiases;
-	m_optionsBP.st_dwLearnCycles=m_dwCycles;
-	m_optionsBP.st_fMinError=m_fMinError;
-	m_optionsBP.st_wPatterns=(WORD)m_dwPatterns;
-	m_optionsBP.st_bInputBlock=m_iInput*2;
-	m_optionsBP.st_bHiddenBlock=m_iHidden*2;
-	m_optionsBP.st_wNeurons=(WORD)m_dwNeurons;
-	m_optionsBP.st_fInitLearnRate=m_fInitLearnRate;
-	m_optionsBP.st_fFinalLearnRate=m_fFinalLearnRate;
-	m_optionsBP.st_dwLearnSteps=m_dwLearnSteps;
-	m_optionsBP.st_fLearnChangeRate=m_fLearnChangeRate;
-	m_optionsBP.st_fInitMoment=m_fInitMoment;
-	m_optionsBP.st_fFinalMoment=m_fFinalMoment;
-	m_optionsBP.st_dwMomentSteps=m_dwMomentSteps;
-	m_optionsBP.st_fMomentChangeRate=m_fMomentChangeRate;
+	UpdateData(TRUE);
+	m_optionsBP->st_bLearnMode=m_bLearnMode;
+	m_optionsBP->st_bSigmoidType=m_bSigmoidType;
+	m_optionsBP->st_fSigmoidAlpha=m_fAlpha;
+	m_optionsBP->st_bUseBiases=m_bBiases;
+	m_optionsBP->st_bUseMomentum=m_bMomentum;
+	m_optionsBP->st_dwLearnCycles=m_dwCycles;
+	m_optionsBP->st_fMinError=m_fMinError;
+	m_optionsBP->st_wPatterns=(WORD)m_dwPatterns;
+	m_optionsBP->st_bInputBlock=m_iInput*2;
+	m_optionsBP->st_bHiddenBlock=m_iHidden*2;
+	m_optionsBP->st_bSecondHidden=m_bSecond;
+	m_optionsBP->st_wNeurons=(WORD)m_dwNeurons;
+	m_optionsBP->st_fInitLearnRate=m_fInitLearnRate;
+	m_optionsBP->st_fFinalLearnRate=m_fFinalLearnRate;
+	m_optionsBP->st_dwLearnSteps=m_dwLearnSteps;
+	m_optionsBP->st_fLearnChangeRate=m_fLearnChangeRate;
+	m_optionsBP->st_fInitMoment=m_fInitMoment;
+	m_optionsBP->st_fFinalMoment=m_fFinalMoment;
+	m_optionsBP->st_dwMomentSteps=m_dwMomentSteps;
+	m_optionsBP->st_fMomentChangeRate=m_fMomentChangeRate;
 	CPropertyPage::OnOK();
 }
 
-void CBPDlg::GetOptionsBP(OPTIONSBP *optionsBP)
-{
-	CopyMemory(optionsBP,&m_optionsBP,sizeof(OPTIONSBP));
-}
 void CBPDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	// TODO: Add your message handler code here and/or call default
@@ -307,4 +252,72 @@ void CBPDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	m_strRatio.Format(_T("%.2f"),(FLOAT)(m_iHidden*m_iHidden)/(m_iInput*m_iInput)*100);
 	m_strRatio+=_T("%");
 	UpdateData(FALSE);
+}
+void CBPDlg::OnBnClickedCheckMomentum()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	EnableMomentum(m_bMomentum);
+}
+
+void CBPDlg::OnBnClickedCheckSecond()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	EnableSecond(m_bSecond);
+}
+
+void CBPDlg::OnBnClickedRadioSequential()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	m_bLearnMode=LEARN_TYPE_SEQUENTIAL;
+	EnableLearnRate(TRUE);
+	EnableMomentum(m_bMomentum);
+}
+
+void CBPDlg::OnBnClickedRadioBatch()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	m_bLearnMode=LEARN_TYPE_BATCH;
+	EnableLearnRate(FALSE);
+	EnableMomentum(FALSE);
+}
+
+void CBPDlg::OnBnClickedRadioSigmoid()
+{
+	// TODO: Add your control notification handler code here
+	m_bSigmoidType=SIGMOID_TYPE_ORIGINAL;
+}
+
+void CBPDlg::OnBnClickedRadioHypertan()
+{
+	// TODO: Add your control notification handler code here
+	m_bSigmoidType=SIGMOID_TYPE_HYPERTAN;
+}
+
+void CBPDlg::EnableMomentum(const BOOLEAN bFlag)
+{
+	GetDlgItem(IDC_EDIT_INITMOMENT)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_FINALMOMENT)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_MOMENTCHANGERATE)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_MOMENTSTEPS)->EnableWindow(bFlag);
+}
+
+void CBPDlg::EnableLearnRate(const BOOLEAN bFlag)
+{
+	//GetDlgItem(IDC_CHECK_BIASES)->EnableWindow(bFlag);
+	GetDlgItem(IDC_CHECK_MOMENTUM)->EnableWindow(bFlag);
+
+	GetDlgItem(IDC_EDIT_INITLEARNRATE)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_FINALLEARNRATE)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_LEARNCHANGERATE)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_LEARNSTEPS)->EnableWindow(bFlag);
+}
+void CBPDlg::EnableSecond(const BOOLEAN bFlag)
+{
+	GetDlgItem(IDC_STATIC_WITH)->EnableWindow(bFlag);
+	GetDlgItem(IDC_EDIT_NEURONS)->EnableWindow(bFlag);
+	GetDlgItem(IDC_STATIC_NEURONS)->EnableWindow(bFlag);
 }

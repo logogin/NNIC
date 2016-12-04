@@ -16,9 +16,8 @@ class CDCTDlg : public CPropertyPage
 
 // Construction
 public:
-	void GetOptionsDCT(OPTIONSDCT *optionsDCT);
 	CDCTDlg();
-	CDCTDlg(const OPTIONSDCT &optionsCP);
+	CDCTDlg(OPTIONSDCT *optionsCP);
 	~CDCTDlg();
 
 // Dialog Data
@@ -41,7 +40,7 @@ public:
 
 // Implementation
 protected:
-	OPTIONSDCT m_optionsDCT;
+	OPTIONSDCT *m_optionsDCT;
 	// Generated message map functions
 	//{{AFX_MSG(CDCTDlg)
 	virtual BOOL OnInitDialog();

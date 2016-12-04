@@ -15,116 +15,68 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-NetBP::NetBP(const BYTE bNetRank,const WORD *wLayerRank):m_bNetRank(bNetRank),
+NetBP::NetBP(const BYTE bNetRank,const PWORD wLayerRank):m_bNetRank(bNetRank),
 	m_bUseBias(FALSE),m_wLayerRank(NULL),m_wNeuronRank(NULL),m_vAxons(NULL),
 	m_bFirstEpoch(TRUE)
 	, m_dwBiasMatrixSize(0)
 {
-	m_wLayerRank=new WORD[m_bNetRank];
+	m_wLayerRank=(PWORD)HeapAlloc(m_bNetRank*sizeof(WORD));
 	ASSERT(m_wLayerRank!=NULL);
 
 	DWORD i,j;
 	for (i=0; i<m_bNetRank; i++)
 		m_wLayerRank[i]=wLayerRank[i];
 
-	m_wNeuronRank=new WORD[m_bNetRank-1];
+	m_wNeuronRank=(PWORD)HeapAlloc((m_bNetRank-1)*sizeof(WORD));
 	ASSERT(m_wNeuronRank!=NULL);
 
 	for (i=0; i<m_bNetRank-1; i++)
 		m_wNeuronRank[i]=m_wLayerRank[i];
 
+	HANDLE hHeap;
 	for (i=0; i<BP_ARRAY_RANK; i++)
 	{
-		m_vWeights[i]=new FLOAT **[m_bNetRank-1];
+		m_vWeights[i]=(PFLOAT **)HeapAlloc((m_bNetRank-1)*sizeof(PFLOAT *));
 		ASSERT(m_vWeights[i]!=NULL);
+		hHeap=GetHeapHandle(m_vWeights[i]);
 		for (j=0; j<m_bNetRank-1; j++)
 		{
-			//m_vWeights[i][j]=new FLOAT *[m_wLayerRank[j+1]];
-			m_vWeights[i][j]=AllocateFloatMatrix(m_wLayerRank[j+1],m_wNeuronRank[j]);
+			m_vWeights[i][j]=AllocateFloatMatrix(hHeap,m_wLayerRank[j+1],m_wNeuronRank[j],TRUE);
 			ASSERT(m_vWeights[i][j]!=NULL);
-			ZeroMemory(m_vWeights[i][j][0],sizeof(FLOAT)*m_wNeuronRank[j]*m_wLayerRank[j+1]);
-			//for (UINT k=0; k<m_wLayerRank[j+1]; k++)
-			//{
-			//	m_vWeights[i][j][k]=new FLOAT[m_wNeuronRank[j]];
-			//	ASSERT(m_vWeights[i][j][k]!=NULL);
-			//	ZeroMemory(m_vWeights[i][j][k],sizeof(FLOAT)*m_wNeuronRank[j]);
-			//}
 		}
 	}
 
-	//m_vAxons=new FLOAT *[m_bNetRank];
-	DWORD *dwLayerRank=new DWORD[m_bNetRank];
+	PDWORD dwLayerRank=(PDWORD)HeapAlloc(m_bNetRank*sizeof(DWORD));
 	ASSERT(dwLayerRank!=NULL);
 	for (i=0; i<m_bNetRank; i++)
 		dwLayerRank[i]=m_wLayerRank[i];
 	m_vAxons=AllocateFloatMatrix(m_bNetRank,dwLayerRank);
 	ASSERT(m_vAxons!=NULL);
 	
-	//for (i=0; i<m_bNetRank; i++)
-	//{
-	//	m_vAxons[i]=new FLOAT[m_wLayerRank[i]];
-	//	ASSERT(m_vAxons[i]!=NULL);
-	//}
-
-	//m_vErrorSignal=new FLOAT *[m_bNetRank-1];
 	m_vErrorSignal=AllocateFloatMatrix(m_bNetRank-1,dwLayerRank+1);
 	ASSERT(m_vErrorSignal!=NULL);
-	delete []dwLayerRank;
-	//for (i=1; i<m_bNetRank; i++)
-	//{
-	//	m_vErrorSignal[i-1]=new FLOAT[m_wLayerRank[i]];
-	//	ASSERT(m_vErrorSignal[i-1]!=NULL);
-	//}
+	HeapFree(dwLayerRank);
 }
 
 NetBP::~NetBP()
 {
 	if (m_wLayerRank!=NULL)
-		delete []m_wLayerRank;
+		HeapFree(m_wLayerRank);
 	if (m_wNeuronRank!=NULL)
-		delete []m_wNeuronRank;
+		HeapFree(m_wNeuronRank);
 	if (m_vAxons!=NULL)
 		DestroyMatrix((LPVOID *)m_vAxons);
+	if (m_vErrorSignal!=NULL)
+		DestroyMatrix((LPVOID *)m_vErrorSignal);
+
 	DWORD i;
 	for (i=0; i<BP_ARRAY_RANK; i++)
 	{
 		if (m_vWeights[i]!=NULL)
-			DestroyMatrix((LPVOID *)(m_vWeights[i]));
+			HeapFree(m_vWeights[i]);
 		if (m_bUseBias&&m_vBiases[i]!=NULL)
 			DestroyMatrix((LPVOID *)(m_vBiases[i]));
 	}
-	//if (m_wLayerRank!=NULL)
-	//{
-
-	//	for (UINT i=0; i<BP_ARRAY_RANK; i++)
-	//	{
-	//		for (UINT j=0; j<m_bNetRank-1; j++)
-	//		{
-	//			for (UINT k=0; k<m_wLayerRank[j+1]; k++)
-	//				delete []m_vWeights[i][j][k];
-	//			delete []m_vWeights[i][j];
-	//		}
-	//		delete []m_vWeights[i];
-	//	}
-
-	//	if (m_bUseBias)
-	//		for (i=0; i<BP_ARRAY_RANK; i++)
-	//		{
-	//			for (UINT j=0; j<m_bNetRank-1; j++)
-	//				delete []m_vBiases[i][j];
-	//			delete []m_vBiases[i];
-	//		}
-	//}
-
-	//for (UINT i=0; i<m_bNetRank-1; i++)
-	//	delete []m_vErrorSignal[i];
-	//delete []m_vErrorSignal;
-
-	//for (i=0; i<m_bNetRank; i++)
-	//		delete []m_vAxons[i];
-	//delete []m_vAxons;
-	//delete []m_wNeuronRank;
-	//delete []m_wLayerRank;
 }
 
 void NetBP::SetSignalBoundaries(const FLOAT fMinSignal, const FLOAT fMaxSignal)
@@ -140,7 +92,7 @@ void NetBP::UseBiases(const BOOLEAN bFlag)
 	DWORD i;
 	if (bFlag)
 	{
-		DWORD *dwLayerRank=new DWORD[m_bNetRank-1];
+		PDWORD dwLayerRank=(PDWORD)HeapAlloc((m_bNetRank-1)*sizeof(DWORD));
 		m_dwBiasMatrixSize=0;
 		for (i=0; i<m_bNetRank-1; i++)
 		{
@@ -149,35 +101,23 @@ void NetBP::UseBiases(const BOOLEAN bFlag)
 		}
 		for (i=0; i<BP_ARRAY_RANK; i++)
 		{
-			//m_vBiases[i]=new FLOAT *[m_bNetRank-1];
-			m_vBiases[i]=AllocateFloatMatrix(m_bNetRank-1,dwLayerRank);
+			m_vBiases[i]=AllocateFloatMatrix(m_bNetRank-1,dwLayerRank,TRUE);
 			ASSERT(m_vBiases[i]!=NULL);
-			ZeroMemory(m_vBiases[i][0],sizeof(FLOAT)*m_dwBiasMatrixSize);
-			//for (UINT j=0; j<m_bNetRank-1; j++)
-			//{
-			//	m_vBiases[i][j]=new FLOAT[m_wLayerRank[j+1]];
-			//	ASSERT(m_vBiases[i][j]!=NULL);
-			//	ZeroMemory(m_vBiases[i][j],sizeof(FLOAT)*m_wLayerRank[j+1]);
-			//}
 		}
-		delete []dwLayerRank;
+		HeapFree(dwLayerRank);
 	}
 }
 
 void NetBP::InitWeights()
 {
 	FLOAT fRange=m_fMaxSignal-m_fMinSignal;
-//	UINT r=0;
 	DWORD i,j,k;
 	srand((unsigned)time(NULL));
 	for (i=0; i<m_bNetRank-1; i++)
 		for (j=0; j<m_wLayerRank[i+1]; j++)
 			for (k=0; k<m_wNeuronRank[i]; k++)
-//			{
-//				r++;
 				m_vWeights[WEIGH][i][j][k]=
-					m_fMinSignal+/*(r%100)/100.0f*/(FLOAT)rand()/RAND_MAX*fRange;
-//			}
+					m_fMinSignal+(FLOAT)rand()/RAND_MAX*fRange;
 	if (m_bUseBias)
 		for (i=0; i<m_bNetRank-1; i++)
 			for (j=0; j<m_wLayerRank[i+1]; j++)
@@ -191,11 +131,11 @@ void NetBP::InitWeights(const BYTE bLayer,const LPVOID pWeights)
 	CopyMemory(m_vWeights[WEIGH][bLayer-1][0],pWeights,dwWeightsSize*sizeof(FLOAT));
 	
 	if (m_bUseBias)
-		CopyMemory(m_vBiases[WEIGH][bLayer-1],(FLOAT *)pWeights+dwWeightsSize,
+		CopyMemory(m_vBiases[WEIGH][bLayer-1],(PFLOAT)pWeights+dwWeightsSize,
 			m_wLayerRank[bLayer]*sizeof(FLOAT));
 }
 
-void NetBP::SetAxons(const BYTE bLayer, const FLOAT *fAxons)
+void NetBP::SetAxons(const BYTE bLayer, const PFLOAT fAxons)
 {
 	ASSERT(bLayer<m_bNetRank);
 	CopyMemory(m_vAxons[bLayer],fAxons,sizeof(FLOAT)*m_wLayerRank[bLayer]);
@@ -205,20 +145,9 @@ void NetBP::ForwardPass(const BYTE bFrom)
 {
 	ASSERT(bFrom<m_bNetRank);
 
-	/*DOUBLE*/FLOAT fNet;
-
-//	ofstream file;
-//	file.open(_T("debug.txt"),ios::out | ios::app);
-
-//	file<<endl<<"PROPAGATION"<<endl<<"Layer 0"<<endl;
-//	for (UINT m=0; m<m_wLayerRank[0]; m++)
-//		file<<m_vAxons[0][m]<<" "<<flush;
-
-//	file<<endl;
+	FLOAT fNet;
 	DWORD i,j,k;
 	for (i=bFrom+1; i<m_bNetRank; i++)
-	{
-//		file<<"Layer "<<i<<endl;
 		for (j=0; j<m_wLayerRank[i]; j++)
 		{
 			fNet=0.0f;
@@ -228,14 +157,10 @@ void NetBP::ForwardPass(const BYTE bFrom)
 				fNet+=m_fMaxSignal*m_vBiases[WEIGH][i-1][j];
 
 			m_vAxons[i][j]=SigmoidFunction(fNet);
-//			file<<m_vAxons[i][j]<<" "<<flush;
 		}
-//		file<<endl;
-	}
-//	file.close();
 }
 
-FLOAT NetBP::TargetFunction(const BYTE bLayer, const FLOAT *fTarget)
+FLOAT NetBP::TargetFunction(const BYTE bLayer, const PFLOAT fTarget)
 {
 	ASSERT(bLayer<m_bNetRank);
 	FLOAT fDist;
@@ -249,85 +174,23 @@ FLOAT NetBP::TargetFunction(const BYTE bLayer, const FLOAT *fTarget)
 	return fError/2;
 }
 
-void NetBP::BackwardPass(const FLOAT *fTarget)
+void NetBP::BackwardPass(const PFLOAT fTarget)
 {
 	UpdateGradients(fTarget);
 	UpdateWeights();
-/*	ofstream file("debug.txt",ios::out | ios::app);
-
-	file<<endl<<endl<<"\nWEIGHTS"<<endl;
-	for (i=0; i<m_bNetRank-1; i++)
-	{
-		file<<"Layer "<<i+1<<endl;
-		for (UINT j=0; j<m_wLayerRank[i+1]; j++)
-		{
-			file<<"\tNeuron "<<j<<endl;
-			for (UINT k=0; k<m_wNeuronRank[i]; k++)
-				file<<m_vWeights[WEIGH][i][j][k]<<" ";
-			file<<endl;
-		}
-		file<<endl;
-	}
-	file.close();*/
 }
 
-FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const FLOAT fPrevNetError)
+FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const PFLOAT *fPatterns,const FLOAT fPrevNetError)
 {
-//	FLOAT fGradNorm=0.0;
-//
-//	for (UINT i=0; i<m_bNetRank-1; i++)
-//		for (UINT j=0; j<m_wLayerRank[i+1]; j++)
-//			for (UINT k=0; k<m_wNeuronRank[i]; k++)
-//				fGradNorm+=m_vWeights[GRAD2][i][j][k]*m_vWeights[GRAD2][i][j][k];
-//
-//	if (m_bUseBias)
-//		for (i=0; i<m_bNetRank-1; i++)
-//			for (UINT j=0; j<m_wLayerRank[i+1]; j++)
-//				fGradNorm+=m_vBiases[GRAD2][i][j]*m_vBiases[GRAD2][i][j];
-//
-//	m_fLearnRate=fPrevNetError/fGradNorm;
-//
-//	FLOAT fNetError;
-//	
-//	CopyWeights(DELTA,WEIGH);
-//
-//	BOOLEAN bFlag=FALSE;
-//	do
-//	{
-//		UpdateWeights(WEIGH,DELTA);
-//		fNetError=0.0;
-//		for (i=0 ;i<uiPatterns; i++)
-//		{
-//			SetAxons(0,fPatterns[i]);
-//			ForwardPass(0);
-//			fNetError+=TargetFunction(2,fPatterns[i]);
-//		}
-//		if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
-//			m_fLearnRate/=2;
-//		else
-//			bFlag=TRUE;
-//	}
-//	while (!bFlag);
-//	ZeroWeights(GRAD2);
-
-/****************/
 	FLOAT fGradNorm=0.0;
 	FLOAT fGrad=0.0;
 	FLOAT fWeight=0.0;
 	FLOAT fValue;
 	BOOLEAN bFlag;
+	FLOAT fPrevLearnRate=m_fLearnRate;
 	FLOAT fNetError;
 	DWORD i,j,k;
-
-//	if (m_bFirstEpoch)
-//	{
-//		m_bFirstEpoch=FALSE;
-//		m_fLearnRate=0.1f;
-//		UpdateWeights(WEIGH,DELTA);
-//		CopyWeights(GRAD1,GRAD2);
-//		ZeroWeights(GRAD2);
-//		return 0.0f;
-//	}
+	DWORD dwCount=0;
 
 	if (m_bFirstEpoch)
 	{
@@ -342,7 +205,7 @@ FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const F
 				for (j=0; j<m_wLayerRank[i+1]; j++)
 					fGradNorm+=m_vBiases[GRAD2][i][j]*m_vBiases[GRAD2][i][j];
 
-		m_fLearnRate=fPrevNetError/fGradNorm;
+		m_fLearnRate=fPrevNetError/sqrt(fGradNorm);
 
 		CopyWeights(DELTA,WEIGH);
 
@@ -358,11 +221,16 @@ FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const F
 				fNetError+=TargetFunction(m_bNetRank-1,fPatterns[i]);
 			}
 			if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
+			{
 				m_fLearnRate/=2.0;
+				dwCount++;
+			}
 			else
 				bFlag=TRUE;
 		}
-		while (!bFlag);
+		while (!bFlag&&dwCount<MIT);
+		if (!bFlag||!_finite(m_fLearnRate))
+			m_fLearnRate=fPrevLearnRate;
 		CopyWeights(GRAD1,GRAD2);
 		ZeroWeights(GRAD2);
 		return fNetError;
@@ -404,44 +272,37 @@ FLOAT NetBP::BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const F
 			fNetError+=TargetFunction(m_bNetRank-1,fPatterns[i]);
 		}
 		if ((fNetError-fPrevNetError)>(-0.5*m_fLearnRate*fGradNorm))
+		{
 			m_fLearnRate/=2.0;
+			dwCount++;
+		}
 		else
 			bFlag=TRUE;
 	}
-	while(!bFlag);
+	while(!bFlag&&dwCount<MIT);
+	if (!bFlag)
+		m_fLearnRate=fPrevLearnRate;
 	CopyWeights(GRAD1,GRAD2);
 	ZeroWeights(GRAD2);
 	return fNetError;
 }
 
-void NetBP::UpdateGradients(const FLOAT *fTarget)
+void NetBP::UpdateGradients(const PFLOAT fTarget)
 {
-//	ofstream file("debug.txt",ios::out | ios::app);
-//	file<<endl<<"CALCULATE DELTA"<<endl;
-//	file<<"Layer "<<m_bNetRank-1<<endl;
 	DWORD i,j,k;
 	for (i=0; i<m_wLayerRank[m_bNetRank-1]; i++)
-	{
 		m_vErrorSignal[m_bNetRank-2][i]=(m_vAxons[m_bNetRank-1][i]-fTarget[i])*
 					DSigmoidFunction(m_vAxons[m_bNetRank-1][i]);
-//		file<<"delta :"<<(m_vAxons[m_bNetRank-1][i]-fTarget[i])
-//			<<" dy/ds :"<<DSigmoidFunction(m_vAxons[m_bNetRank-1][i])
-//			<<" error :"<<m_vErrorSignal[m_bNetRank-2][i]<<" "<<endl;
-//		file<<m_vErrorSignal[m_bNetRank-2][i]<<" "<<flush;
-	}
-	/*DOUBLE*/FLOAT fSum;
+
+	FLOAT fSum;
 	for (i=m_bNetRank-2; i>=1; i--)
-	{
-//		file<<endl<<"Layer "<<i<<endl;
 		for (j=0; j<m_wLayerRank[i]; j++)
 		{
 			fSum=0.0f;
 			for (k=0; k<m_wLayerRank[i+1]; k++)
 				fSum+=m_vErrorSignal[i][k]*m_vWeights[WEIGH][i][k][j];
 			m_vErrorSignal[i-1][j]=fSum*DSigmoidFunction(m_vAxons[i][j]);
-//			file<<m_vErrorSignal[i-1][j]<<" "<<flush;
 		}
-	}
 
 	if (m_bLearnType & LEARN_TYPE_SEQUENTIAL)
 	{
@@ -468,7 +329,6 @@ void NetBP::UpdateGradients(const FLOAT *fTarget)
 				for (UINT j=0; j<m_wLayerRank[i+1]; j++)
 					m_vBiases[GRAD2][i][j]+=m_vErrorSignal[i][j]*m_fMaxSignal;
 	}
-//	file.close();
 }
 
 void NetBP::UpdateWeights()
@@ -477,24 +337,23 @@ void NetBP::UpdateWeights()
 	FLOAT fDelta;
 	if (m_bLearnType & LEARN_TYPE_MOMENTUM)
 	{
-		//FLOAT fDelta;
 		for (i=0; i<m_bNetRank-1; i++)
 			for (j=0; j<m_wLayerRank[i+1]; j++)
 				for (k=0; k<m_wNeuronRank[i]; k++)
 				{
-					fDelta=-m_fLearnRate*((1.0f-m_fMomentumParam)*m_vWeights[GRAD2][i][j][k]+
+					fDelta=/*-m_fLearnRate**/((1.0f-m_fMomentumParam)*m_vWeights[GRAD2][i][j][k]+
 						m_fMomentumParam*m_vWeights[DELTA][i][j][k]);
 					m_vWeights[DELTA][i][j][k]=fDelta;
-					m_vWeights[WEIGH][i][j][k]+=fDelta;
+					m_vWeights[WEIGH][i][j][k]+=-m_fLearnRate*fDelta;
 				}
 		if (m_bUseBias)
 			for (i=0; i<m_bNetRank-1; i++)
 				for (j=0; j<m_wLayerRank[i+1]; j++)
 				{
-					fDelta=-m_fLearnRate*((1.0f-m_fMomentumParam)*m_vBiases[GRAD2][i][j]+
+					fDelta=/*-m_fLearnRate**/((1.0f-m_fMomentumParam)*m_vBiases[GRAD2][i][j]+
 						m_fMomentumParam*m_vBiases[DELTA][i][j]);
 					m_vBiases[DELTA][i][j]=fDelta;
-					m_vBiases[WEIGH][i][j]+=fDelta;
+					m_vBiases[WEIGH][i][j]+=-m_fLearnRate*fDelta;
 				}
 	}
 	else
@@ -547,9 +406,11 @@ FLOAT NetBP::DSigmoidFunction(const FLOAT fValue)
 	switch (m_bSigmoidType)
 	{
 	case SIGMOID_TYPE_ORIGINAL:
-		return m_fSigmoidAlpha*((1.0f-m_fScaleParam)-fValue)*(m_fScaleParam+fValue);
+		return /*m_fSigmoidAlpha*((1.0f-m_fScaleParam)-fValue)*(m_fScaleParam+fValue);*/
+			m_fSigmoidAlpha*(fValue+m_fScaleParam)*(1.0f-(fValue+m_fScaleParam));
 	case SIGMOID_TYPE_HYPERTAN:
-		return m_fSigmoidAlpha/m_fScaleParam*(m_fScaleParam-fValue)*(m_fScaleParam+fValue);
+		return /*m_fSigmoidAlpha/m_fScaleParam*(m_fScaleParam-fValue)*(m_fScaleParam+fValue);*/
+			m_fSigmoidAlpha*(m_fScaleParam-(fValue*fValue)/m_fScaleParam);
 	}
 	return fValue;
 }
@@ -574,34 +435,19 @@ void NetBP::SetScaleParam(const FLOAT fScaleParam)
 	m_fScaleParam=fScaleParam;
 }
 
-void NetBP::GetAxons(const BYTE bLayer,FLOAT *fOutput)
+void NetBP::GetAxons(const BYTE bLayer,PFLOAT fOutput)
 {
 	ASSERT(bLayer<m_bNetRank);
 	CopyMemory(fOutput,m_vAxons[bLayer],sizeof(FLOAT)*m_wLayerRank[bLayer]);
 }
 
-//void NetBP::ResetGradients()
-//{
-//	//m_bFirstEpoch=TRUE;
-////	for (UINT i=0; i<2; i++)
-//		for (UINT j=0; j<m_bNetRank-1; j++)
-//			for (UINT k=0; k<m_wLayerRank[j+1]; k++)
-//				ZeroMemory(m_vWeightsGrad[1][j][k],sizeof(FLOAT)*m_wNeuronRank[j]);
-//	if (m_bUseBias)
-////		for (i=0; i<2; i++)
-//			for (UINT j=0; j<m_bNetRank-1; j++)
-//				ZeroMemory(m_vBiasesGrad[1][j],sizeof(FLOAT)*m_wLayerRank[j+1]);
-//}
-
 void NetBP::CopyWeights(const BYTE bDestIndex,const BYTE bSrcIndex)
 {
 	DWORD i;
 	for (i=0; i<m_bNetRank-1; i++)
-		//for (j=0; j<m_wLayerRank[i+1]; j++)
 		CopyMemory(m_vWeights[bDestIndex][i][0],
 			m_vWeights[bSrcIndex][i][0],sizeof(FLOAT)*m_wLayerRank[i+1]*m_wNeuronRank[i]);
 	if (m_bUseBias)
-		//for (UINT i=0; i<m_bNetRank-1; i++)
 		CopyMemory(m_vBiases[bDestIndex][0],
 			m_vBiases[bSrcIndex][0],sizeof(FLOAT)*m_dwBiasMatrixSize);
 }
@@ -610,10 +456,8 @@ void NetBP::ZeroWeights(const BYTE bDestIndex)
 {
 	DWORD i;
 	for (i=0; i<m_bNetRank-1; i++)
-		//for (UINT j=0; j<m_wLayerRank[i+1]; j++)
 		ZeroMemory(m_vWeights[bDestIndex][i][0],sizeof(FLOAT)*m_wLayerRank[i+1]*m_wNeuronRank[i]);
 	if (m_bUseBias)
-		//for (UINT i=0; i<m_bNetRank-1; i++)
 		ZeroMemory(m_vBiases[bDestIndex][0],sizeof(FLOAT)*m_dwBiasMatrixSize);
 }
 
@@ -633,7 +477,7 @@ void NetBP::CopyWeights(LPVOID pDest,const BYTE bLayer)
 	CopyMemory(pDest,m_vWeights[WEIGH][bLayer-1][0],
 		m_wNeuronRank[bLayer-1]*m_wLayerRank[bLayer]*sizeof(FLOAT));
 	if (m_bUseBias)
-		CopyMemory((FLOAT *)pDest+m_wNeuronRank[bLayer-1]*m_wLayerRank[bLayer],
+		CopyMemory((PFLOAT)pDest+m_wNeuronRank[bLayer-1]*m_wLayerRank[bLayer],
 			m_vBiases[WEIGH][bLayer-1],m_wLayerRank[bLayer]*sizeof(FLOAT));
 }
 

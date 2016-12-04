@@ -421,11 +421,23 @@ typedef struct tagCOMPRDATADCT
 	FLOAT st_fSignalWidth;
 } COMPRDATADCT;
 
-BYTE **AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth);
-FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD dwWidth);
-FLOAT **AllocateFloatMatrix(const DWORD dwHeight,const DWORD *pWidth);
-WORD **AllocateWordMatrix(const DWORD dwHeight,const DWORD dwWidth);
-void DestroyMatrix(LPVOID *pMatrix);
+DWORD GetPageSize(void);
+HANDLE HeapCreate(const DWORD dwInitalSize,const DWORD dwMaximumSize=0);
+BOOLEAN HeapFree(HANDLE hHeap,LPVOID lpMem);
+HANDLE GetHeapHandle(const LPVOID lpMem);
+BOOLEAN HeapFree(LPVOID lpMem);
+LPVOID HeapAlloc(const HANDLE hHeap,const SIZE_T dwBytes,const BOOLEAN bZero=FALSE);
+LPVOID HeapAlloc(const SIZE_T dwBytes,const BOOLEAN bZero=FALSE);
+
+LPBYTE *AllocateByteMatrix(const DWORD dwHeight,const DWORD dwWidth,const BOOLEAN bZero=FALSE);
+PFLOAT *AllocateFloatMatrix(const DWORD dwHeight,const DWORD dwWidth,const BOOLEAN bZero=FALSE);
+PFLOAT *AllocateFloatMatrix(HANDLE hHeap,
+							const DWORD dwHeight,
+							const DWORD dwWidth,
+							const BOOLEAN bZero=FALSE);
+PFLOAT *AllocateFloatMatrix(const DWORD dwHeight,const PDWORD pWidth,const BOOLEAN bZero=FALSE);
+PWORD *AllocateWordMatrix(const DWORD dwHeight,const DWORD dwWidth,const BOOLEAN bZero=FALSE);
+BOOLEAN DestroyMatrix(LPVOID *pMatrix);
 
 DWORD FindPrimeNumber(const DWORD dwFrom);
 LONG Round(const FLOAT fValue);

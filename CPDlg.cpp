@@ -5,6 +5,7 @@
 #include "NNIC.h"
 #include "CPDlg.h"
 #include ".\NeuroNet\NetCP.h"
+#include ".\cpdlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,11 +19,12 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CCPDlg, CPropertyPage)
 
 CCPDlg::CCPDlg() : CPropertyPage(CCPDlg::IDD)
+, m_bNetType(0)
 {
 
 }
 
-CCPDlg::CCPDlg(const OPTIONSCP &optionsCP) : CPropertyPage(CCPDlg::IDD)
+CCPDlg::CCPDlg(OPTIONSCP *optionsCP) : CPropertyPage(CCPDlg::IDD)
 {
 	//{{AFX_DATA_INIT(CCPDlg)
 	m_bTrainNeighbours = FALSE;
@@ -38,7 +40,7 @@ CCPDlg::CCPDlg(const OPTIONSCP &optionsCP) : CPropertyPage(CCPDlg::IDD)
 	m_dwLearnSteps = 0;
 	m_dwNeighSteps = 0;
 	//}}AFX_DATA_INIT
-	CopyMemory(&m_optionsCP,&optionsCP,sizeof(OPTIONSCP));
+	m_optionsCP=optionsCP;
 }
 
 CCPDlg::~CCPDlg()
@@ -75,10 +77,10 @@ void CCPDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CCPDlg, CPropertyPage)
 	//{{AFX_MSG_MAP(CCPDlg)
-	ON_BN_CLICKED(IDC_RADIO_KOHGROS, OnRadioKohgros)
-	ON_BN_CLICKED(IDC_RADIO_KOHONEN, OnRadioKohonen)
-	ON_BN_CLICKED(IDC_CHECK_TRAINNEIGH, OnCheckTrainneigh)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_CHECK_TRAINNEIGH, OnBnClickedCheckTrainNeigh)
+	ON_BN_CLICKED(IDC_RADIO_KOHGROS, OnBnClickedRadioKohgros)
+	ON_BN_CLICKED(IDC_RADIO_KOHONEN, OnBnClickedRadioKohonen)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -89,38 +91,34 @@ BOOL CCPDlg::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 	
 	// TODO: Add extra initialization here
-	switch (m_optionsCP.st_bNetType)
+	switch (m_optionsCP->st_bNetType)
 	{
 	case NET_TYPE_KOHONEN_GROSSBERG:
-		OnRadioKohgros();
 		CheckRadioButton(IDC_RADIO_KOHGROS,IDC_RADIO_KOHONEN,IDC_RADIO_KOHGROS);
+		EnableNeighRadiusChange(m_optionsCP->st_bTrainNeighbours);
 		break;
 	case NET_TYPE_KOHONEN:
-		OnRadioKohonen();
 		CheckRadioButton(IDC_RADIO_KOHGROS,IDC_RADIO_KOHONEN,IDC_RADIO_KOHONEN);
-		GetDlgItem(IDC_EDIT_MINDIST)->EnableWindow(FALSE);
 		EnableLearnRateChange(FALSE);
 		EnableNeighRadiusChange(FALSE);
 		break;
 	}
-
-	m_dwCycles=m_optionsCP.st_dwCycles;
-	m_wClusters=m_optionsCP.st_wClusters;
-	m_fMinDist=m_optionsCP.st_fMinDist;
-	m_bTrainNeighbours=m_optionsCP.st_bTrainNeighbours;
-	m_fLearnInit=m_optionsCP.st_fInitLearnRate;
-	m_fLearnFinal=m_optionsCP.st_fFinalLearnRate;
-	m_fLearnChange=m_optionsCP.st_fLearnChangeRate;
-	m_dwLearnSteps=m_optionsCP.st_dwLearnRateSteps;
-	m_wNeighInit=m_optionsCP.st_wInitNeighRadius;
-	m_wNeighFinal=m_optionsCP.st_wFinalNeighRadius;
-	m_wNeighChange=m_optionsCP.st_wNeighChangeRate;
-	m_dwNeighSteps=m_optionsCP.st_dwNeighRadiusSteps;
-
-	EnableNeighRadius(m_bTrainNeighbours);
+	m_bNetType=m_optionsCP->st_bNetType;
+	m_dwCycles=m_optionsCP->st_dwCycles;
+	m_wClusters=m_optionsCP->st_wClusters;
+	m_fMinDist=m_optionsCP->st_fMinDist;
+	m_bTrainNeighbours=m_optionsCP->st_bTrainNeighbours;
+	m_fLearnInit=m_optionsCP->st_fInitLearnRate;
+	m_fLearnFinal=m_optionsCP->st_fFinalLearnRate;
+	m_fLearnChange=m_optionsCP->st_fLearnChangeRate;
+	m_dwLearnSteps=m_optionsCP->st_dwLearnRateSteps;
+	m_wNeighInit=m_optionsCP->st_wInitNeighRadius;
+	m_wNeighFinal=m_optionsCP->st_wFinalNeighRadius;
+	m_wNeighChange=m_optionsCP->st_wNeighChangeRate;
+	m_dwNeighSteps=m_optionsCP->st_dwNeighRadiusSteps;
 
 	UpdateData(FALSE);
-
+	EnableNeighRadius(m_bTrainNeighbours);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -129,56 +127,26 @@ void CCPDlg::OnOK()
 {
 	// TODO: Add your specialized code here and/or call the base class
 	UpdateData(TRUE);
-	m_optionsCP.st_dwCycles=m_dwCycles;
-	m_optionsCP.st_wClusters=LOWORD(m_wClusters);
-	m_optionsCP.st_fMinDist=m_fMinDist;
-	m_optionsCP.st_bTrainNeighbours=m_bTrainNeighbours;
-	m_optionsCP.st_fInitLearnRate=m_fLearnInit;
-	m_optionsCP.st_fFinalLearnRate=m_fLearnFinal;
-	m_optionsCP.st_fLearnChangeRate=m_fLearnChange;
-	m_optionsCP.st_dwLearnRateSteps=m_dwLearnSteps;
-	m_optionsCP.st_wInitNeighRadius=LOWORD(m_wNeighInit);
-	m_optionsCP.st_wFinalNeighRadius=LOWORD(m_wNeighFinal);
-	m_optionsCP.st_wNeighChangeRate=LOWORD(m_wNeighChange);
-	m_optionsCP.st_dwNeighRadiusSteps=m_dwNeighSteps;
+	m_optionsCP->st_bNetType=m_bNetType;
+	m_optionsCP->st_dwCycles=m_dwCycles;
+	m_optionsCP->st_wClusters=(WORD)m_wClusters;
+	m_optionsCP->st_fMinDist=m_fMinDist;
+	m_optionsCP->st_bTrainNeighbours=m_bTrainNeighbours;
+	m_optionsCP->st_fInitLearnRate=m_fLearnInit;
+	m_optionsCP->st_fFinalLearnRate=m_fLearnFinal;
+	m_optionsCP->st_fLearnChangeRate=m_fLearnChange;
+	m_optionsCP->st_dwLearnRateSteps=m_dwLearnSteps;
+	m_optionsCP->st_wInitNeighRadius=(WORD)m_wNeighInit;
+	m_optionsCP->st_wFinalNeighRadius=(WORD)m_wNeighFinal;
+	m_optionsCP->st_wNeighChangeRate=(WORD)m_wNeighChange;
+	m_optionsCP->st_dwNeighRadiusSteps=m_dwNeighSteps;
 
 	CPropertyPage::OnOK();
 }
 
-void CCPDlg::GetOptionsCP(OPTIONSCP *optionsCP)
-{
-	CopyMemory(optionsCP,&m_optionsCP,sizeof(OPTIONSCP));
-}
-
-void CCPDlg::OnRadioKohgros() 
-{
-	// TODO: Add your control notification handler code here
-	UpdateData(TRUE);
-	m_optionsCP.st_bNetType=NET_TYPE_KOHONEN_GROSSBERG;
-	GetDlgItem(IDC_EDIT_MINDIST)->EnableWindow(TRUE);
-	EnableLearnRateChange(TRUE);
-	EnableNeighRadiusChange(TRUE&m_optionsCP.st_bTrainNeighbours);
-}
-
-void CCPDlg::OnRadioKohonen() 
-{
-	// TODO: Add your control notification handler code here
-	m_optionsCP.st_bNetType=NET_TYPE_KOHONEN;
-	GetDlgItem(IDC_EDIT_MINDIST)->EnableWindow(FALSE);
-	EnableLearnRateChange(FALSE);
-	EnableNeighRadiusChange(FALSE);
-}
-
-void CCPDlg::OnCheckTrainneigh() 
-{
-	// TODO: Add your control notification handler code here
-	UpdateData(TRUE);
-	m_optionsCP.st_bTrainNeighbours=m_bTrainNeighbours;
-	EnableNeighRadius(m_bTrainNeighbours);
-}
-
 void CCPDlg::EnableLearnRateChange(const BOOLEAN bFlag)
 {
+	GetDlgItem(IDC_EDIT_MINDIST)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_LEARNCHANGE)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_LEARNSTEPS)->EnableWindow(bFlag);
 }
@@ -194,6 +162,29 @@ void CCPDlg::EnableNeighRadius(const BOOLEAN bFlag)
 	GetDlgItem(IDC_EDIT_NEIGHINIT)->EnableWindow(bFlag);
 	GetDlgItem(IDC_EDIT_NEIGHFINAL)->EnableWindow(bFlag);
 	BOOLEAN bState=((CButton *)GetDlgItem(IDC_RADIO_KOHGROS))->GetCheck();
-	GetDlgItem(IDC_EDIT_NEIGHCHANGE)->EnableWindow(bState&bFlag);
-	GetDlgItem(IDC_EDIT_NEIGHSTEPS)->EnableWindow(bState&bFlag);
+	EnableNeighRadiusChange(bState & bFlag);
+}
+
+void CCPDlg::OnBnClickedCheckTrainNeigh()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	EnableNeighRadius(m_bTrainNeighbours);
+}
+
+void CCPDlg::OnBnClickedRadioKohgros()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	m_bNetType=NET_TYPE_KOHONEN_GROSSBERG;
+	EnableLearnRateChange(TRUE);
+	EnableNeighRadiusChange(m_bTrainNeighbours);
+}
+
+void CCPDlg::OnBnClickedRadioKohonen()
+{
+	// TODO: Add your control notification handler code here
+	m_bNetType=NET_TYPE_KOHONEN;
+	EnableLearnRateChange(FALSE);
+	EnableNeighRadiusChange(FALSE);
 }

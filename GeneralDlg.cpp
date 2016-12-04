@@ -24,7 +24,7 @@ CGeneralDlg::CGeneralDlg()
 {
 }
 
-CGeneralDlg::CGeneralDlg(const OPTIONSGENERAL &optionsGENERAL)
+CGeneralDlg::CGeneralDlg(OPTIONSGENERAL *optionsGENERAL)
 	: CPropertyPage(CGeneralDlg::IDD)
 	, m_strDefComprFileName(_T(""))
 	, m_bPromtOverwrite(FALSE)
@@ -73,8 +73,8 @@ void CGeneralDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CGeneralDlg, CPropertyPage)
 	ON_BN_CLICKED(IDC_RADIO_APPEND, OnBnClickedRadioAppend)
 	ON_BN_CLICKED(IDC_RADIO_OVERWRITE, OnBnClickedRadioOverwrite)
-	ON_BN_CLICKED(IDC_BUTTON_LOADDEAFULTS, OnBnClickedButtonLoadDeafults)
-	ON_BN_CLICKED(IDC_BUTTON_SAVEDEFAULTS, OnBnClickedButtonSaveDefaults)
+//	ON_BN_CLICKED(IDC_BUTTON_LOADDEAFULTS, OnBnClickedButtonLoadDeafults)
+//	ON_BN_CLICKED(IDC_BUTTON_SAVEDEFAULTS, OnBnClickedButtonSaveDefaults)
 	ON_BN_CLICKED(IDC_CHECK_WRITEREPORT, OnBnClickedCheckWriteReport)
 	ON_BN_CLICKED(IDC_CHECK_LIMITFILESIZE, OnBnClickedCheckLimitFileSize)
 END_MESSAGE_MAP()
@@ -85,7 +85,7 @@ END_MESSAGE_MAP()
 BOOL CGeneralDlg::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
-	switch (m_optionsGENERAL.st_bStoringMethod)
+	switch (m_optionsGENERAL->st_bStoringMethod)
 	{
 	case REPORT_OVERWRITE:
         CheckRadioButton(IDC_RADIO_OVERWRITE,IDC_RADIO_APPEND,IDC_RADIO_OVERWRITE);
@@ -96,14 +96,14 @@ BOOL CGeneralDlg::OnInitDialog()
 	}
 
 	// TODO:  Add extra initialization here
-	m_strDefComprFileName=m_optionsGENERAL.st_strDefComprFileName;
-	m_bPromtOverwrite=m_optionsGENERAL.st_bPromtOverwrite;
-	m_bShowReport=m_optionsGENERAL.st_bShowReport;
-	m_bWriteReport=m_optionsGENERAL.st_bWriteReport;
-	m_strReportFileName=m_optionsGENERAL.st_strReportFileName;
-	m_bStoringMethod=m_optionsGENERAL.st_bStoringMethod;
-	m_bLimitFileSize=m_optionsGENERAL.st_bLimitFileSize;
-	m_wReportFileSize=m_optionsGENERAL.st_wReportFileSize;
+	m_strDefComprFileName=m_optionsGENERAL->st_strDefComprFileName;
+	m_bPromtOverwrite=m_optionsGENERAL->st_bPromtOverwrite;
+	m_bShowReport=m_optionsGENERAL->st_bShowReport;
+	m_bWriteReport=m_optionsGENERAL->st_bWriteReport;
+	m_strReportFileName=m_optionsGENERAL->st_strReportFileName;
+	m_bStoringMethod=m_optionsGENERAL->st_bStoringMethod;
+	m_bLimitFileSize=m_optionsGENERAL->st_bLimitFileSize;
+	m_wReportFileSize=m_optionsGENERAL->st_wReportFileSize;
 
 	UpdateData(FALSE);
 	EnableWriteReport(m_bWriteReport);
@@ -133,16 +133,6 @@ void CGeneralDlg::OnBnClickedRadioOverwrite()
 	m_bStoringMethod=REPORT_OVERWRITE;
 	GetDlgItem(IDC_CHECK_LIMITFILESIZE)->EnableWindow(FALSE);
 	EnableLimitFileSize(FALSE);
-}
-
-void CGeneralDlg::OnBnClickedButtonLoadDeafults()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CGeneralDlg::OnBnClickedButtonSaveDefaults()
-{
-	// TODO: Add your control notification handler code here
 }
 
 void CGeneralDlg::EnableWriteReport(const BOOLEAN bFlag)
@@ -178,19 +168,14 @@ void CGeneralDlg::OnOK()
 {
 	// TODO: Add your specialized code here and/or call the base class
 	UpdateData(TRUE);
-	m_optionsGENERAL.st_strDefComprFileName=m_strDefComprFileName;
-	m_optionsGENERAL.st_bPromtOverwrite=m_bPromtOverwrite;
-	m_optionsGENERAL.st_bShowReport=m_bShowReport;
-	m_optionsGENERAL.st_bWriteReport=m_bWriteReport;
-	m_optionsGENERAL.st_strReportFileName=m_strReportFileName;
-	m_optionsGENERAL.st_bStoringMethod=m_bStoringMethod;
-	m_optionsGENERAL.st_bLimitFileSize=m_bLimitFileSize;
-	m_optionsGENERAL.st_wReportFileSize=(WORD)m_wReportFileSize;
+	m_optionsGENERAL->st_strDefComprFileName=m_strDefComprFileName;
+	m_optionsGENERAL->st_bPromtOverwrite=m_bPromtOverwrite;
+	m_optionsGENERAL->st_bShowReport=m_bShowReport;
+	m_optionsGENERAL->st_bWriteReport=m_bWriteReport;
+	m_optionsGENERAL->st_strReportFileName=m_strReportFileName;
+	m_optionsGENERAL->st_bStoringMethod=m_bStoringMethod;
+	m_optionsGENERAL->st_bLimitFileSize=m_bLimitFileSize;
+	m_optionsGENERAL->st_wReportFileSize=(WORD)m_wReportFileSize;
 
 	CPropertyPage::OnOK();
-}
-
-void CGeneralDlg::GetOptionsGENERAL(OPTIONSGENERAL * optionsGENERAL)
-{
-	*optionsGENERAL=m_optionsGENERAL;
 }

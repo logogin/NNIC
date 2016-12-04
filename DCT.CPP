@@ -23,11 +23,6 @@ DCT::DCT(const BYTE bBlockSize):m_bBlockSize(bBlockSize)
 	{
 		m_vMatrices[i]=AllocateFloatMatrix(m_bBlockSize,m_bBlockSize);
 		ASSERT(m_vMatrices[i]!=NULL);
-		//for (UINT j=0; j<m_bBlockSize; j++)
-		//{
-		//	m_vMatrices[i][j]=new FLOAT[m_bBlockSize];
-		//	ASSERT(m_vMatrices[i][j]!=NULL);
-		//}
 	}
 
 	FLOAT fRoot=(FLOAT)(1.0f/sqrtf((FLOAT)m_bBlockSize));
@@ -42,15 +37,6 @@ DCT::DCT(const BYTE bBlockSize):m_bBlockSize(bBlockSize)
 			m_vMatrices[CTM][i][j]=(FLOAT)(M_SQRT2*fRoot*cos((2*j+1)*i*M_PI_2/m_bBlockSize));
 			m_vMatrices[TCTM][j][i]=m_vMatrices[CTM][i][j];
 		}
-	/*using namespace std;
-	ofstream f("debug_dct.txt",ios::out | ios::trunc);
-	f.close();
-	f.open("debug_idct.txt",ios::out | ios::trunc);
-	f.close();
-	f.open("debug_qua.txt",ios::out |ios::app);
-	f.close();
-	f.open("debug_deq.txt",ios::out |ios::app);
-	f.close();*/
 }
 
 DCT::~DCT()
@@ -61,7 +47,7 @@ DCT::~DCT()
 			DestroyMatrix((LPVOID *)m_vMatrices[i]);
 }
 
-void DCT::DCTransform(const FLOAT *fBlock)
+void DCT::DCTransform(const PFLOAT fBlock)
 {
 	DWORD i,j,k;
 	DWORD dwIndex;
@@ -75,21 +61,13 @@ void DCT::DCTransform(const FLOAT *fBlock)
 				m_vMatrices[TEMP][i][j]+=fBlock[dwIndex+k]*m_vMatrices[TCTM][k][j];
 		}
 	}
-	//using namespace std;
-	//ofstream f("debug_dct.txt",ios::out |ios::app);
 	for (i=0; i<m_bBlockSize; i++)
-	{
 		for (j=0; j<m_bBlockSize; j++)
 		{
 			m_vMatrices[RSLT][i][j]=0.0;
 			for (k=0; k<m_bBlockSize; k++)
 				m_vMatrices[RSLT][i][j]+=m_vMatrices[CTM][i][k]*m_vMatrices[TEMP][k][j];
-		/*	f<<m_vMatrices[RSLT][i][j]<<" "<<flush;*/
 		}
-	/*	f<<endl;*/
-	}
-	/*f<<endl;
-	f.close();*/
 }
 
 void DCT::IDCTransform()
@@ -103,24 +81,16 @@ void DCT::IDCTransform()
 				m_vMatrices[TEMP][i][j]+=m_vMatrices[RSLT][i][k]*m_vMatrices[CTM][k][j];
 		}
 
-	//using namespace std;
-	//ofstream f("debug_idct.txt",ios::out |ios::app);
 	for (i=0; i<m_bBlockSize; i++)
-	{
 		for (j=0; j<m_bBlockSize; j++)
 		{
 			m_vMatrices[RSLT][i][j]=0.0;
 			for (k=0; k<m_bBlockSize; k++)
 				m_vMatrices[RSLT][i][j]+=m_vMatrices[TCTM][i][k]*m_vMatrices[TEMP][k][j];
-			//f<<m_vMatrices[RSLT][i][j]<<" "<<flush;
 		}
-	/*	f<<endl;*/
-	}
-	/*f<<endl;
-	f.close();*/
 }
 
-void DCT::IDCTransform(const FLOAT *fBlock)
+void DCT::IDCTransform(const PFLOAT fBlock)
 {
 	DWORD i,j,k;
 	DWORD dwIndex;
@@ -155,42 +125,26 @@ void DCT::SetQuality(const BYTE bQuality)
 void DCT::QuantizateBlock()
 {
 	DWORD i,j;
-	/*using namespace std;
-	ofstream f("debug_qua.txt",ios::out |ios::app);*/
 	for (i=0; i<m_bBlockSize; i++)
-	{
 		for (j=0; j<m_bBlockSize; j++)
 		{
 			m_vMatrices[RSLT][i][j]/=m_vMatrices[QUANT][i][j];
 			m_vMatrices[RSLT][i][j]=(FLOAT)Round(m_vMatrices[RSLT][i][j]);
-			/*f<<m_vMatrices[RSLT][i][j]<<" "<<flush;*/
 		}
-		/*f<<endl;*/
-	}
-	/*f<<endl;
-	f.close();*/
 }
 
 void DCT::DequantizateBlock()
 {
 	DWORD i,j;
-	/*using namespace std;
-	ofstream f("debug_deq.txt",ios::out |ios::app);*/
 	for (i=0; i<m_bBlockSize; i++)
-	{
 		for (j=0; j<m_bBlockSize; j++)
 		{
 			m_vMatrices[RSLT][i][j]*=m_vMatrices[QUANT][i][j];
 			m_vMatrices[RSLT][i][j]=(FLOAT)Round(m_vMatrices[RSLT][i][j]);
-			/*f<<m_vMatrices[RSLT][i][j]<<" "<<flush;*/
 		}
-		/*f<<endl;*/
-	}
-	/*f<<endl;
-	f.close();*/
 }
 
-void DCT::GetBlock(FLOAT *fBlock)
+void DCT::GetBlock(PFLOAT fBlock)
 {
 	CopyMemory(fBlock,m_vMatrices[RSLT][0],sizeof(FLOAT)*m_bBlockSize*m_bBlockSize);
 }
@@ -205,18 +159,8 @@ void DCT::ZigZagSequence(SHORT *sSequence)
 
 void DCT::DeZigZagSequence(const SHORT * sSequence)
 {
-	//using namespace std;
 	DWORD i,j;
-//	ofstream f("debug.txt",ios::out |ios::app);
 	for (i=0; i<m_bBlockSize; i++)
-	{
 		for (j=0; j<m_bBlockSize; j++)
-		{
 			m_vMatrices[RSLT][i][j]=sSequence[ZigZag[i][j]];
-			//f<<m_vMatrices[RSLT][i][j]<<" "<<flush;
-		}
-		//f<<endl;
-	}
-	//f<<endl;
-	//f.close();
 }

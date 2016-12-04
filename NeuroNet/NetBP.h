@@ -20,6 +20,8 @@
 #define GRAD1 2
 #define GRAD2 3 
 
+#define MIT 100
+
 #define LEARN_TYPE_SEQUENTIAL 1
 #define LEARN_TYPE_BATCH 2
 #define LEARN_TYPE_MOMENTUM 4
@@ -28,24 +30,24 @@ class NetBP
 public:
 	void CopyWeights(LPVOID pDest,const BYTE bLayer);
 	FLOAT GetLearnRate(void);
-	void UpdateGradients(const FLOAT *fTarget);
+	void UpdateGradients(const PFLOAT fTarget);
 	void SetLearnType(const BYTE bLearnType);
-	FLOAT BackwardPass(const DWORD dwPatterns,const FLOAT **fPatterns,const FLOAT fPrevNetError);
-	void GetAxons(const BYTE bLayer,FLOAT *fOutput);
+	FLOAT BackwardPass(const DWORD dwPatterns,const PFLOAT *fPatterns,const FLOAT fPrevNetError);
+	void GetAxons(const BYTE bLayer,PFLOAT fOutput);
 	void SetScaleParam(const FLOAT fScaleParam);
 	void SetSigmoidAlpha(const FLOAT fSigmoidAlpha);
 	void SetMomentumParam(const FLOAT fMomentumParam);
 	void SetLearnRate(const FLOAT fLearnRate);
 	void SetSigmoidType(const BYTE bSigmoidType);
-	void BackwardPass(const FLOAT *fTarget);
-	FLOAT TargetFunction(const BYTE bLayer,const FLOAT *fTarget);
+	void BackwardPass(const PFLOAT fTarget);
+	FLOAT TargetFunction(const BYTE bLayer,const PFLOAT fTarget);
 	void ForwardPass(const BYTE bFrom);
-	void SetAxons(const BYTE bLayer,const FLOAT *fAxons);
+	void SetAxons(const BYTE bLayer,const PFLOAT fAxons);
 	void InitWeights(void);
 	void InitWeights(const BYTE bLayer, const LPVOID pWeights);
 	void UseBiases(const BOOLEAN bFlag);
 	void SetSignalBoundaries(const FLOAT fMinSignal,const FLOAT fMaxSignal);
-	NetBP(const BYTE bNetRank,const WORD *wLayerRank);
+	NetBP(const BYTE bNetRank,const PWORD wLayerRank);
 	virtual ~NetBP();
 protected:
 	FLOAT DSigmoidFunction(const FLOAT fValue);
@@ -55,12 +57,12 @@ protected:
 	void UpdateWeights(void);
 	void UpdateWeights(const BYTE bNextIndex,const BYTE bPrevIndex);
 	BYTE m_bNetRank;
-	WORD *m_wLayerRank;
-	WORD *m_wNeuronRank;
-	FLOAT **m_vAxons;
-	FLOAT ***m_vWeights[BP_ARRAY_RANK];
-	FLOAT **m_vBiases[BP_ARRAY_RANK];
-	FLOAT **m_vErrorSignal;
+	PWORD m_wLayerRank;
+	PWORD m_wNeuronRank;
+	PFLOAT *m_vAxons;
+	PFLOAT **m_vWeights[BP_ARRAY_RANK];
+	PFLOAT *m_vBiases[BP_ARRAY_RANK];
+	PFLOAT *m_vErrorSignal;
 	BOOLEAN m_bUseBias;
 	FLOAT m_fMinSignal;
 	FLOAT m_fMaxSignal;

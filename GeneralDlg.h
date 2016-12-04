@@ -9,7 +9,7 @@ class CGeneralDlg : public CPropertyPage
 
 public:
 	CGeneralDlg();
-	CGeneralDlg(const OPTIONSGENERAL &optionsGENERAL);
+	CGeneralDlg(OPTIONSGENERAL *optionsGENERAL);
 	virtual ~CGeneralDlg();
 
 // Dialog Data
@@ -32,15 +32,15 @@ protected:
 public:
 	afx_msg void OnBnClickedRadioAppend();
 	afx_msg void OnBnClickedRadioOverwrite();
-	afx_msg void OnBnClickedButtonLoadDeafults();
-	afx_msg void OnBnClickedButtonSaveDefaults();
+//	afx_msg void OnBnClickedButtonLoadDeafults();
+//	afx_msg void OnBnClickedButtonSaveDefaults();
 	afx_msg void OnBnClickedCheckWriteReport();
 	afx_msg void OnBnClickedCheckLimitFileSize();
 protected:
 	// General Options Structure
-	OPTIONSGENERAL m_optionsGENERAL;
+	OPTIONSGENERAL *m_optionsGENERAL;
 	void EnableWriteReport(const BOOLEAN bFlag);
 	void EnableLimitFileSize(const BOOLEAN bFlag);
-public:
-	void GetOptionsGENERAL(OPTIONSGENERAL * optionsGENERAL);
+//public:
+//	void GetOptionsGENERAL(OPTIONSGENERAL * optionsGENERAL);
 };

@@ -111,14 +111,22 @@ CBitmapKit * CResampleDlg::GetBitmapKit()
 
 UINT ResampleProgress(LPVOID pParam)
 {
-	CResampleDlg *pDlg=(CResampleDlg *)pParam;
+	//try
+	//{
+		CResampleDlg *pDlg=(CResampleDlg *)pParam;
 
-	if (pDlg == NULL ||
-        !pDlg->IsKindOf(RUNTIME_CLASS(CResampleDlg)))
-    return TRUE;
+		if (pDlg == NULL ||
+			!pDlg->IsKindOf(RUNTIME_CLASS(CResampleDlg)))
+		return TRUE;
 	
-	pDlg->GetBitmapKit()->Resample(pDlg->GetNewWidth(),pDlg->GetNewHeight(),pDlg,TRUE);
-	pDlg->EndDialog(IDOK);
+		pDlg->GetBitmapKit()->Resample(pDlg->GetNewWidth(),pDlg->GetNewHeight(),pDlg,TRUE);
+		pDlg->EndDialog(IDOK);
+	//}
+	//catch (CUserException *userException)
+	//{
+	//	AfxMessageBox(_T("Exception"),MB_OK);
+	//	userException->Delete();
+	//}
 	return FALSE;
 }
 
@@ -144,6 +152,8 @@ void CResampleDlg::OnBnClickedCancel()
 		return;
 	}
 	TerminateThread(m_threadResample,0);
+	//m_threadResample->ResumeThread();
+	//AfxThrowUserException();
 	CDialog::OnCancel();
 }
 

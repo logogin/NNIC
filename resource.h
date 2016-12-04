@@ -9,12 +9,15 @@
 #define IDD_NNIC_DIALOG                 102
 #define IDD_PROPPAGE_GENERAL            106
 #define IDD_PROPPAGE_DCT                107
-#define IDR_MAINFRAME                   128
 #define IDR_MAIN_MENU                   129
 #define IDD_PROPPAGE_BACK               132
 #define IDD_PROPPAGE_COUNTER            133
 #define IDR_ACCELERATOR                 136
 #define IDD_DIALOG_REPORT               137
+#define IDR_MAINFRAME                   141
+#define IDD_DIALOG_COMPARE              143
+#define IDB_BITMAP1                     148
+#define IDB_BITMAP_LOGO                 148
 #define IDC_STATIC_LEFT                 1000
 #define IDC_STATIC_RIGHT                1001
 #define IDC_BUTTON_COMPRESS             1004
@@ -102,10 +105,16 @@
 #define IDC_STATIC_STATUS1              1139
 #define IDC_STATIC_STATUSTEXT1          1140
 #define IDC_STATIC_STATUS2              1141
+#define IDC_EDIT_FIRSTPATH              1141
 #define IDC_STATIC_OPERATION            1142
+#define IDC_BUTTON_FIRSTLOAD            1142
 #define IDC_STATIC_STATUS3              1143
+#define IDC_EDIT_FIRSTPATH2             1143
+#define IDC_EDIT_SECONDPATH             1143
 #define IDC_STATIC_STATUSTEXT3          1144
+#define IDC_BUTTON_SECONDLOAD           1144
 #define IDC_STATIC_STATUSTEXT2          1145
+#define IDC_BUTTON_COMPARE              1145
 #define IDC_STATIC_STATUS4              1146
 #define IDC_STATIC_STATUSTEXT4          1147
 #define IDC_STATIC_STATUS5              1148
@@ -128,9 +137,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        140
+#define _APS_NEXT_RESOURCE_VALUE        149
 #define _APS_NEXT_COMMAND_VALUE         32803
-#define _APS_NEXT_CONTROL_VALUE         1141
+#define _APS_NEXT_CONTROL_VALUE         1146
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

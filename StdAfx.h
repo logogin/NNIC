@@ -22,6 +22,7 @@
 #include <afxtempl.h>
 #include <afxmt.h>
 #include <math.h>
+#include <float.h>
 
 #include "Globals.h"
 #include "BitmapKit.h"
